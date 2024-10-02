@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/01 07:29:29 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/02 07:59:31 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,18 @@
 # include <algorithm>		// For using algorithms like sort, find, etc.
 # include <deque>	 		// For deque
 # include <stack>	 		// For stack
-// # include <random>			// For creating random numbers -> COMMENTED BECAUSE IT WON'T COMPILE WITH C++98 standard
+// # include <random>		// For creating random numbers --> COMMENTED BECAUSE IT WON'T COMPILE WITH C++98 standard <--
 # include <ctime>			// For time measurement
-#include <ostream>			// For outputting data to streams (e.g., console, file)
-#include <cstdlib>			// For general purpose functions like memory management, random number generation, etc.
-#include <sys/socket.h>		// For handling socket programming (e.g., socket creation, communication)
-#include <netinet/in.h>		// For defining Internet protocol family (e.g., sockaddr_in structure for IPv4)
-#include <unistd.h>			// For POSIX operating system API, including system calls like close() and read(
+# include <ostream>			// For outputting data to streams (e.g., console, file)
+# include <cstdlib>			// For general purpose functions like memory management, random number generation, etc.
+# include <sys/socket.h>	// For handling socket programming (e.g., socket creation, communication)
+# include <sys/types.h> 	//-> for socket()
+# include <netinet/in.h> 	//-> for sockaddr_in
+# include <fcntl.h> 		//-> for fcntl()
+# include <unistd.h> 		//-> for close()
+# include <arpa/inet.h> 	//-> for inet_ntoa()
+# include <poll.h> 			//-> for poll()
+# include <csignal> 		//-> for signal()
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"

@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/01 07:28:32 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/02 08:05:55 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	std::cout << "---- SERVER ----" << std::endl;
-	if(!is_port_valid(av[1]) || !*av[2])
+	if(!is_port_valid(av[1]) || av[2][0] == '\0')
 	{
 		std::cout << "invalid Port number / Password!" << std::endl;
 		return (1);
