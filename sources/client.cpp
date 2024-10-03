@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/02 08:22:24 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:39:32 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Client::Client(Client const &src)
 
 Client::~Client()
 {
-	
+
 }
 
 Client &Client::operator=(Client const &src)
@@ -43,8 +43,9 @@ Client &Client::operator=(Client const &src)
 		this->nickname = src.nickname;
 		this->username = src.username;
 		this->realname = src.realname;
+		// this->buffer = src.buffer;
+		// this->connection_status = src.connection_status;
 	}
-
 	return (*this);
 }
 

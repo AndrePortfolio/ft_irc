@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/02 07:59:31 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:02:09 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 # include <algorithm>		// For using algorithms like sort, find, etc.
 # include <deque>	 		// For deque
 # include <stack>	 		// For stack
-// # include <random>		// For creating random numbers --> COMMENTED BECAUSE IT WON'T COMPILE WITH C++98 standard <--
 # include <ctime>			// For time measurement
 # include <ostream>			// For outputting data to streams (e.g., console, file)
 # include <cstdlib>			// For general purpose functions like memory management, random number generation, etc.

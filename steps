@@ -1,0 +1,83 @@
+Pre-requisites:
+1. understand the following external functions:
+	socket, close, setsockopt, getsockname,
+	getprotobyname, gethostbyname, getaddrinfo,
+	freeaddrinfo, bind, connect, listen, accept, htons,
+	htonl, ntohs, ntohl, inet_addr, inet_ntoa, send,
+	recv, signal, sigaction, lseek, fstat, fcntl,
+	poll(or equivalent) i.e select(), kqueue() or epool().
+
+2. Understand concepts:
+	- server
+	- client
+	- server-to-server communication
+	- port
+	- non-blocking I/O operations.
+	- What are *operators* (in IRC context)
+	- Receiving partial data
+	- Low bandwith
+	- what is "nc" (nc 127.0.0.1 6667)
+	- What is the relationship between ctrl+D and ’com’, then ’man’, then ’d\n’
+	- Aggregate packets and rebuilding them
+
+3. clients:
+	- Halloy (best)
+	- irssi
+
+Requirements:
+1. The server must be capable of handling multiple clients
+	at the same time and never hang.
+2. Forking is not allowed. All I/O operations must be non-blocking
+3. Only 1 pool() (or equivalent) can be used to handle all operations
+	(read, write, but also listen and so forth).
+4. You can't read/recv or write/send in any file descriptor without using
+	pool() (or equivalent).
+5. Choose 1 IRC client. Must connect to the server without encontering any error.
+6. Communication between client and server has to be done via TCP/IP (v4 or v6)
+7. Features to implement:
+	1. Able to authenticate, set a nickname and username, join a channel,
+		send and receive private messages using your reference cliente.
+	2. All the messages sent from on client to a channel have to be forwarded
+		to every other clienet that joined the channel.
+	3. You must have *operators* and regular users.
+	4. *operators* must have specific commands only they can use.
+		- KICK: Eject an client from the channel.
+		- INVITE: Invite a client to a channel.
+		- TOPIC: Change or view the channel's mode.
+		- MODE: Change the channel's mode:
+			* i: Set/remove invite-only channel
+			* t: Set/remove the restrictions of the TOPIC command to
+				channel *operators*.
+			* k: Set/remove the channel key(password).
+			* o: Give/take channel operator privilege.
+			* l: Set/remove the user limit to channel.
+
+
+NOTE: for MacOS you are allowed to use fcntl() instead of write(), but
+	only in the following format: fcntl(fd, F_SETFL, O_NONBLOCK);
+NOTE: Use ctrl+D to send the command in several parts: ’com’, then ’man’
+	then ’d\n’.
+NOTE: In order to process a command, you have to first aggregate the received
+	packets in order to rebuild it.
+
+COMPARE TO natcat:
+1. nc irc.libera.chat 6667
+2. NICK YourNickname
+3. USER YourUsername 0 * :Real Name
+4. JOIN #libera
+
+COMMON MISTAKES:
+- Be careful to properly broadcast each event that other clients need to see
+	(when someone joins/leaves a channel, if someone if kicked, or if the mode changes)
+- JOIN #chan1,#chan2,#chan3 pass1,pass2
+- What if username, nickname and realname were all different?
+- Make sure to test the +k mode properly!
+- Why do I have a @ prefixed to my nickname?
+
+RESOURCES
+- Blocking vs Non-Blocking Sockets via stack overflow
+https://stackoverflow.com/questions/10654286/why-should-i-use-non-blocking-or-blocking-sockets
+- IRCv3 specifications
+https://ircv3.net/irc/
+- IRC Guide
+https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
