@@ -52,7 +52,6 @@ Requirements:
 			* o: Give/take channel operator privilege.
 			* l: Set/remove the user limit to channel.
 
-
 NOTE: for MacOS you are allowed to use fcntl() instead of write(), but
 	only in the following format: fcntl(fd, F_SETFL, O_NONBLOCK);
 NOTE: Use ctrl+D to send the command in several parts: ’com’, then ’man’
