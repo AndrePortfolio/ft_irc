@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/03 11:02:09 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/08 17:24:18 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,18 @@
 # include <poll.h> 			//-> for poll()
 # include <csignal> 		//-> for signal()
 
+# include "server.hpp"
+# include "client.hpp"
+
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"
 # define BLUE	"\x1b[34;1m"
 # define CYAN	"\x1b[36;1m"
 # define YELLOW	"\033[33;1m"
 # define RESET	"\x1b[0m"
+
+# define MAX_FDS 1024
+# define BUFFER_SIZE 1024
+# define MAX_CONNEECTIONS 5
 
 #endif

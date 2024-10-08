@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/04 11:23:13 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/08 13:07:40 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ Client::Client(int socket, std::string nickname, std::string username, std::stri
 	this->realname = realname;
 	this->buffer = "";
 	this->connection_status = 0;
+	this->socketFd = socket;
 }
 
 Client::Client(Client const &src)

@@ -73,6 +73,8 @@ COMMON MISTAKES:
 - Make sure to test the +k mode properly!
 - Why do I have a @ prefixed to my nickname?
 
+nc 127.0.0.1 6667
+
 RESOURCES
 - Blocking vs Non-Blocking Sockets via stack overflow
 https://stackoverflow.com/questions/10654286/why-should-i-use-non-blocking-or-blocking-sockets

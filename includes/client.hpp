@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/02 08:22:50 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/08 17:16:22 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@ private:
 	std::string			username;
 	std::string			realname;
 	std::string			buffer;
-	int					connection_status;	
+	int					connection_status;
+	int					socketFd;
+
 
 public:
 	Client();
 	Client(Client const &src);
 	Client(
-		int				fd,
+		int				socket,
 		std::string		nickname,
 		std::string		username,
 		std::string		realname

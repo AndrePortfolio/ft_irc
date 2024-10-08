@@ -6,36 +6,30 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/04 16:03:43 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/08 17:19:43 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/headers.hpp"
 
-int	is_port_valid(std::string port_nbr)
+int	main(int ac, char **av)
 {
-	if (port_nbr.empty())
-	{
-		std::cerr << "Error: no port was provided.\n";
-		exit(1);
-	}
-	int	port;
 	try
 	{
-		port = std::atoi(port_nbr.c_str());	// atoi doesn't trow excpetions
+		if (ac != 3)
+			throw std::runtime_error("Usage: ./ircserv <port number> <password>");
+
+		std::cout << GREEN << "------------------- SERVER -------------------\n\n" << RESET;
+
+		Server	server(av[1], av[2]);
 	}
-	catch (const std::invalid_argument& e)
+	catch(const std::exception& e)
 	{
-		std::cerr << "Invalid port number: " << port_nbr << "\n";
-		exit(1);
+		std::cerr << e.what() << std::endl;
 	}
-	if (port <= 1024 || port > 65535)
-	{
-		std::cerr << "Port number must be between 1024 and 65535.\n";
-		exit(1);
-	}
-	return (1);
+	return (0);
 }
+
 
 /*
 	struct sockaddr_in
@@ -47,7 +41,6 @@ int	is_port_valid(std::string port_nbr)
 	};
 */
 
-// Not the actual server, just testing
 bool	initServerTest(char *argv[])
 {
 	int					server_fd, client_fd;
@@ -98,25 +91,4 @@ bool	initServerTest(char *argv[])
 	close(client_fd);
 	close(server_fd);
 	return (true);
-}
-
-// Compare our project against Weechat (terminal-based)
-int	main(int ac, char **av)
-{
-	if (ac != 3)
-	{
-		std::cout << "Usage: " << av[0] << " <port number> <password>" << std::endl;
-		return (1);
-	}
-	std::cout << "---- SERVER ----" << std::endl;
-	if(!is_port_valid(av[1]) || av[2][0] == '\0')
-	{
-		std::cout << "invalid Port number / Password!" << std::endl;
-		return (1);
-	}
-	// Init server
-	if (!initServerTest(av))
-		return (1);
-
-	return (0);
 }

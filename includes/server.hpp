@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/03 15:54:25 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/08 17:57:03 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,28 @@ class Server
 {
 	private:
 		int					port;
-		int					serviceSocketFd;
-		static bool			signal;
+		std::string			password;
+		bool				signal;
+		int					socketFd;
+		struct sockaddr_in	address;
 		std::vector<Client>	clients;
 
-	public:
 		Server();
+
+	public:
+		Server(std::string port, std::string password);
 		Server(const Server &copy);
 		Server& operator=(const Server &other);
 		~Server();
 
-		void		serverInit();
-		void		createServerSocket();
-		void		acceptNewClient();
+		void		validateInput(std::string port, std::string password);
+		void		initServer();
+		void		initServerAddress();
+		void		setNonBlocking(int fd);
+		void		configureSocketOptions(int fd);
+		void		acceptClients();
 		void		receivedNewData(int fd);
+
 		static void	signalHandler(int signum);
 		void		closeFds();
 		void		clearClients(int fd);
