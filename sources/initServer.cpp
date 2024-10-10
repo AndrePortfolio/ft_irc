@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:22 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/10 12:44:17 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 13:22:10 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	Server::initServerAddress()
 	address.sin_port = htons(port);
 }
 
+/* Bind the IP and port to the server socket */
 void	Server::bindServerSocket()
 {
 	if (bind(socketFd, (struct sockaddr*)&address, sizeof(address)) == ERROR)
@@ -60,9 +61,10 @@ void	Server::bindServerSocket()
 		signal = true;
 }
 
+/* Listen to the socket */
 void	Server::listenToServerSocket()
 {
-	if (listen(socketFd, MAX_CONNEECTIONS) == ERROR)
+	if (listen(socketFd, MAX_CONNECTIONS) == ERROR)
 		throw std::runtime_error("Error: Failed to listen on the socket");
 
 	std::cout	<< CYAN << "Status: " << RESET << "Server listening on port "

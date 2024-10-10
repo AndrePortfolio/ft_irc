@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/10 12:43:50 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 13:33:53 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	Server::initServer()
 /* Accept client connections and receive data from them */
 void	Server::acceptClients()
 {
-	struct pollfd	fds[MAX_CONNEECTIONS];
+	struct pollfd	fds[MAX_FDS];
 	int				activeFds = 0;
 
 	// Init pool with the server socket

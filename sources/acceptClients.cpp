@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/10 12:34:44 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 13:37:50 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::updatePool(struct pollfd& fds, int& activeFds, int socket)
 }
 
 /* Listen indefinitely for Events */
-void	Server::checkForEvent(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds)
+void	Server::checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	int	poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
 	if (poolCount == ERROR)
@@ -29,7 +29,7 @@ void	Server::checkForEvent(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds
 }
 
 /* Listen for clients wanting to connect to the server and accept them */
-void	Server::listenForClients(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds)
+void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	// Checks for pending connection requests
 	if (fds[0].revents & POLLIN)
@@ -46,13 +46,14 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_CONNEECTIONS], int& active
 			clients.emplace_back(newClient);
 			updatePool(fds[activeFds], activeFds, clientFd);
 
-			std::cout << "New client connected: " << clientFd << std::endl;
+			std::cout	<< GREEN <<  "New client connected: " << RESET
+						<< (clientFd - 3) << std::endl;
 		}
 	}
 }
 
 /* Checks if there is data to read on the client socket */
-void	Server::CheckforClientData(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds)
+void	Server::CheckforClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	for (int i = 1; i < activeFds; i++)
 	{
@@ -80,7 +81,7 @@ void Server::receivedNewData(int fd)
 		throw std::runtime_error("Error: Failed to read from client socket");
 	else if (bytesRead == CLIENT_DISCONNECTED)
 	{
-		std::cout << "Client" << fd << " disconnected.\n";
+		std::cout << RED <<  "Client disconnected:  " << RESET << (fd - 3) << std::endl;
 		close(fd);
 		return ;
 	}

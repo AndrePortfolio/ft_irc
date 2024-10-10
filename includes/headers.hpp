@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/10 11:54:42 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 13:33:36 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@
 # include <csignal> 		//-> for signal()
 
 # define BUFFER_SIZE 1024
-# define MAX_CONNEECTIONS 5
+# define MAX_FDS 1024
+# define MAX_CONNECTIONS 5
 # define WAIT_INDEFINITELY -1
 # define DEFAULT_PROTOCOL 0
 # define CLIENT_DISCONNECTED 0
