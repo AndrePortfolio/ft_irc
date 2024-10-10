@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/08 17:59:21 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 12:14:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 //----------------------------------------------------------------------------//
 //--------------------------- Contructors / Destructor -----------------------//
 //----------------------------------------------------------------------------//
-
-Server::Server(){}
 
 Server::Server(std::string port, std::string password)
 	: port(0), password(password), signal(false), socketFd(0), address(), clients()
@@ -45,8 +43,10 @@ Server&	Server::operator=(const Server &other)
 	if (this != &other)
 	{
 		this->port = other.port;
-		this->socketFd = other.socketFd;
+		this->password = other.password;
 		this->signal = other.signal;
+		this->socketFd = other.socketFd;
+		this->address = other.address;
 		this->clients = other.clients;
 	}
 	return (*this);
@@ -55,6 +55,7 @@ Server&	Server::operator=(const Server &other)
 //----------------------------------- Methods --------------------------------//
 //----------------------------------------------------------------------------//
 
+/* Check for valid ports and existing passowrd */
 void	Server::validateInput(std::string port, std::string password)
 {
 	std::stringstream	portStream(port);
@@ -71,108 +72,140 @@ void	Server::validateInput(std::string port, std::string password)
 		throw std::runtime_error( "Error: Port must be a number from 1024 to 65535.");
 }
 
+/* Configure the server socket, bind to an IP/port, and prepare for client connections */
 void	Server::initServer()
 {
-	socketFd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socketFd < 0)
+	// Create TCP socket using IPv4
+	socketFd = socket(AF_INET, SOCK_STREAM, DEFAULT_PROTOCOL);
+	if (socketFd == ERROR)
 		throw std::runtime_error("Error: Failed to Assign socket");
 
 	configureSocketOptions(socketFd);
 	setNonBlocking(socketFd);
 	initServerAddress();
 
-	if (bind(socketFd, (struct sockaddr*)&address, sizeof(address)) < 0)
+	if (bind(socketFd, (struct sockaddr*)&address, sizeof(address)) == ERROR)
 		throw std::runtime_error("Error: Couldn't bind the IP and port to socket");
 	else
 		signal = true;
 
-	if (listen(socketFd, MAX_CONNEECTIONS) < 0)
+	if (listen(socketFd, MAX_CONNEECTIONS) == ERROR)
 		throw std::runtime_error("Error: Failed to listen on the socket");
 
 	std::cout	<< CYAN << "Status: " << RESET << "Server listening on port "
 				<< port << "\n";
 }
 
+/* Configure the sockaddr_in structure with the server address and port */
 void	Server::initServerAddress()
 {
-	memset(&address, 0, sizeof(address));
+	// Use IPv4 protocol
 	address.sin_family = AF_INET;
+
+	// Bind to all available network interfaces (0.0.0.0)
 	address.sin_addr.s_addr = INADDR_ANY;
+
+	// Set the port number, converting to network byte order
 	address.sin_port = htons(port);
 }
 
+/* Listen for clients wanting to connect to the server and accept them */
+void	Server::listenForClients(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds)
+{
+	// Checks for pending connection requests
+	if (fds[0].revents & POLLIN)
+	{
+		int	clientFd = accept(socketFd, nullptr, nullptr);
+
+		if (clientFd == ERROR)
+			throw std::runtime_error("Error: Failed to Assign socket to client");
+		else if (clientFd >= 0)
+		{
+			Client newClient;
+
+			setNonBlocking(clientFd);
+			clients.emplace_back(newClient);
+			updatePool(fds[activeFds], activeFds, clientFd);
+
+			std::cout << "New client connected: " << clientFd << std::endl;
+		}
+	}
+}
+
+/* Add new file descriptor to the pool */
+void	Server::updatePool(struct pollfd& fds, int& activeFds, int socket)
+{
+	fds.fd = socket;
+	fds.events = POLLIN;
+	activeFds++;
+}
+
+/* Listen indefinitely for Events */
+void	Server::checkForEvent(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds)
+{
+	int	poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
+	if (poolCount == ERROR)
+		throw std::runtime_error("Error: pool failed");
+}
+
+/* Accept client connections and receive data from them */
 void	Server::acceptClients()
 {
-	struct pollfd	fds[MAX_FDS];
-	int				nfds = 1;
+	struct pollfd	fds[MAX_CONNEECTIONS];
+	int				activeFds = 0;
 
-	fds[0].fd = socketFd;
-	fds[0].events = POLLIN;
-
+	// Init pool with the server socket
+	updatePool(fds[0], activeFds, socketFd);
 	while (true)
 	{
-		int	poolCount = poll(fds, nfds, -1);
-		if (poolCount < 0)
-			throw std::runtime_error("Error: pool failed");
+		checkForEvent(fds, activeFds);
+		listenForClients(fds, activeFds);
 
-		if (fds[0].revents & POLLIN)
-		{
-			int	clientFd = accept(socketFd, nullptr, nullptr);
-
-			if (clientFd < 0)
-				throw std::runtime_error("Error: Failed to Assign socket to client");
-			else if (clientFd >= 0)
-			{
-				setNonBlocking(clientFd);
-				Client newClient;
-				clients.emplace_back(newClient);
-				fds[nfds].fd = clientFd;
-				fds[nfds].events = POLLIN;
-				nfds++;
-
-				std::cout << "New client connected: " << clientFd << std::endl;
-			}
-		}
-		for (int i = 1; i < nfds; i++)
+		for (int i = 1; i < activeFds; i++)
 		{
 			if (fds[i].revents & POLLIN)
 			{
 				receivedNewData(fds[i].fd);
 				if (fds[i].fd == -1)
 				{
-					fds[i] = fds[nfds - 1];
-					nfds--;
+					fds[i] = fds[activeFds - 1];
+					activeFds--;
 				}
 			}
 		}
 	}
 }
 
-// Used to avoid "Address already in use" error
+/* Used to avoid "Address already in use" error */
 void Server::configureSocketOptions(int fd)
 {
 	int	opt = 1;
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == ERROR)
 		throw std::runtime_error("Error: Couldn't set socket options (SO_REUSEADDR)");
 }
 
+/* If I/O operations aren't ready it returns immediately,allowing the program to keep running */
 void Server::setNonBlocking(int fd)
 {
+	// Gets the current flags from the file descriptor
 	int flags = fcntl(fd, F_GETFL, 0);
-	if (flags == -1)
+	if (flags == ERROR)
 		throw std::runtime_error("Error: Unable to get socket flags");
 
-	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
+	// Set flags to include non-blocking mode
+	if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == ERROR)
 		throw std::runtime_error("Error: Unable to set non-blocking mode");
 }
 
+/* Read data from client and output it to the server */
 void Server::receivedNewData(int fd)
 {
 	char	buffer[BUFFER_SIZE];
 	ssize_t	bytesRead = read(fd, buffer, sizeof(buffer) - 1);
-	if (bytesRead < 0)
+
+	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
-	else if (bytesRead == 0)
+	else if (bytesRead == CLIENT_DISCONNECTED)
 	{
 		std::cout << "Client" << fd << " disconnected.\n";
 		close(fd);

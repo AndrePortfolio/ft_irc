@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/08 17:16:22 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 10:16:47 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ private:
 	std::string			buffer;
 	int					connection_status;
 	int					socketFd;
-
 
 public:
 	Client();
