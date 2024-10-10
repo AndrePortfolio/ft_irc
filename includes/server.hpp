@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/10 12:13:04 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 12:29:25 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ class Server
 		void		updatePool(struct pollfd& fds, int& activeFds, int socket);
 		void		listenForClients(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds);
 		void		checkForEvent(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds);
+		void		CheckforClientData(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds);
 
 		static void	signalHandler(int signum);
-		void		closeFds();
-		void		clearClients(int fd);
 };
 
 #endif
