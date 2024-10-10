@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/10 12:29:25 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 12:43:32 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ class Server
 		void		validateInput(std::string port, std::string password);
 		void		initServer();
 		void		initServerAddress();
-		void		setNonBlocking(int fd);
-		void		configureSocketOptions(int fd);
+		void		setNonBlocking(int& fd);
+		void		createServerSocket();
 		void		acceptClients();
+		void		bindServerSocket();
+		void		listenToServerSocket();
 		void		receivedNewData(int fd);
 		void		updatePool(struct pollfd& fds, int& activeFds, int socket);
 		void		listenForClients(struct pollfd(&fds)[MAX_CONNEECTIONS], int& activeFds);

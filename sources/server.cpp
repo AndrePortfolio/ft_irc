@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/10 12:33:10 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/10 12:43:50 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,25 +75,11 @@ void	Server::validateInput(std::string port, std::string password)
 /* Configure the server socket, bind to an IP/port, and prepare for client connections */
 void	Server::initServer()
 {
-	// Create TCP socket using IPv4
-	socketFd = socket(AF_INET, SOCK_STREAM, DEFAULT_PROTOCOL);
-	if (socketFd == ERROR)
-		throw std::runtime_error("Error: Failed to Assign socket");
-
-	configureSocketOptions(socketFd);
+	createServerSocket();
 	setNonBlocking(socketFd);
 	initServerAddress();
-
-	if (bind(socketFd, (struct sockaddr*)&address, sizeof(address)) == ERROR)
-		throw std::runtime_error("Error: Couldn't bind the IP and port to socket");
-	else
-		signal = true;
-
-	if (listen(socketFd, MAX_CONNEECTIONS) == ERROR)
-		throw std::runtime_error("Error: Failed to listen on the socket");
-
-	std::cout	<< CYAN << "Status: " << RESET << "Server listening on port "
-				<< port << "\n";
+	bindServerSocket();
+	listenToServerSocket();
 }
 
 /* Accept client connections and receive data from them */
