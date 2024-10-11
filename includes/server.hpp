@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/10 13:34:02 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 10:15:50 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class Server
 		~Server();
 
 		void	validateInput(std::string port, std::string password);
-		void	initServer();
+		void	runServer();
 		void	initServerAddress();
 		void	setNonBlocking(int& fd);
 		void	createServerSocket();

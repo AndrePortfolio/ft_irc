@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/10 13:33:36 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 10:10:32 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,25 @@
 # include <ostream>			// For outputting data to streams (e.g., console, file)
 # include <cstdlib>			// For general purpose functions like memory management, random number generation, etc.
 # include <sys/socket.h>	// For handling socket programming (e.g., socket creation, communication)
-# include <sys/types.h> 	//-> for socket()
-# include <netinet/in.h> 	//-> for sockaddr_in
-# include <fcntl.h> 		//-> for fcntl()
-# include <unistd.h> 		//-> for close()
-# include <arpa/inet.h> 	//-> for inet_ntoa()
-# include <poll.h> 			//-> for poll()
-# include <csignal> 		//-> for signal()
+# include <sys/types.h> 	// For socket()
+# include <netinet/in.h> 	// For sockaddr_in
+# include <fcntl.h> 		// For fcntl()
+# include <unistd.h> 		// For close()
+# include <arpa/inet.h> 	// For inet_ntoa()
+# include <poll.h> 			// For poll()
+# include <csignal> 		// For signal()
 
 # define BUFFER_SIZE 1024
 # define MAX_FDS 1024
 # define MAX_CONNECTIONS 5
 # define WAIT_INDEFINITELY -1
-# define DEFAULT_PROTOCOL 0
+# define DEFAULT 0
 # define CLIENT_DISCONNECTED 0
 # define ERROR -1
+# define MIN_ALLOWED_PORT 1024
+# define MAX_ALLOWED_PORT 65535
+# define DEFAULT_FDS 3
+# define CLIENT_ACCEPTED 0
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"

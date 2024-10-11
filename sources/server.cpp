@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/10 13:33:53 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 10:17:49 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ Server::Server(std::string port, std::string password)
 	: port(0), password(password), signal(false), socketFd(0), address(), clients()
 {
 	validateInput(port, password);
-	initServer();
-	acceptClients();
+	runServer();
 }
 
 Server::Server(const Server &copy)
@@ -65,21 +64,31 @@ void	Server::validateInput(std::string port, std::string password)
 
 	if (port.empty())
 		throw std::runtime_error("Error: no port was provided.");
+
 	portStream >> this->port;
 	if (!portStream.eof())
 		throw std::runtime_error("Error: Port must be a valid number");
-	if (this->port < 1024 || this->port > 65535)
+
+	if (this->port < MIN_ALLOWED_PORT || this->port > MAX_ALLOWED_PORT)
 		throw std::runtime_error( "Error: Port must be a number from 1024 to 65535.");
 }
 
 /* Configure the server socket, bind to an IP/port, and prepare for client connections */
-void	Server::initServer()
+void	Server::runServer()
 {
+	// Step 1: Create the server socket
 	createServerSocket();
 	setNonBlocking(socketFd);
 	initServerAddress();
+
+	// Step 2: Bind the socket to the IP/port
 	bindServerSocket();
+
+	// Step 3: Mark the socket for listening in
 	listenToServerSocket();
+
+	// Step 4: Accept incomming connections.
+	acceptClients();
 }
 
 /* Accept client connections and receive data from them */

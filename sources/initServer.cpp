@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:22 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/10 13:22:10 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 10:21:10 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void Server::createServerSocket()
 {
 	// Create TCP socket using IPv4
-	socketFd = socket(AF_INET, SOCK_STREAM, DEFAULT_PROTOCOL);
+	socketFd = socket(AF_INET, SOCK_STREAM, DEFAULT);
 	if (socketFd == ERROR)
 		throw std::runtime_error("Error: Failed to Assign socket");
 
@@ -26,11 +26,11 @@ void Server::createServerSocket()
 		throw std::runtime_error("Error: Couldn't set socket options (SO_REUSEADDR)");
 }
 
-/* If I/O operations aren't ready it returns immediately,allowing the program to keep running */
+/* Returns immediately if no I/O, allowing the program to keep running */
 void Server::setNonBlocking(int& fd)
 {
 	// Gets the current flags from the file descriptor
-	int flags = fcntl(fd, F_GETFL, 0);
+	int flags = fcntl(fd, F_GETFL, DEFAULT);
 	if (flags == ERROR)
 		throw std::runtime_error("Error: Unable to get socket flags");
 

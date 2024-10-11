@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/10 13:37:50 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 10:20:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 
 		if (clientFd == ERROR)
 			throw std::runtime_error("Error: Failed to Assign socket to client");
-		else if (clientFd >= 0)
+		else if (clientFd >= CLIENT_ACCEPTED)
 		{
 			Client newClient;
 
@@ -47,7 +47,7 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 			updatePool(fds[activeFds], activeFds, clientFd);
 
 			std::cout	<< GREEN <<  "New client connected: " << RESET
-						<< (clientFd - 3) << std::endl;
+						<< (clientFd - DEFAULT_FDS) << std::endl;
 		}
 	}
 }
@@ -81,10 +81,11 @@ void Server::receivedNewData(int fd)
 		throw std::runtime_error("Error: Failed to read from client socket");
 	else if (bytesRead == CLIENT_DISCONNECTED)
 	{
-		std::cout << RED <<  "Client disconnected:  " << RESET << (fd - 3) << std::endl;
+		std::cout	<< RED <<  "Client disconnected:  " << RESET << (fd - DEFAULT_FDS)
+					<< std::endl;
 		close(fd);
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-	std::cout << "Client " << fd << ": " << buffer << std::endl;
+	std::cout << CYAN <<  "Client " << fd << ": " << RESET << buffer;
 }
