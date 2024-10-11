@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/11 13:02:18 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 14:56:21 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,5 @@ void Server::receivedNewData(int fd)
 	buffer[bytesRead] = '\0';
 	std::cout << CYAN <<  "Client " << fd << ": " << RESET << buffer;
 
-	send(fd, buffer, bytesRead, 0);
+	// send(fd, buffer, bytesRead, 0);
 }
