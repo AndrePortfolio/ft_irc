@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/11 10:15:50 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:15:45 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ class Server
 		void	listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds);
 		void	checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds);
 		void	CheckforClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds);
+
+
+		void 	printClients() const;
 };
 
 #endif

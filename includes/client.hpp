@@ -6,48 +6,52 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/10 10:16:47 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:15:39 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_CLASS_HPP
-#define CLIENT_CLASS_HPP
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
 
 #include "headers.hpp"
 
 class Client
 {
-private:
-	std::string			nickname;
-	std::string			username;
-	std::string			realname;
-	std::string			buffer;
-	int					connection_status;
-	int					socketFd;
+	private:
+		std::string			nickname;
+		std::string			username;
+		std::string			realname;
+		std::string			buffer;
+		bool				status;
 
-public:
-	Client();
-	Client(Client const &src);
-	Client(
-		int				socket,
-		std::string		nickname,
-		std::string		username,
-		std::string		realname
- 		);
-	virtual ~Client();
+		int					socketFd;
 
-	Client					&operator=(Client const &rhs);
+		Client(){}
 
-	const std::string		&getNickname(void) const;
-	void					setNickname(const std::string &src);
-	const std::string		&getUsername(void) const;
-	void					setUsername(const std::string &src);
-	const std::string		&getRealname(void) const;
-	void					setRealname(const std::string &src);
-	const std::string		&getBuffer(void) const;
-	void					setBuffer(const std::string &src);
-	const int				&getConnectionStatus(void) const;
-	void					setConnectionStatus(const int &status);
+	public:
+		Client(int clientSocket);
+		Client(Client const &src);
+		Client(
+			int				socket,
+			std::string		nickname,
+			std::string		username,
+			std::string		realname
+			);
+		virtual ~Client();
+
+		Client					&operator=(Client const &rhs);
+
+		const std::string		&getNickname(void) const;
+		void					setNickname(const std::string &src);
+		const std::string		&getUsername(void) const;
+		void					setUsername(const std::string &src);
+		const std::string		&getRealname(void) const;
+		void					setRealname(const std::string &src);
+		const std::string		&getBuffer(void) const;
+		void					setBuffer(const std::string &src);
+		const bool				&getStatus(void) const;
+		void					setStatus(const int &status);
+		const int				&getSocket(void) const;
 };
 
 #endif

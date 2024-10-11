@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/11 10:20:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:15:35 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,41 @@ void	Server::checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 		throw std::runtime_error("Error: pool failed");
 }
 
+void Server::printClients() const
+{
+	std::cout << "Current clients connected: " << clients.size() << std::endl;
+	for (size_t i = 0; i < clients.size(); ++i) {
+		std::cout << "Client Socket: " << clients[i].getSocket() << std::endl;
+		// If Client has more attributes, print them as well
+		// std::cout << "Nickname: " << clients[i].getNickname() << std::endl;
+	}
+}
+
+
 /* Listen for clients wanting to connect to the server and accept them */
 void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	// Checks for pending connection requests
 	if (fds[0].revents & POLLIN)
 	{
-		int	clientFd = accept(socketFd, nullptr, nullptr);
+		struct sockaddr_in	clientAddress;
+		socklen_t			clientSize = sizeof(clientAddress);
+		int					clientSocket = accept(socketFd, (sockaddr*)&clientAddress, &clientSize);
 
-		if (clientFd == ERROR)
+		if (clientSocket == ERROR)
 			throw std::runtime_error("Error: Failed to Assign socket to client");
-		else if (clientFd >= CLIENT_ACCEPTED)
+		else if (clientSocket >= CLIENT_ACCEPTED)
 		{
-			Client newClient;
+			Client newClient(clientSocket);
 
-			setNonBlocking(clientFd);
-			clients.emplace_back(newClient);
-			updatePool(fds[activeFds], activeFds, clientFd);
+			setNonBlocking(clientSocket);
+			clients.emplace_back(clientSocket);
+			updatePool(fds[activeFds], activeFds, clientSocket);
 
 			std::cout	<< GREEN <<  "New client connected: " << RESET
-						<< (clientFd - DEFAULT_FDS) << std::endl;
+						<< (clientSocket - DEFAULT_FDS) << std::endl;
+
+			printClients();
 		}
 	}
 }

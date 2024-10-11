@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/11 10:17:49 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:12:57 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@
 //----------------------------------------------------------------------------//
 
 Server::Server(std::string port, std::string password)
-	: port(0), password(password), signal(false), socketFd(0), address(), clients()
+	:	port(0),
+		password(password),
+		signal(false),
+		socketFd(-1),
+		address(),
+		clients()
 {
 	validateInput(port, password);
 	runServer();
@@ -79,9 +84,9 @@ void	Server::runServer()
 	// Step 1: Create the server socket
 	createServerSocket();
 	setNonBlocking(socketFd);
-	initServerAddress();
 
 	// Step 2: Bind the socket to the IP/port
+	initServerAddress();
 	bindServerSocket();
 
 	// Step 3: Mark the socket for listening in

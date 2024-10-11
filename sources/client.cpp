@@ -6,16 +6,11 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/08 13:07:40 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:13:01 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/client.hpp"
-
-Client::Client()
-{
-	Client(-1, "", "", "");
-}
 
 Client::Client(int socket, std::string nickname, std::string username, std::string realname)
 {
@@ -23,9 +18,17 @@ Client::Client(int socket, std::string nickname, std::string username, std::stri
 	this->username = username;
 	this->realname = realname;
 	this->buffer = "";
-	this->connection_status = 0;
+	this->status = false;
 	this->socketFd = socket;
 }
+
+Client::Client(int clientSocket)
+	:	nickname(),
+		username(),
+		realname(),
+		buffer(),
+		status(false),
+		socketFd(clientSocket){}
 
 Client::Client(Client const &src)
 {
@@ -34,7 +37,8 @@ Client::Client(Client const &src)
 
 Client::~Client()
 {
-
+	// if (socketFd >= 0)
+	// 	close(socketFd);
 }
 
 Client &Client::operator=(Client const &src)
@@ -90,13 +94,17 @@ void	Client::setBuffer(const std::string &src)
 	this->buffer = src;
 }
 
-const	int	&Client::getConnectionStatus(void) const
+const	bool	&Client::getStatus(void) const
 {
-	return (this->connection_status);
+	return (this->status);
 }
 
-void	Client::setConnectionStatus(const int &status)
+void	Client::setStatus(const int &status)
 {
-	this->connection_status = status;
+	this->status = status;
 }
 
+const int	&Client::getSocket(void) const
+{
+	return (this->socketFd);
+}
