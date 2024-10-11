@@ -6,21 +6,11 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/11 12:13:01 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:32:14 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/client.hpp"
-
-Client::Client(int socket, std::string nickname, std::string username, std::string realname)
-{
-	this->nickname = nickname;
-	this->username = username;
-	this->realname = realname;
-	this->buffer = "";
-	this->status = false;
-	this->socketFd = socket;
-}
 
 Client::Client(int clientSocket)
 	:	nickname(),
@@ -30,9 +20,9 @@ Client::Client(int clientSocket)
 		status(false),
 		socketFd(clientSocket){}
 
-Client::Client(Client const &src)
+Client::Client(const Client &copy)
 {
-	*this = src;
+	*this = copy;
 }
 
 Client::~Client()
@@ -41,15 +31,16 @@ Client::~Client()
 	// 	close(socketFd);
 }
 
-Client &Client::operator=(Client const &src)
+Client &Client::operator=(Client const &other)
 {
-	if (this != &src)
+	if (this != &other)
 	{
-		this->nickname = src.nickname;
-		this->username = src.username;
-		this->realname = src.realname;
-		// this->buffer = src.buffer;
-		// this->connection_status = src.connection_status;
+		this->nickname = other.nickname;
+		this->username = other.username;
+		this->realname = other.realname;
+		this->buffer = other.buffer;
+		this->status = other.status;
+		this->socketFd = other.socketFd;
 	}
 	return (*this);
 }

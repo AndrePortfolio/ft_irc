@@ -84,3 +84,7 @@ https://ircv3.net/irc/
 https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 - YT Guide
 https://www.youtube.com/watch?v=cNdlrbZSkyQ
+
+FIXES:
+1. When message send is too big client freezes, or it sends the message as multiple
+2. Can't connect to Weechat

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/11 10:10:32 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:24:47 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@
 # define MIN_ALLOWED_PORT 1024
 # define MAX_ALLOWED_PORT 65535
 # define DEFAULT_FDS 3
-# define CLIENT_ACCEPTED 0
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"

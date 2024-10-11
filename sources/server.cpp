@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/11 12:12:57 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/11 12:37:54 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------//
 
 Server::Server(std::string port, std::string password)
-	:	port(0),
+	:	port(),
 		password(password),
 		signal(false),
 		socketFd(-1),
