@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/11 12:52:44 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/12 12:59:49 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@ class Client
 		std::string	buffer;
 		bool		status;
 		int			socketFd;
+		sockaddr_in	address;
 
 		Client(){}
 
 	public:
-		Client(int clientSocket);
+		Client(int clientSocket, sockaddr_in clientAddress);
 		Client(const Client &copy);
 		~Client();
 		Client	&operator=(const Client &other);
@@ -44,6 +45,7 @@ class Client
 		const bool			&getStatus(void) const;
 		void				setStatus(const int &status);
 		const int			&getSocket(void) const;
+		const  sockaddr_in	&getAddress(void) const;
 };
 
 #endif

@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/12 12:34:31 by andrealbuqu      ###   ########.fr       */
+/*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
+/*   Updated: 2024/10/12 12:32:37 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/headers.hpp"
+#include "headers.hpp"
 
-int	main(int ac, char **av)
+const std::string Server::currentDateTime()
 {
-	try
-	{
-		if (ac != 3)
-			throw std::runtime_error("Usage: ./ircserv <port number> <password>");
+	time_t		now = time(0);
+	struct tm	tstruct;
+	char		buf[80];
+	tstruct = *localtime(&now);
 
-		Server	server(av[1], av[2]);
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return (0);
+	strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+	return (buf);
 }

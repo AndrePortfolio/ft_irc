@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/11 14:56:21 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/12 13:11:18 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,11 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 			throw std::runtime_error("Error: Failed to Assign socket to client");
 		setNonBlocking(clientSocket);
 
-		Client	newClient(clientSocket);
+		Client	newClient(clientSocket, clientAddress);
 
 		clients.push_back(newClient);
 		updatePool(fds[activeFds], activeFds, clientSocket);
-
-		std::cout	<< GREEN <<  "New client connected: " << RESET
-					<< (clientSocket - DEFAULT_FDS) << std::endl;
+		printMessage(NEW_CONNECTION);
 	}
 }
 
@@ -59,36 +57,28 @@ void	Server::CheckforClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 	for (int i = 1; i < activeFds; i++)
 	{
 		if (fds[i].revents & POLLIN)
-		{
-			receivedNewData(fds[i].fd);
-
-			// if client disconnected update pool array
-			if (fds[i].fd == ERROR)
-			{
-				fds[i] = fds[activeFds - 1];
-				activeFds--;
-			}
-		}
+			receivedNewData(fds, i, activeFds);
 	}
 }
 
 /* Read data from client and output it to the server */
-void Server::receivedNewData(int fd)
+void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds)
 {
 	char	buffer[BUFFER_SIZE];
-	int		bytesRead = recv(fd, buffer, sizeof(buffer) - 1, 0);
+	int		bytesRead = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
 
 	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
 	else if (bytesRead == CLIENT_DISCONNECTED)
 	{
-		std::cout	<< RED <<  "Client disconnected:  " << RESET << (fd - DEFAULT_FDS)
-					<< std::endl;
-		close(fd);
+		printMessage(DISCONNECTED);
+		close(fds[i].fd);
+		fds[i] = fds[activeFds - 1];
+		activeFds--;
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-	std::cout << CYAN <<  "Client " << fd << ": " << RESET << buffer;
 
-	// send(fd, buffer, bytesRead, 0);
+	// std::cout	<< CYAN <<  "Client " << (fds[i].fd - DEFAULT_FDS) << ": "
+	// 			<< RESET << buffer;
 }

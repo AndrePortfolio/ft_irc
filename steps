@@ -85,6 +85,9 @@ https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 - YT Guide
 1. https://www.youtube.com/watch?v=gntyAFoZp-E
 2. https://www.youtube.com/watch?v=cNdlrbZSkyQ
+- Github
+https://github.com/barimehdi77/ft_irc
+https://github.com/marineks/Ft_irc?tab=readme-ov-file
 
 FIXES:
 1. When message send is too big client freezes, or it sends the message as multiple

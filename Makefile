@@ -7,7 +7,7 @@ RM = rm -rf
 OBJ_DIR = objects
 SRC_DIR = sources
 HEADER = includes
-S = main server client acceptClients initServer
+S = main server client acceptClients initServer messages utils
 SRC = $(addprefix $(SRC_DIR)/,$(addsuffix .cpp, $(S)))
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.cpp=.o)))
 

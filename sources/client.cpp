@@ -6,19 +6,24 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/11 12:32:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/12 13:00:12 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/client.hpp"
 
-Client::Client(int clientSocket)
+//----------------------------------------------------------------------------//
+//--------------------------- Contructors / Destructor -----------------------//
+//----------------------------------------------------------------------------//
+
+Client::Client(int clientSocket, sockaddr_in clientAddress)
 	:	nickname(),
 		username(),
 		realname(),
 		buffer(),
 		status(false),
-		socketFd(clientSocket){}
+		socketFd(clientSocket),
+		address(clientAddress){}
 
 Client::Client(const Client &copy)
 {
@@ -31,6 +36,10 @@ Client::~Client()
 	// 	close(socketFd);
 }
 
+//----------------------------------------------------------------------------//
+//---------------------------------- Operators -------------------------------//
+//----------------------------------------------------------------------------//
+
 Client &Client::operator=(Client const &other)
 {
 	if (this != &other)
@@ -41,61 +50,28 @@ Client &Client::operator=(Client const &other)
 		this->buffer = other.buffer;
 		this->status = other.status;
 		this->socketFd = other.socketFd;
+		this->address = other.address;
 	}
 	return (*this);
 }
 
-const std::string &Client::getNickname(void) const
-{
-	return (this->nickname);
-}
+//----------------------------------------------------------------------------//
+//--------------------------------- Methods ----------------------------------//
+//----------------------------------------------------------------------------//
 
-void Client::setNickname(const std::string &src)
-{
-	this->nickname = src;
-}
+/* -------------------------------- Getters ----------------------------------*/
+const std::string	&Client::getNickname(void) const { return (this->nickname); }
+const std::string	&Client::getUsername(void) const { return (this->username); }
+const std::string	&Client::getRealname(void) const { return (this->realname); }
+const std::string	&Client::getBuffer(void) const { return (this->buffer); }
+const bool			&Client::getStatus(void) const { return (this->status); }
+const int			&Client::getSocket(void) const { return (this->socketFd); }
+const  sockaddr_in	&Client::getAddress(void) const { return (this->address); }
 
-const std::string &Client::getUsername(void) const
-{
-	return (this->username);
-}
+/* -------------------------------- Setters ----------------------------------*/
+void	Client::setNickname(const std::string &src) { this->nickname = src; }
+void	Client::setUsername(const std::string &src) { this->username = src; }
+void	Client::setRealname(const std::string &src) { this->realname = src; }
+void	Client::setBuffer(const std::string &src) { this->buffer = src; }
+void	Client::setStatus(const int &status) { this->status = status; }
 
-void Client::setUsername(const std::string &src)
-{
-	this->username = src;
-}
-
-const std::string &Client::getRealname(void) const
-{
-	return (this->realname);
-}
-
-void	Client::setRealname(const std::string &src)
-{
-	this->realname = src;
-}
-
-const std::string &Client::getBuffer(void) const
-{
-	return (this->buffer);
-}
-
-void	Client::setBuffer(const std::string &src)
-{
-	this->buffer = src;
-}
-
-const	bool	&Client::getStatus(void) const
-{
-	return (this->status);
-}
-
-void	Client::setStatus(const int &status)
-{
-	this->status = status;
-}
-
-const int	&Client::getSocket(void) const
-{
-	return (this->socketFd);
-}
