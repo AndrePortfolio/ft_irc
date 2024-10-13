@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:22 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/12 13:15:40 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 08:50:47 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ void	Server::listenToServerSocket()
 	if (listen(socketFd, MAX_CONNECTIONS) == ERROR)
 		throw std::runtime_error("Error: Failed to listen on the socket");
 
-	printMessage(LISTENING);
+	printMessage(LISTENING, DEFAULT);
 }

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/12 12:58:46 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 08:41:59 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ class Server
 	// Util Functions
 		std::string			welcomeMsg() const;
 		const std::string	currentDateTime();
-		void				printMessage(int msg);
+		void				printMessage(int msg, int index);
 
 	public:
 		Server(std::string port, std::string password);

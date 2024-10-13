@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/12 13:20:50 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 08:43:08 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ std::string	Server::welcomeMsg() const
 }
 
 /* Displays messages */
-void	Server::printMessage(int input)
+void	Server::printMessage(int input, int index)
 {
 	std::string	msg;
 	std::string welcome;
@@ -77,7 +77,7 @@ void	Server::printMessage(int input)
 			msg.append("]: ");
 			msg.append(RESET);
 			msg.append("socket ");
-			msg.append(std::to_string(clients.back().getSocket()));
+			msg.append(std::to_string(index));
 			msg.append(" hung up.");
 			break;
 		default:

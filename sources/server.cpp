@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/12 12:46:15 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 08:50:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	Server::validateInput(std::string port, std::string password)
 /* Configure the server socket, bind to an IP/port, and prepare for client connections */
 void	Server::runServer()
 {
-	printMessage(SERVER);
+	printMessage(SERVER, DEFAULT);
 
 	// Step 1: Create the server socket
 	createServerSocket();

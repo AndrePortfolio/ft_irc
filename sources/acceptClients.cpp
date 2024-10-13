@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/12 13:11:18 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 08:54:09 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 
 		clients.push_back(newClient);
 		updatePool(fds[activeFds], activeFds, clientSocket);
-		printMessage(NEW_CONNECTION);
+		printMessage(NEW_CONNECTION, DEFAULT);
 	}
 }
 
@@ -68,17 +68,18 @@ void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFd
 	int		bytesRead = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
 
 	if (bytesRead == ERROR)
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+			return ;
 		throw std::runtime_error("Error: Failed to read from client socket");
+	}
 	else if (bytesRead == CLIENT_DISCONNECTED)
 	{
-		printMessage(DISCONNECTED);
+		printMessage(DISCONNECTED, fds[i].fd);
 		close(fds[i].fd);
 		fds[i] = fds[activeFds - 1];
 		activeFds--;
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-
-	// std::cout	<< CYAN <<  "Client " << (fds[i].fd - DEFAULT_FDS) << ": "
-	// 			<< RESET << buffer;
 }
