@@ -60,7 +60,7 @@ NOTE: In order to process a command, you have to first aggregate the received
 	packets in order to rebuild it.
 
 COMPARE TO natcat:
-1. nc irc.libera.chat 6667
+1. nc irc.libera.chat 6697
 2. NICK YourNickname
 3. USER YourUsername 0 * :Real Name
 4. JOIN #libera
@@ -73,7 +73,7 @@ COMMON MISTAKES:
 - Make sure to test the +k mode properly!
 - Why do I have a @ prefixed to my nickname?
 
-nc 127.0.0.1 6667
+nc 127.0.0.1 6697
 
 RESOURCES
 - Blocking vs Non-Blocking Sockets via stack overflow
@@ -88,19 +88,23 @@ https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 - Github
 https://github.com/barimehdi77/ft_irc
 https://github.com/marineks/Ft_irc?tab=readme-ov-file
+- irssi Guide
+https://www.youtube.com/watch?v=gOg-V_-tZMo
 
-FIXES:
-1. When message send is too big client freezes, or it sends the message as multiple
-2. Can't connect to Weechat
 
-WeeChat Commands:
+/connect chat.freenode.net
+NOTE: when in the server it still says [(status)]
 
-/disconnect <server>
-/buffer close
-/buffer next
-/quit
+/set nick USERNAME
+/NICK USERNAME
+nano ~/.irssi/config
+	autoconnect = "yes"
+	password = "USER, PASS"
+/join #ubuntu
+/join #gentoo
+/window (nbr)
+NOTE: writing prints msg on channel as <USER> msg
 
-/server add my_server localhost <port>
-/connect my_server
-/nick YourNickname
-/join #your_channel_name
+administrator:
+/kick user
+/ban user

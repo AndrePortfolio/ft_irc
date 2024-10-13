@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 08:50:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 11:14:39 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,6 @@ void	Server::acceptClients()
 	{
 		checkForEvent(fds, activeFds);
 		listenForClients(fds, activeFds);
-		CheckforClientData(fds, activeFds);
+		CheckForClientData(fds, activeFds);
 	}
 }

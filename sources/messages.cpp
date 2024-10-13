@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 08:43:08 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 09:01:51 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 /* Displays welcome message */
 std::string	Server::welcomeMsg() const
 {
-	std::string welcome = GREEN;
-	welcome.append("██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
-	welcome.append("██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
-	welcome.append("██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
-	welcome.append("██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝\n");
-	welcome.append("╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
-	welcome.append(" ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
-	welcome.append(BLUE);
-	welcome.append("You need to login so you can start chatting OR you can send HELP to see how :) \n");
-	welcome.append(RESET);
-	return (welcome);
+	std::string msg = GREEN;
+	msg.append("██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
+	msg.append("██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
+	msg.append("██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
+	msg.append("██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝\n");
+	msg.append("╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
+	msg.append(" ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
+	msg.append(BLUE);
+	msg.append("Login to start chatting OR send HELP to see how :)\n");
+	msg.append(RESET);
+	return (msg);
 }
 
 /* Displays messages */
 void	Server::printMessage(int input, int index)
 {
 	std::string	msg;
-	std::string welcome;
+	std::string wMsg;
 
 	switch (input)
 	{
@@ -65,8 +65,8 @@ void	Server::printMessage(int input, int index)
 			msg.append(" on socket ");
 			msg.append(std::to_string(clients.back().getSocket()));
 			msg.append(".");
-			welcome = welcomeMsg();
-			send(clients.back().getSocket(), welcome.c_str(), welcome.length(), DEFAULT);
+			wMsg = welcomeMsg();
+			send(clients.back().getSocket(), wMsg.c_str(), wMsg.length(), DEFAULT);
 			break;
 		case 3: // Disconnection
 			msg.append(CYAN);

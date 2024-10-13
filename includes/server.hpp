@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/13 08:41:59 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 11:47:49 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,20 @@ class Server
 		Server& operator=(const Server &other);
 
 	// Member Functions
-		void		validateInput(std::string port, std::string password);
-		void		runServer();
-		void		createServerSocket();
-		void		setNonBlocking(int& fd);
-		void		initServerAddress();
-		void		bindServerSocket();
-		void		listenToServerSocket();
-		void		acceptClients();
-		void		updatePool(struct pollfd& fds, int& activeFds, int socket);
-		void		checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		CheckforClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		receivedNewData(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
+		void	validateInput(std::string port, std::string password);
+		void	runServer();
+		void	createServerSocket();
+		void	setNonBlocking(int& fd);
+		void	initServerAddress();
+		void	bindServerSocket();
+		void	listenToServerSocket();
+		void	acceptClients();
+		void	updatePool(struct pollfd& fds, int& activeFds, int socket);
+		void	checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds);
+		void	listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds);
+		void	CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds);
+		void	receivedNewData(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
+		void	adjustPool(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
 
 	// Util Functions
 		std::string			welcomeMsg() const;
