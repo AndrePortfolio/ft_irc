@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/13 08:50:21 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 13:16:14 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define ERROR -1
 # define MIN_ALLOWED_PORT 1024
 # define MAX_ALLOWED_PORT 65535
-# define DEFAULT_FDS 3
+# define DEFAULT_FDS 4
 
 # define SERVER 0
 # define NEW_CONNECTION 2

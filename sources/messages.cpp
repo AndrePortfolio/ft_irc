@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 09:01:51 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 13:28:47 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ void	Server::printMessage(int input, int index)
 			msg.append("]: ");
 			msg.append(RESET);
 			msg.append("new connection from ");
-			msg.append(inet_ntoa(((sockaddr_in*)&clients.back().getAddress())->sin_addr));
+			msg.append(inet_ntoa(((sockaddr_in*)&clients[index].getAddress())->sin_addr));
 			msg.append(" on socket ");
-			msg.append(std::to_string(clients.back().getSocket()));
+			msg.append(std::to_string(clients[index].getSocket()));
 			msg.append(".");
 			wMsg = welcomeMsg();
-			send(clients.back().getSocket(), wMsg.c_str(), wMsg.length(), DEFAULT);
+			send(clients[index].getSocket(), wMsg.c_str(), wMsg.length(), DEFAULT);
 			break;
 		case 3: // Disconnection
 			msg.append(CYAN);

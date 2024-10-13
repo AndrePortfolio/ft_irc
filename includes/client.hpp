@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/12 12:59:49 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 13:27:08 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,16 @@
 class Client
 {
 	private:
+		bool		status;
 		std::string	nickname;
 		std::string	username;
-		std::string	realname;
-		std::string	buffer;
-		bool		status;
+		std::string	realname;	// is this requiered?
+		std::string	buffer;		// unsure if we need this in this scope
 		int			socketFd;
 		sockaddr_in	address;
 
-		Client(){}
-
 	public:
+		Client(){}
 		Client(int clientSocket, sockaddr_in clientAddress);
 		Client(const Client &copy);
 		~Client();

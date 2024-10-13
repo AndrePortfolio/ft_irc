@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/13 11:49:53 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/13 13:34:38 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 		setNonBlocking(clientSocket);
 
 		Client	newClient(clientSocket, clientAddress);
-		clients.push_back(newClient);
+		clients[clientSocket - DEFAULT_FDS] = newClient;
 
 		updatePool(fds[activeFds], activeFds, clientSocket);
-		printMessage(NEW_CONNECTION, DEFAULT);
+		printMessage(NEW_CONNECTION, clientSocket - DEFAULT_FDS);
 	}
 }
 
@@ -62,27 +62,53 @@ void	Server::CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 }
 
 /* Read data from client and output it to the server */
-void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds)
+void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
 	char	buffer[BUFFER_SIZE];
-	int		bytesRead = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
+	int		bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, 0);
 
 	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
 	else if (bytesRead == CLIENT_DISCONNECTED)
 	{
-		printMessage(DISCONNECTED, fds[i].fd);
-		adjustPool(fds, i, activeFds);
+		printMessage(DISCONNECTED, fds[client].fd);
+		adjustClients(fds, client, activeFds);
 		return ;
 	}
 	buffer[bytesRead] = '\0';
+
+	// std::string outputMsg;
+
+	// outputMsg = parseClientMessage(buffer, client);
+	// feebackClient(outputMsg);
 }
 
-/* Make sure there are no gaps in the pool array of fds */
-void Server::adjustPool(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds)
+/* Removes client from map and makes sure there are no gaps in the pool of fds */
+void Server::adjustClients(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
-	close(fds[i].fd);
-	for (int j = i; j < activeFds; j++)
+	int key = fds[client].fd - DEFAULT_FDS;
+
+	// Remove from map
+	if (clients.find(key) != clients.end())
+		clients.erase(key);
+
+	// Remove from pool
+	close(fds[client].fd);
+	for (int j = client; j < activeFds; j++)
 		fds[j] = fds[j + 1];
 	activeFds--;
 }
+
+// std::string Server::parseClientMessage(char	buffer[BUFFER_SIZE], int& client)
+// {
+// 	std::string	message(buffer, strlen(buffer) - 1);
+// 	if (message.back() == '\r')
+// 		message.erase(message.end() - 1);
+
+
+// }
+
+// void	Server::feebackClient(std::string outputMsg)
+// {
+
+// }
