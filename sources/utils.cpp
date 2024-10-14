@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/14 13:51:01 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/14 10:17:30 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ std::string	Server::welcomeMsg() const
 	msg.append("╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
 	msg.append(" ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
 	msg.append(BLUE);
-	msg.append("Login to start chatting OR send HELP to see how :)\n\n");
+	msg.append("\n   ✨ Login to start chatting OR type HELP to see all commands! ✨\n");
+    msg.append("          📢 Remember: Great chat, great community! 🤗\n\n");
 	msg.append(RESET);
 	return (msg);
 }
