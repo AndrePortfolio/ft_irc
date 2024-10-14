@@ -1,3 +1,17 @@
+Usefull copy/paste commands to test the program:
+	./ircserv 4242 42
+	irssi
+	/connect localhost 4242 42
+
+To pass raw commands to our server using IRSSI -> /QUOTE command
+
+Context for evals:
+	1st client uses socket 4 as fd's 0,1,2 are reserved for stdin, stdout and stderr.
+	Socket 3 is the listening one, and when a client connects it duplicates itself, AKA client
+	connects to socket 4.
+
+------------------------------------------------------------------------------------------------------
+
 Pre-requisites:
 1. understand the following external functions:
 	socket, close, setsockopt, getsockname,

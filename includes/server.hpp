@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/14 13:40:59 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/14 12:41:20 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ class Server
 	// Commands
 		std::string	helpCommand();
 		std::string	invalidCommand();
+		std::vector<std::string> splitCommands(const std::string& message);
+		std::string processCommand(const std::string& command);
 
 	// Util Functions
 		std::string			welcomeMsg() const;
