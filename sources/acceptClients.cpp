@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/13 14:00:10 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/14 13:47:09 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	Server::CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
 	char	buffer[BUFFER_SIZE];
-	int		bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, 0);
+	int		bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
 
 	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
@@ -76,7 +76,8 @@ void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& act
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-	handleData(buffer, client);
+	int	clientIndex = client - 1;
+	handleData(buffer, clientIndex);
 }
 
 /* Removes client from map and makes sure there are no gaps in the pool of fds */
@@ -95,53 +96,3 @@ void Server::adjustClients(struct pollfd(&fds)[MAX_FDS], int& client, int& activ
 	activeFds--;
 }
 
-/* Removes ENTER from the command, prepares for parsing and outputs to client */
-void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
-{
-	std::string	message(buffer, strlen(buffer) - 1);
-	if (message.back() == '\r')
-		message.erase(message.end() - 1);
-
-	std::string	outputMsg = parseClientMessage(message, client);
-	feebackClient(outputMsg);
-}
-
-/* Parses client input */
-std::string Server::parseClientMessage(std::string message, int& client)
-{
-	if (message == "HELP")
-	{}
-	else if (message == "PASS")
-	{}
-	else if (message == "NICK")
-	{}
-	else if (message == "USER")
-	{}
-	else if (message == "OPER")
-	{}
-	else if (message == "JOIN")
-	{}
-	else if (message == "PRIVMSG")
-	{}
-	else if (message == "KICK")
-	{}
-	else if (message == "INVITE")
-	{}
-	else if (message == "TOPIC")
-	{}
-	else if (message == "MODE")
-	{}
-	else if (message == "QUIT")
-	{}
-	else
-		return ("Invalid command\n");
-
-	(void)client;
-	return (nullptr); // remove after all commands done
-}
-
-/* Sends feedback to client */
-void	Server::feebackClient(std::string outputMsg)
-{
-	(void)outputMsg;
-}

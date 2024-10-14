@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/13 13:16:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/14 13:31:12 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@
 # define BLUE	"\x1b[34;1m"
 # define CYAN	"\x1b[36;1m"
 # define YELLOW	"\033[33;1m"
+# define BOLD	"\033[1m"
 # define RESET	"\x1b[0m"
 
 # include "server.hpp"

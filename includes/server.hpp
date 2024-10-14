@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/13 13:41:18 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/14 13:40:59 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ class Server
 		void		adjustClients(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
 		void		handleData(char	buffer[BUFFER_SIZE], int& client);
 		std::string	parseClientMessage(std::string message, int& client);
-		void		feebackClient(std::string outputMsg);
+		void		feebackClient(std::string outputMsg, int& client);
+
+	// Commands
+		std::string	helpCommand();
+		std::string	invalidCommand();
 
 	// Util Functions
 		std::string			welcomeMsg() const;
