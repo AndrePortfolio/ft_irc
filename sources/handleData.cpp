@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/14 13:54:22 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/14 14:51:38 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,12 @@ std::string Server::parseClientMessage(std::string message, int& client)
 	{}
 	else if (message == "QUIT")
 	{}
+	else if (message == "PART")
+	{}
+	else if (message == "PING")
+	{}
 	// else
-	return invalidCommand();
+	return (invalidCommand());
 }
 
 /* Sends feedback to client */
