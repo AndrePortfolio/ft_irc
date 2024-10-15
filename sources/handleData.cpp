@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 10:44:15 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 11:43:43 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,136 +16,186 @@
 void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
 {
 	std::string	message(buffer, strlen(buffer) - 1);
-	if (message.back() == '\r')
+	if (!message.empty() && message.back() == '\r')
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client);
-	feebackClient(outputMsg, client);
-}
-
-std::vector<std::string> Server::splitCommands(const std::string& message)
-{
-    std::vector<std::string> commands;
-    std::istringstream stream(message);
-    std::string command;
-
-    while (std::getline(stream, command, '\n'))
-    {
-        if (!command.empty() && command.back() == '\r')
-        {
-            command.pop_back(); // Remove trailing carriage return
-        }
-        commands.push_back(command);
-    }
-
-    return (commands);
-}
-
-/* Processes individual command */
-std::string Server::processCommand(const std::string& command)
-{
-    std::istringstream commandStream(command);
-    std::string cmd;
-    commandStream >> cmd;
-
-    if (cmd == "HELP")
-        return (helpCommand());
-    else if (cmd == "CAP" && command.find("LS 302") != std::string::npos)
-        return ("CAP * LS :\r\n"); // Respond indicating no capabilities are supported
-     else if (cmd == "JOIN")
-    {
-        std::string channel;
-        commandStream >> channel;
-        if (channel.empty() || channel[0] != '#')
-            return (":server 461 * JOIN :No channel specified or invalid channel name\r\n");
-        // return (":nick!user@server JOIN " + channel + "\r\n:server 332 " + channel + " :Welcome to " + channel + "\r\n");
-    }
-    else if (cmd == "PASS")
-    {
-        std::string password;
-        commandStream >> password;
-        if (password.empty())
-            return (":server 461 * PASS :Not enough parameters\r\n");
-        // return (":server 001 * :Password accepted\r\n");
-    }
-    else if (cmd == "NICK")
-    {
-        std::string nickname;
-        commandStream >> nickname;
-        if (nickname.empty())
-            return (":server 431 * :No nickname given\r\n");
-        // return (":server 001 " + nickname + " :Welcome, your nickname has been set\r\n");
-    }
-    else if (cmd == "USER")
-    {
-        std::string username;
-        commandStream >> username;
-        if (username.empty())
-            return (":server 461 * USER :Not enough parameters\r\n");
-        // return (":server 001 user :Welcome, you are now registered\r\n");
-    }
-    else if (cmd == "MODE")
-    {
-        std::string target;
-        commandStream >> target;
-        if (target.empty())
-            return (":server 461 * MODE :Not enough parameters\r\n");
-        return (":server 324 nick +nt\r\n"); // Respond with default mode settings
-    }
-    else if (cmd == "OPER")
-        return ("OPER command\n");
-    else if (cmd == "PRIVMSG")
-        return ("PRIVMSG command\n");
-    else if (cmd == "KICK")
-        return ("KICK command\n");
-    else if (cmd == "INVITE")
-        return ("INVITE command\n");
-    else if (cmd == "TOPIC")
-        return ("TOPIC command\n");
-    else if (cmd == "QUIT")
-        return ("QUIT command\n");
-    else if (cmd == "PART")
-    {
-        std::string channel;
-        commandStream >> channel;
-        if (channel.empty())
-            return (":server 461 * PART :No channel specified\r\n");
-        return (":server 331 nick :Left channel " + channel + "\r\n");
-    }
-    else if (cmd == "PING")
-        return ("PONG :server\r\n"); // Respond to PING with PONG
-    // else
-    return (invalidCommand());
+	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
 /* Parses client input */
 std::string Server::parseClientMessage(std::string message, int& client)
 {
-    (void)client; // delete once used;
+	strings	commands = splitCommands(message);
 
-    std::cout << "----\nMessage received: " << message << "\n--------" << std::endl;
-
-    std::vector<std::string> commands = splitCommands(message);
-
+	// Just for debuging, will delete this
 	std::cout << "Commands received: " << commands.size() << "\n----" << std::endl;
-	for (std::vector<std::string>::const_iterator it = commands.begin(); it != commands.end(); ++it)
+	for (stringConsIterator it = commands.begin(); it != commands.end(); ++it)
 	{
 		std::cout << "Command: " << *it << std::endl;
 	}
-
-    for (std::vector<std::string>::const_iterator it = commands.begin(); it != commands.end(); ++it)
-    {
-        std::string response = processCommand(*it);
-        feebackClient(response, client);
-    }
-
-    return ""; // No need to return a concatenated response
+	return (processCommand(commands, client));
 }
 
-/* Sends feedback to client */
-void	Server::feebackClient(std::string outputMsg, int& client)
+/* Spits client message in multiple command arguments */
+strings	Server::splitCommands(const std::string& message)
 {
-	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
+	strings				commands;
+	std::istringstream	stream(message);
+	std::string			command;
+
+	while (std::getline(stream, command, ' '))
+		commands.push_back(command);
+
+	return (commands);
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::capCommand(const strings& commands)
+{
+	(void)commands;
+	// if (commands.size() == 3 && commands[1] == "LS" && commands[2] == "302")
+		return ("CAP * LS :\n");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::joinCommand(const strings& commands)
+{
+	(void)commands;
+	// if (commands.size() <= 1 || commands[1][0] != '#')
+	// 	return (":server 461 * JOIN :No channel specified or invalid channel name\r\n");
+	return (":nick!user@server JOIN " "+ channel +" "\r\n:server 332 " "+ channel +" " :Welcome to " "+ channel +" "\r\n");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::passCommand(const strings& commands)
+{
+	(void)commands;
+	// if (password.empty())
+		// 	return (":server 461 * PASS :Not enough parameters\r\n");
+	return (":server 001 * :Password accepted\r\n");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::nickCommand(const strings& commands)
+{
+	(void)commands;
+	// if (nickname.empty())
+		// 	return (":server 431 * :No nickname given\r\n");
+	return (":server 001 " "+ nickname +" " :Welcome, your nickname has been set\r\n");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::userCommand(const strings& commands)
+{
+	(void)commands;
+		// if (username.empty())
+		// 	return (":server 461 * USER :Not enough parameters\r\n");
+	return (":server 001 user :Welcome, you are now registered\r\n");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::modeCommand(const strings& commands)
+{
+	(void)commands;
+	// if (target.empty())
+		// 	return (":server 461 * MODE :Not enough parameters\r\n");
+	return (":server 324 nick +nt\r\n"); // Respond with default mode settings
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::partCommand(const strings& commands)
+{
+	(void)commands;
+	// if (channel.empty())
+		// 	return (":server 461 * PART :No channel specified\r\n");
+	return (":server 331 nick :Left channel " "+ channel +" "\r\n");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::operCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::privmsgCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::kickCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::inviteCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::topicCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::quitCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Unsure of what this does, just replicating behavior from previous code */
+std::string	Server::pingCommand(const strings& commands)
+{
+	(void)commands;
+	return ("");
+}
+
+/* Processes individual command */
+std::string Server::processCommand(const strings& commands, int& client)
+{
+	(void)client;
+	if (commands[0] == "HELP")
+		return (helpCommand());
+	else if (commands[0] == "CAP")
+		return (capCommand(commands));
+	else if (commands[0] == "JOIN")
+		return (joinCommand(commands));
+	else if (commands[0] == "PASS")
+		return (passCommand(commands));
+	else if (commands[0] == "NICK")
+		return (nickCommand(commands));
+	else if (commands[0] == "USER")
+		return (userCommand(commands));
+	else if (commands[0] == "MODE")
+		return (modeCommand(commands));
+	else if (commands[0] == "OPER")
+		return (operCommand(commands));
+	else if (commands[0] == "PRIVMSG")
+		return (privmsgCommand(commands));
+	else if (commands[0] == "KICK")
+		return (kickCommand(commands));
+	else if (commands[0] == "INVITE")
+		return (inviteCommand(commands));
+	else if (commands[0] == "TOPIC")
+		return (topicCommand(commands));
+	else if (commands[0] == "QUIT")
+		return (quitCommand(commands));
+	else if (commands[0] == "PART")
+		return (partCommand(commands));
+	else if (commands[0] == "PING")
+		return (pingCommand(commands));
+	return (invalidCommand());
 }
 
 /* Displays Invalid command message */

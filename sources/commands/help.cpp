@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 10:43:33 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 10:46:38 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::string	Server::helpCommand()
 	std::string msg;
 
 	msg.append(BOLD);
-	msg.append("\nlogin Instructions:\n");
+	msg.append("\nLogin Instructions:\n");
 	msg.append(GREEN);
 	msg.append("STEP 1 -> ");
 	msg.append(RESET);

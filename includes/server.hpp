@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/14 12:41:20 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/15 11:35:41 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include "headers.hpp"
 
 class Client;
+
 typedef std::map<int, Client> Clients;
+typedef std::vector<std::string> strings;
+typedef std::vector<std::string>::const_iterator stringConsIterator;
 
 class Server
 {
@@ -52,13 +55,27 @@ class Server
 		void		adjustClients(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
 		void		handleData(char	buffer[BUFFER_SIZE], int& client);
 		std::string	parseClientMessage(std::string message, int& client);
-		void		feebackClient(std::string outputMsg, int& client);
 
 	// Commands
+		strings		splitCommands(const std::string& message);
+		std::string	processCommand(const strings& commands, int& client);
+
 		std::string	helpCommand();
+		std::string	capCommand(const strings& commands);
+		std::string	joinCommand(const strings& commands);
+		std::string	passCommand(const strings& commands);
+		std::string	nickCommand(const strings& commands);
+		std::string	userCommand(const strings& commands);
+		std::string	modeCommand(const strings& commands);
+		std::string	operCommand(const strings& commands);
+		std::string	privmsgCommand(const strings& commands);
+		std::string	kickCommand(const strings& commands);
+		std::string	inviteCommand(const strings& commands);
+		std::string	topicCommand(const strings& commands);
+		std::string	quitCommand(const strings& commands);
+		std::string	partCommand(const strings& commands);
+		std::string	pingCommand(const strings& commands);
 		std::string	invalidCommand();
-		std::vector<std::string> splitCommands(const std::string& message);
-		std::string processCommand(const std::string& command);
 
 	// Util Functions
 		std::string			welcomeMsg() const;
