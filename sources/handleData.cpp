@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 10:12:41 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 10:44:15 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ std::string Server::parseClientMessage(std::string message, int& client)
 /* Sends feedback to client */
 void	Server::feebackClient(std::string outputMsg, int& client)
 {
-	outputMsg.append("\n");
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
