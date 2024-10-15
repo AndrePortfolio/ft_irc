@@ -1,5 +1,5 @@
 NAME = ircserv
-CXXFLAGS = -Wall -Wextra -Werror #-std=c++98
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 CXX = c++
 COMPRESS = ar rcs
 RM = rm -rf
@@ -10,7 +10,7 @@ CMD_SRC_DIR = $(SRC_DIR)/commands
 SRC_DIRS = $(SRC_DIR) $(SRC_DIR)/commands
 HEADER = includes
 S1 = main server client acceptClients runServer handleData utils
-S2 = help #invite join kick mode nick oper part pass ping privmsg quit topic user
+S2 = help cap invite join kick mode nick oper part pass ping privmsg quit topic user
 SRC =
 SRC += $(addprefix $(SRC_DIR)/,$(addsuffix .cpp, $(S1)))
 SRC += $(addprefix $(CMD_SRC_DIR)/,$(addsuffix .cpp, $(S2)))
