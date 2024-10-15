@@ -6,9 +6,14 @@ RM = rm -rf
 
 OBJ_DIR = objects
 SRC_DIR = sources
+CMD_SRC_DIR = $(SRC_DIR)/commands
+SRC_DIRS = $(SRC_DIR) $(SRC_DIR)/commands
 HEADER = includes
-S = main server client acceptClients runServer handleData utils
-SRC = $(addprefix $(SRC_DIR)/,$(addsuffix .cpp, $(S)))
+S1 = main server client acceptClients runServer handleData utils
+S2 = help #invite join kick mode nick oper part pass ping privmsg quit topic user
+SRC =
+SRC += $(addprefix $(SRC_DIR)/,$(addsuffix .cpp, $(S1)))
+SRC += $(addprefix $(CMD_SRC_DIR)/,$(addsuffix .cpp, $(S2)))
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.cpp=.o)))
 
 # Colours
@@ -25,9 +30,12 @@ $(NAME): $(OBJ_DIR) $(OBJ)
 	@echo "$(CYAN)make$(RESET)   $@ $(GREEN)[OK]$(RESET)"
 
 $(OBJ_DIR):
-	@mkdir -p $@
+	@mkdir -p $(OBJ_DIR) $(foreach dir, $(SRC_DIRS), $(OBJ_DIR)/$(notdir $(dir)))
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
+
+$(OBJ_DIR)/%.o: $(CMD_SRC_DIR)/%.cpp
 	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
 
 clean:

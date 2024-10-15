@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleData.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/14 13:16:40 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/15 10:12:41 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ std::string Server::processCommand(const std::string& command)
     std::istringstream commandStream(command);
     std::string cmd;
     commandStream >> cmd;
-	
+
     if (cmd == "HELP")
         return (helpCommand());
     else if (cmd == "CAP" && command.find("LS 302") != std::string::npos)
@@ -114,19 +114,19 @@ std::string Server::processCommand(const std::string& command)
     }
     else if (cmd == "PING")
         return ("PONG :server\r\n"); // Respond to PING with PONG
-    else
-        return (invalidCommand());
+    // else
+    return (invalidCommand());
 }
 
 /* Parses client input */
 std::string Server::parseClientMessage(std::string message, int& client)
 {
     (void)client; // delete once used;
-	
+
     std::cout << "----\nMessage received: " << message << "\n--------" << std::endl;
 
     std::vector<std::string> commands = splitCommands(message);
-	
+
 	std::cout << "Commands received: " << commands.size() << "\n----" << std::endl;
 	for (std::vector<std::string>::const_iterator it = commands.begin(); it != commands.end(); ++it)
 	{
@@ -147,53 +147,6 @@ void	Server::feebackClient(std::string outputMsg, int& client)
 {
 	outputMsg.append("\n");
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
-}
-
-/* Displays how to Login */
-std::string	Server::helpCommand()
-{
-	std::string msg;
-
-    msg.append(GREEN);
-    msg.append("STEP 1 -> ");
-    msg.append(RESET);
-    msg.append("Set a password:\n");
-    msg.append(BOLD);
-    msg.append("\t   PASS <Password>\n\n");
-    msg.append(GREEN);
-    msg.append("STEP 2 -> ");
-    msg.append(RESET);
-    msg.append("Set a nickname:\n");
-    msg.append(BOLD);
-    msg.append("\t   NICK <nick>\n\n");
-    msg.append(GREEN);
-    msg.append("STEP 3 -> ");
-    msg.append(RESET);
-    msg.append("Set a username and fullname:\n");
-    msg.append(BOLD);
-    msg.append("\t   USER <user> * * :<fullname>\n\n");
-
-    msg.append(GREEN);
-    msg.append("Available commands:\n");
-    msg.append(RESET);
-    msg.append(BOLD);
-    msg.append("- HELP: Show this help message\n");
-    msg.append("- PASS: Set a password for the connection\n");
-    msg.append("- NICK <nickname>: Set your nickname\n");
-    msg.append("- USER <username>: Register your username\n");
-    msg.append("- OPER: Gain operator privileges\n");
-    msg.append("- JOIN <channel>: Join a channel\n");
-    msg.append("- PRIVMSG <nick/channel> <message>: Send a private message\n");
-    msg.append("- KICK <channel> <user>: Kick a user from a channel\n");
-    msg.append("- INVITE <nick> <channel>: Invite a user to a channel\n");
-    msg.append("- TOPIC <channel> <topic>: Set the channel topic\n");
-    msg.append("- MODE <channel/user> <mode>: Change mode of a channel or user\n");
-    msg.append("- QUIT: Disconnect from the server\n");
-    msg.append("- PING: Ping the server\n");
-    msg.append("- PART <channel>: Leave a channel\n");
-    msg.append(RESET);
-	
-	return (msg);
 }
 
 /* Displays Invalid command message */
