@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 12:05:49 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:12:12 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,36 +38,41 @@ std::string Server::parseClientMessage(std::string message, int& client)
 
 	debugCommandSplit(commands); // Just for debuging, will delete this
 
+	// General Commands:
 	if (commands[0] == "HELP")
 		return (helpCommand());
 	else if (commands[0] == "CAP")
 		return (capCommand(commands));
-	else if (commands[0] == "JOIN")
-		return (joinCommand(commands, client));
+	// Login Commands:
 	else if (commands[0] == "PASS")
 		return (passCommand(commands));
 	else if (commands[0] == "NICK")
 		return (nickCommand(commands));
 	else if (commands[0] == "USER")
 		return (userCommand(commands));
+	// Channel Operations:
+	else if (commands[0] == "JOIN")
+		return (joinCommand(commands, client));
 	else if (commands[0] == "MODE")
-		return (modeCommand(commands));
+		return (modeCommand(commands, client));
+	else if (commands[0] == "TOPIC")
+		return (topicCommand(commands, client));
+	else if (commands[0] == "PART")
+		return (partCommand(commands, client));
+	else if (commands[0] == "PRIVMSG")
+		return (privmsgCommand(commands, client));
+	else if (commands[0] == "INVITE")
+		return (inviteCommand(commands, client));
+	else if (commands[0] == "KICK")
+		return (kickCommand(commands, client));
+	// Server Adminstration and Maintenance:
 	else if (commands[0] == "OPER")
 		return (operCommand(commands));
-	else if (commands[0] == "PRIVMSG")
-		return (privmsgCommand(commands));
-	else if (commands[0] == "KICK")
-		return (kickCommand(commands));
-	else if (commands[0] == "INVITE")
-		return (inviteCommand(commands));
-	else if (commands[0] == "TOPIC")
-		return (topicCommand(commands));
-	else if (commands[0] == "QUIT")
-		return (quitCommand(commands));
-	else if (commands[0] == "PART")
-		return (partCommand(commands));
 	else if (commands[0] == "PING")
 		return (pingCommand(commands));
+	else if (commands[0] == "QUIT")
+		return (quitCommand(commands));
+
 	return (invalidCommand());
 }
 

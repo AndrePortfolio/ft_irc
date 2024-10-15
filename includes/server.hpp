@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/15 12:11:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:11:52 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,19 @@ class Server
 		strings		splitCommands(const std::string& message);
 		std::string	helpCommand();
 		std::string	capCommand(const strings& commands);
-		std::string	joinCommand(const strings& commands, int& client);
+
 		std::string	passCommand(const strings& commands);
 		std::string	nickCommand(const strings& commands);
 		std::string	userCommand(const strings& commands);
-		std::string	modeCommand(const strings& commands);
+		std::string	joinCommand(const strings& commands, int& client);
+		std::string	modeCommand(const strings& commands, int& client);
+		std::string	topicCommand(const strings& commands, int& client);
+		std::string	partCommand(const strings& commands, int& client);
+		std::string	privmsgCommand(const strings& commands, int& client);
+		std::string	inviteCommand(const strings& commands, int& client);
+		std::string	kickCommand(const strings& commands, int& client);
 		std::string	operCommand(const strings& commands);
-		std::string	privmsgCommand(const strings& commands);
-		std::string	kickCommand(const strings& commands);
-		std::string	inviteCommand(const strings& commands);
-		std::string	topicCommand(const strings& commands);
 		std::string	quitCommand(const strings& commands);
-		std::string	partCommand(const strings& commands);
 		std::string	pingCommand(const strings& commands);
 		std::string	invalidCommand();
 

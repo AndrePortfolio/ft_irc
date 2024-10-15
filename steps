@@ -94,6 +94,8 @@ RESOURCES
 https://stackoverflow.com/questions/10654286/why-should-i-use-non-blocking-or-blocking-sockets
 - IRCv3 specifications
 https://ircv3.net/irc/
+- IRC Protocol
+https://datatracker.ietf.org/doc/html/rfc1459
 - IRC Guide
 https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 - YT Guide
