@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 15:12:12 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 16:19:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ strings	Server::splitCommands(const std::string& message)
 	std::istringstream	stream(message);
 	std::string			command;
 
-	// still need to protect for double space and space in the beginning
-	// still need to protect for no space before :
 	while (std::getline(stream, command, ' '))
 	{
+		if (command.empty())
+			continue; 
 		if (command[0] == ':')
 		{
 			commands.push_back(message.substr(message.find(':') + 1));
@@ -94,6 +94,8 @@ strings	Server::splitCommands(const std::string& message)
 		}
 		commands.push_back(command);
 	}
+	if (commands.empty())
+		commands.push_back("Invalid command");
 	return (commands);
 }
 
