@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/15 12:02:36 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/15 12:11:14 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ class Server
 
 	// Commands
 		strings		splitCommands(const std::string& message);
-
 		std::string	helpCommand();
 		std::string	capCommand(const strings& commands);
 		std::string	joinCommand(const strings& commands, int& client);
