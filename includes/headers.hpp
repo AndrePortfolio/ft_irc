@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/14 13:31:12 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:05:59 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,50 @@
 # define DISCONNECTED 3
 # define LISTENING 1
 
+enum numeric_rpl
+{
+	RPL_WELCOME = 001,
+	RPL_YOURHOST = 002,
+	RPL_CREATED = 003,
+	RPL_MYINFO = 004,
+	RPL_ISUPPORT = 005,
+	RPL_UMODEIS = 221,
+	RPL_CHANNELMODEIS = 324,
+	RPL_NOTOPIC = 331,
+	RPL_TOPIC = 332,
+	RPL_INVITING = 341,
+	RPL_NAMREPLY = 353,
+	RPL_ENDOFNAMES = 366,
+	RPL_MOTD = 372,
+	RPL_MOTDSTART = 375,
+	RPL_ENDOFMOTD = 376,
+};
+
+enum numeric_err
+{
+	ERR_NOSUCHNICK = 401,
+	ERR_NOSUCHSERVER = 402,
+	ERR_NOSUCHCHANNEL = 403,
+	ERR_TOOMANYCHANNELS = 405,
+	ERR_UNKNOWNCOMMAND = 421,
+	ERR_NOMOTD = 422,
+	ERR_NONICKNAMEGIVEN = 431,
+	ERR_ERRONEUSNICKNAME = 432,
+	ERR_NICKNAMEINUSE = 433,
+	ERR_USERNOTINCHANNEL = 441,
+	ERR_NOTONCHANNEL = 442,
+	ERR_USERONCHANNEL = 443,
+	ERR_NOTREGISTERED = 451,
+	ERR_NEEDMOREPARAMS = 461,
+	ERR_ALREADYREGISTERED = 462,
+	ERR_PASSWDMISMATCH = 464,
+	ERR_UNKNOWNMODE = 472,
+	ERR_INVITEONLYCHAN = 473,
+	ERR_BADCHANMASK = 476,
+	ERR_CHANOPRIVSNEEDED = 482,
+	ERR_USERSDONTMATCH = 502,
+};
+
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"
 # define BLUE	"\x1b[34;1m"
@@ -66,6 +110,7 @@
 # define BOLD	"\033[1m"
 # define RESET	"\x1b[0m"
 
+# include "channel.hpp"
 # include "server.hpp"
 # include "client.hpp"
 

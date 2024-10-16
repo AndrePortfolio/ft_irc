@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 15:34:34 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:22:38 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
 /* Unsure of what this does, just replicating behavior from previous code */
-std::string	Server::modeCommand(const strings& commands, int& client)
+void	Server::modeCommand(const strings& commands, int& client)
 {
 	(void)client;
 	(void)commands;
-	// if (target.empty())
-		// 	return (":server 461 * MODE :Not enough parameters\r\n");
-	return (":server 324 nick +nt\r\n"); // Respond with default mode settings
+	return ; // Respond with default mode settings
 }

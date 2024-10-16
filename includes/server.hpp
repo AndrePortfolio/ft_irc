@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/15 15:11:52 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:19:41 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,24 @@
 # include "headers.hpp"
 
 class Client;
+class Channel;
 
 typedef std::map<int, Client> Clients;
 typedef std::vector<std::string> strings;
 typedef std::vector<std::string>::const_iterator stringConsIterator;
+typedef std::map<std::string, Channel *>	t_nameMapChannel;
+typedef t_nameMapChannel::iterator			t_channelIterator;
 
 class Server
 {
 	private:
-		int			port;
-		std::string	password;
-		bool		signal;
-		int			socketFd;
-		sockaddr_in	address;
-		Clients		clients;
+		int					port;
+		std::string			password;
+		bool				signal;
+		int					socketFd;
+		sockaddr_in			address;
+		Clients				clients;
+		t_nameMapChannel	channels;
 
 	// Contructors
 		Server(){}
@@ -54,7 +58,7 @@ class Server
 		void		receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
 		void		adjustClients(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
 		void		handleData(char	buffer[BUFFER_SIZE], int& client);
-		std::string	parseClientMessage(std::string message, int& client);
+		void		parseClientMessage(std::string message, int& client);
 
 	// Commands
 		strings		splitCommands(const std::string& message);
@@ -64,22 +68,28 @@ class Server
 		std::string	passCommand(const strings& commands);
 		std::string	nickCommand(const strings& commands);
 		std::string	userCommand(const strings& commands);
-		std::string	joinCommand(const strings& commands, int& client);
-		std::string	modeCommand(const strings& commands, int& client);
-		std::string	topicCommand(const strings& commands, int& client);
-		std::string	partCommand(const strings& commands, int& client);
-		std::string	privmsgCommand(const strings& commands, int& client);
-		std::string	inviteCommand(const strings& commands, int& client);
-		std::string	kickCommand(const strings& commands, int& client);
+		void		joinCommand(const strings& commands, int& client);
+		void		modeCommand(const strings& commands, int& client);
+		void		topicCommand(const strings& commands, int& client);
+		void		partCommand(const strings& commands, int& client);
+		void		privmsgCommand(const strings& commands, int& client);
+		void		inviteCommand(const strings& commands, int& client);
+		void		kickCommand(const strings& commands, int& client);
 		std::string	operCommand(const strings& commands);
 		std::string	quitCommand(const strings& commands);
 		std::string	pingCommand(const strings& commands);
 		std::string	invalidCommand();
 
+	//Channels
+		bool			existsChannel(std::string name) const;
+		void			removeChannel(std::string channel_name);
+
 	// Util Functions
-		std::string			welcomeMsg() const;
-		const std::string	currentDateTime();
-		void				printMessage(int msg, int index);
+		std::string					welcomeMsg() const;
+		const std::string			currentDateTime();
+		void						printMessage(int msg, int index);
+		std::vector<std::string>	split(std::string str, char c) const;
+
 
 	public:
 		Server(std::string port, std::string password);

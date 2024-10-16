@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 11:14:39 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 09:25:13 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,36 @@ void	Server::acceptClients()
 		listenForClients(fds, activeFds);
 		CheckForClientData(fds, activeFds);
 	}
+}
+
+// Check if a channel exists
+bool	Server::existsChannel(std::string name) const
+{
+	if (this->channels.find(name) != this->channels.end())
+		return true;
+	return false;
+}
+
+// Remove a channel from the server by its name
+void Server::removeChannel(std::string channel_name)
+{
+	channels.erase(channel_name);
+}
+
+std::vector<std::string> Server::split(std::string str, char c) const
+{
+	std::vector<std::string> result;
+	std::string tmp;
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (str[i] == c)
+		{
+			result.push_back(tmp);
+			tmp.clear();
+		}
+		else
+			tmp += str[i];
+	}
+	result.push_back(tmp);
+	return result;
 }

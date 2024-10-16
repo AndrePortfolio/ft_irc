@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleData.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 15:12:12 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:17:00 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
 {
 	std::string	message(buffer, strlen(buffer) - 1);
-	if (!message.empty() && message.back() == '\r')
+	if (!message.empty() && *(message.end() - 1) == '\r')
 		message.erase(message.end() - 1);
 
-	std::string	outputMsg = parseClientMessage(message, client);
-	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
+	// std::string	outputMsg = ---> check message below
+	parseClientMessage(message, client);
+	// send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT); ---> implemented send_message into client
+	// and server class to avoid spaghetti code
 }
 
 /* Just for debuging, will delete this */
@@ -32,51 +34,51 @@ static void	debugCommandSplit(strings commands)
 }
 
 /* Parses client input, split into commands and execute them */
-std::string Server::parseClientMessage(std::string message, int& client)
+void Server::parseClientMessage(std::string message, int& client)
 {
 	strings	commands = splitCommands(message);
 
 	debugCommandSplit(commands); // Just for debuging, will delete this
 
 	// General Commands:
-	if (commands[0] == "HELP")
-		return (helpCommand());
-	else if (commands[0] == "CAP")
-		return (capCommand(commands));
-	// Login Commands:
-	else if (commands[0] == "PASS")
-		return (passCommand(commands));
-	else if (commands[0] == "NICK")
-		return (nickCommand(commands));
-	else if (commands[0] == "USER")
-		return (userCommand(commands));
+	// if (commands[0] == "HELP")
+	// 	helpCommand();
+	// else if (commands[0] == "CAP")
+	// 	capCommand(commands);
+	// // Login Commands:
+	// else if (commands[0] == "PASS")
+	// 	passCommand(commands);
+	// else if (commands[0] == "NICK")
+	// 	return (nickCommand(commands));
+	// else if (commands[0] == "USER")
+	// 	return (userCommand(commands));
 	// Channel Operations:
-	else if (commands[0] == "JOIN")
-		return (joinCommand(commands, client));
+	if (commands[0] == "JOIN")
+		joinCommand(commands, client);
 	else if (commands[0] == "MODE")
-		return (modeCommand(commands, client));
+		modeCommand(commands, client);
 	else if (commands[0] == "TOPIC")
-		return (topicCommand(commands, client));
+		topicCommand(commands, client);
 	else if (commands[0] == "PART")
-		return (partCommand(commands, client));
+		partCommand(commands, client);
 	else if (commands[0] == "PRIVMSG")
-		return (privmsgCommand(commands, client));
+		privmsgCommand(commands, client);
 	else if (commands[0] == "INVITE")
-		return (inviteCommand(commands, client));
+		inviteCommand(commands, client);
 	else if (commands[0] == "KICK")
-		return (kickCommand(commands, client));
-	// Server Adminstration and Maintenance:
-	else if (commands[0] == "OPER")
-		return (operCommand(commands));
-	else if (commands[0] == "PING")
-		return (pingCommand(commands));
-	else if (commands[0] == "QUIT")
-		return (quitCommand(commands));
-
-	return (invalidCommand());
+		kickCommand(commands, client);
+	// // Server Adminstration and Maintenance:
+	// else if (commands[0] == "OPER")
+	// 	return (operCommand(commands));
+	// else if (commands[0] == "PING")
+	// 	return (pingCommand(commands));
+	// else if (commands[0] == "QUIT")
+	// 	return (quitCommand(commands));
+	else
+		invalidCommand();
 }
 
-/* Spits client message in multiple command arguments */
+/* Splits client message in multiple command arguments */
 strings	Server::splitCommands(const std::string& message)
 {
 	strings				commands;

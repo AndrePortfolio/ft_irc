@@ -1,5 +1,5 @@
 NAME = ircserv
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+CXXFLAGS = -Wall -Wextra -Werror #-std=c++98
 CXX = c++
 COMPRESS = ar rcs
 RM = rm -rf
@@ -10,7 +10,7 @@ CMD_SRC_DIR = $(SRC_DIR)/commands
 SRC_DIRS =	$(SRC_DIR) $(CMD_SRC_DIR)/1.generalCommands $(CMD_SRC_DIR)/2.loginCommands \
 			$(CMD_SRC_DIR)/3.channelOperations $(CMD_SRC_DIR)/4.serverAdministration
 HEADER = includes
-S = main server client acceptClients runServer handleData utils
+S = main server client acceptClients runServer handleData channels utils
 GENERAL_CMDS = help cap
 LOGIN_CMDS = nick pass user
 CHANNEL_OPER = invite join kick mode part privmsg topic
