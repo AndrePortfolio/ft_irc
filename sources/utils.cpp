@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 10:48:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 13:26:50 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,32 @@ const std::string Server::currentDateTime()
 
 	strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
 	return (buf);
+}
+
+std::string Server::feedbackClient(int input, int& i, const strings& parameters)
+{
+	std::string msg;
+	std::string command = parameters[0];
+
+	msg.append(RED);
+	switch (input)
+	{
+		case 461:
+			if (!clients[i].getNickname().empty())
+			{
+				msg.append(clients[i].getNickname());
+				msg.append(" ");
+			}
+			msg.append(command);
+			msg.append(" :Not enough parameters\n");
+			break ;
+		case 462:
+			msg.append(clients[i].getNickname());
+			msg.append(" :You may not reregister\n");
+			break ;
+		default:
+			break ;
+	}
+	msg.append(RESET);
+	return (msg);
 }
