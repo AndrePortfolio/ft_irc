@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 13:27:08 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:20:17 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ class Client
 		bool		status;
 		std::string	nickname;
 		std::string	username;
-		std::string	realname;	// is this requiered?
-		std::string	buffer;		// unsure if we need this in this scope
+		std::string	realname;
 		int			socketFd;
 		sockaddr_in	address;
 
@@ -39,8 +38,6 @@ class Client
 		void				setUsername(const std::string &src);
 		const std::string	&getRealname(void) const;
 		void				setRealname(const std::string &src);
-		const std::string	&getBuffer(void) const;
-		void				setBuffer(const std::string &src);
 		const bool			&getStatus(void) const;
 		void				setStatus(const int &status);
 		const int			&getSocket(void) const;

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 10:42:27 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:29:29 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,47 +23,57 @@ void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
+/* Makes the command case-insensitive */
+static std::string toUpper(std::string cmd)
+{
+	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
+	return (cmd);
+}
+
 /* Parses client input, split into commands and execute them */
 std::string Server::parseClientMessage(std::string message, int& client)
 {
-	strings	commands = splitCommands(message);
+	strings	parameters = splitMessage(message);
+	std::string command = toUpper(parameters[0]);
 
 	// General Commands:
-	if (commands[0] == "HELP")
+	if (command == "CAP")
+		return ("");
+	if (command == "HELP")
 		return (helpCommand());
-	else if (commands[0] == "OPER")
-		return (operCommand(commands));
-	else if (commands[0] == "PING")
-		return (pingCommand(commands));
-	else if (commands[0] == "QUIT")
-		return (quitCommand(commands));
+	else if (command == "OPER")
+		return (operCommand(parameters));
+	else if (command == "PING")
+		return (pingCommand(parameters));
+	else if (command == "QUIT")
+		return (quitCommand(parameters));
 	// Login Commands:
-	else if (commands[0] == "PASS")
-		return (passCommand(commands));
-	else if (commands[0] == "NICK")
-		return (nickCommand(commands));
-	else if (commands[0] == "USER")
-		return (userCommand(commands));
+	else if (command == "PASS")
+		return (passCommand(parameters, client));
+	else if (command == "NICK")
+		return (nickCommand(parameters, client));
+	else if (command == "USER")
+		return (userCommand(parameters, client));
 	// Channel Operations:
-	else if (commands[0] == "JOIN")
-		return (joinCommand(commands, client));
-	else if (commands[0] == "MODE")
-		return (modeCommand(commands, client));
-	else if (commands[0] == "TOPIC")
-		return (topicCommand(commands, client));
-	else if (commands[0] == "PART")
-		return (partCommand(commands, client));
-	else if (commands[0] == "PRIVMSG")
-		return (privmsgCommand(commands, client));
-	else if (commands[0] == "INVITE")
-		return (inviteCommand(commands, client));
-	else if (commands[0] == "KICK")
-		return (kickCommand(commands, client));
+	else if (command == "JOIN")
+		return (joinCommand(parameters, client));
+	else if (command == "MODE")
+		return (modeCommand(parameters, client));
+	else if (command == "TOPIC")
+		return (topicCommand(parameters, client));
+	else if (command == "PART")
+		return (partCommand(parameters, client));
+	else if (command == "PRIVMSG")
+		return (privmsgCommand(parameters, client));
+	else if (command == "INVITE")
+		return (inviteCommand(parameters, client));
+	else if (command == "KICK")
+		return (kickCommand(parameters, client));
 	return (invalidCommand());
 }
 
 /* Spits client message in multiple command arguments */
-strings	Server::splitCommands(const std::string& message)
+strings	Server::splitMessage(const std::string& message)
 {
 	strings				commands;
 	std::istringstream	stream(message);

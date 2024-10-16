@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 11:14:39 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:41:39 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	Server::validateInput(std::string port, std::string password)
 
 	if (password.empty())
 		throw std::runtime_error("Error: no password was provided.");
+	if (password.find(' '))
+		throw std::runtime_error("Error: password can't contain spaces.");
 
 	if (port.empty())
 		throw std::runtime_error("Error: no port was provided.");

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 10:43:29 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:29:51 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,21 @@ class Server
 		std::string	parseClientMessage(std::string message, int& client);
 
 	// Commands
-		strings		splitCommands(const std::string& message);
+		strings		splitMessage(const std::string& message);
 		std::string	helpCommand();
-		std::string	passCommand(const strings& commands);
-		std::string	nickCommand(const strings& commands);
-		std::string	userCommand(const strings& commands);
-		std::string	joinCommand(const strings& commands, int& client);
-		std::string	modeCommand(const strings& commands, int& client);
-		std::string	topicCommand(const strings& commands, int& client);
-		std::string	partCommand(const strings& commands, int& client);
-		std::string	privmsgCommand(const strings& commands, int& client);
-		std::string	inviteCommand(const strings& commands, int& client);
-		std::string	kickCommand(const strings& commands, int& client);
-		std::string	operCommand(const strings& commands);
-		std::string	quitCommand(const strings& commands);
-		std::string	pingCommand(const strings& commands);
+		std::string	passCommand(const strings& parameters, int& client);
+		std::string	nickCommand(const strings& parameters, int& client);
+		std::string	userCommand(const strings& parameters, int& client);
+		std::string	joinCommand(const strings& parameters, int& client);
+		std::string	modeCommand(const strings& parameters, int& client);
+		std::string	topicCommand(const strings& parameters, int& client);
+		std::string	partCommand(const strings& parameters, int& client);
+		std::string	privmsgCommand(const strings& parameters, int& client);
+		std::string	inviteCommand(const strings& parameters, int& client);
+		std::string	kickCommand(const strings& parameters, int& client);
+		std::string	operCommand(const strings& parameters);
+		std::string	quitCommand(const strings& parameters);
+		std::string	pingCommand(const strings& parameters);
 		std::string	invalidCommand();
 
 	// Util Functions
