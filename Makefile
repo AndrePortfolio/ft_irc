@@ -11,16 +11,14 @@ SRC_DIRS =	$(SRC_DIR) $(CMD_SRC_DIR)/1.generalCommands $(CMD_SRC_DIR)/2.loginCom
 			$(CMD_SRC_DIR)/3.channelOperations $(CMD_SRC_DIR)/4.serverAdministration
 HEADER = includes
 S = main server client acceptClients runServer handleData utils
-GENERAL_CMDS = help cap
+GENERAL_CMDS = help oper ping quit
 LOGIN_CMDS = nick pass user
 CHANNEL_OPER = invite join kick mode part privmsg topic
-SERVER_ADMIN = oper ping quit
 SRC =
 SRC += $(addprefix $(SRC_DIR)/,$(addsuffix .cpp, $(S)))
 SRC += $(addprefix $(CMD_SRC_DIR)/1.generalCommands/,$(addsuffix .cpp, $(GENERAL_CMDS)))
 SRC += $(addprefix $(CMD_SRC_DIR)/2.loginCommands/,$(addsuffix .cpp, $(LOGIN_CMDS)))
 SRC += $(addprefix $(CMD_SRC_DIR)/3.channelOperations/,$(addsuffix .cpp, $(CHANNEL_OPER)))
-SRC += $(addprefix $(CMD_SRC_DIR)/4.serverAdministration/,$(addsuffix .cpp, $(SERVER_ADMIN)))
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.cpp=.o)))
 
 # Colours
@@ -49,9 +47,6 @@ $(OBJ_DIR)/%.o: $(CMD_SRC_DIR)/2.loginCommands/%.cpp
 	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
 
 $(OBJ_DIR)/%.o: $(CMD_SRC_DIR)/3.channelOperations/%.cpp
-	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
-
-$(OBJ_DIR)/%.o: $(CMD_SRC_DIR)/4.serverAdministration/%.cpp
 	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
 
 clean:

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 16:19:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 10:42:27 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,20 @@ void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
-/* Just for debuging, will delete this */
-static void	debugCommandSplit(strings commands)
-{
-	std::cout << "Commands received: " << commands.size() << "\n----" << std::endl;
-	for (stringConsIterator it = commands.begin(); it != commands.end(); ++it)
-		std::cout << "Command: " << *it << std::endl;
-}
-
 /* Parses client input, split into commands and execute them */
 std::string Server::parseClientMessage(std::string message, int& client)
 {
 	strings	commands = splitCommands(message);
 
-	debugCommandSplit(commands); // Just for debuging, will delete this
-
 	// General Commands:
 	if (commands[0] == "HELP")
 		return (helpCommand());
-	else if (commands[0] == "CAP")
-		return (capCommand(commands));
+	else if (commands[0] == "OPER")
+		return (operCommand(commands));
+	else if (commands[0] == "PING")
+		return (pingCommand(commands));
+	else if (commands[0] == "QUIT")
+		return (quitCommand(commands));
 	// Login Commands:
 	else if (commands[0] == "PASS")
 		return (passCommand(commands));
@@ -65,14 +59,6 @@ std::string Server::parseClientMessage(std::string message, int& client)
 		return (inviteCommand(commands, client));
 	else if (commands[0] == "KICK")
 		return (kickCommand(commands, client));
-	// Server Adminstration and Maintenance:
-	else if (commands[0] == "OPER")
-		return (operCommand(commands));
-	else if (commands[0] == "PING")
-		return (pingCommand(commands));
-	else if (commands[0] == "QUIT")
-		return (quitCommand(commands));
-
 	return (invalidCommand());
 }
 
@@ -85,8 +71,11 @@ strings	Server::splitCommands(const std::string& message)
 
 	while (std::getline(stream, command, ' '))
 	{
-		if (command.empty())
-			continue; 
+		if (command.empty() || command[0] == ' ')
+		{
+			commands.push_back("Invalid command");
+			return (commands);
+		}
 		if (command[0] == ':')
 		{
 			commands.push_back(message.substr(message.find(':') + 1));
@@ -94,8 +83,6 @@ strings	Server::splitCommands(const std::string& message)
 		}
 		commands.push_back(command);
 	}
-	if (commands.empty())
-		commands.push_back("Invalid command");
 	return (commands);
 }
 
