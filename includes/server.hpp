@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 13:18:24 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 14:17:49 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ class Server
 		std::string			welcomeMsg() const;
 		const std::string	currentDateTime();
 		void				printMessage(int input, int index);
-		std::string			feedbackClient(int input, int& client, const strings& parameters);
+		std::string			feedbackClient(int input);
 
 	public:
 		Server(std::string port, std::string password);

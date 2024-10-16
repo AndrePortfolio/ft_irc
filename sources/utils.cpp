@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 13:26:50 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 14:20:16 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,30 +99,41 @@ const std::string Server::currentDateTime()
 	return (buf);
 }
 
-std::string Server::feedbackClient(int input, int& i, const strings& parameters)
+std::string Server::feedbackClient(int input)
 {
 	std::string msg;
-	std::string command = parameters[0];
 
 	msg.append(RED);
 	switch (input)
 	{
 		case 461:
-			if (!clients[i].getNickname().empty())
-			{
-				msg.append(clients[i].getNickname());
-				msg.append(" ");
-			}
-			msg.append(command);
-			msg.append(" :Not enough parameters\n");
+			msg.append("461 :Not enough parameters");
 			break ;
 		case 462:
-			msg.append(clients[i].getNickname());
-			msg.append(" :You may not reregister\n");
+			msg.append("462 :You may not reregister");
+			break ;
+		case 463:
+			msg.append("463 :You are not authenticated");
+			break ;
+		case 464:
+			msg.append("464 :Invalid password provided");
+			break ;
+		case 431:
+			msg.append("431 :No nickname given");
+			break ;
+		case 432:
+			msg.append("432 :Erroneous nickname");
+			break ;
+		case 433:
+			msg.append("433 :Nickname is already in use");
+			break ;
+		case 436:
+			msg.append("436 :Nickname collision KILL");
 			break ;
 		default:
 			break ;
 	}
+	msg.append("\n");
 	msg.append(RESET);
 	return (msg);
 }

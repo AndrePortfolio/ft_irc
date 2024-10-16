@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 12:07:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 14:14:12 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,14 @@
 # define DISCONNECTED 3
 
 // Feedback Client
-# define ERR_ALREADYREGISTERED 462
 # define ERR_NEEDMOREPARAMS 461
+# define ERR_ALREADYREGISTERED 462
+# define ERR_NOTAUTHENTICATED 463
+# define ERR_INVALIDPASSWORD 464
+# define ERR_NONICKNAMEGIVEN 431
+# define ERR_ERRONEUSNICKNAME 432
+# define ERR_NICKNAMEINUSE 433
+# define ERR_NICKCOLLISION 436
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"
