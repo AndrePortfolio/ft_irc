@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 11:20:56 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/16 11:33:37 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	Server::joinCommand(const strings& commands, int &cindex)
 		clients[cindex].sendMessage(ERR_NEEDMOREPARAMS, clients[cindex].getNickname() + " " + commands[0] + " :Not enough parameters");
 		return;
 	}
+	// Handling in case user wants to leave all channels
 	if (commands[1] == "0")
 	{
 		for (t_channelIterator it = channels.begin(); it != channels.end(); it++)

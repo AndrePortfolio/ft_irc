@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 11:19:41 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/16 11:36:06 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ class Channel;
 typedef std::map<int, Client> Clients;
 typedef std::vector<std::string> strings;
 typedef std::vector<std::string>::const_iterator stringConsIterator;
-typedef std::map<std::string, Channel *>	t_nameMapChannel;
-typedef t_nameMapChannel::iterator			t_channelIterator;
+typedef std::map<std::string, Channel *>	t_nameMapChannel;	// map of channel name to channel object
+typedef t_nameMapChannel::iterator			t_channelIterator;	// iterator for the map
 
 class Server
 {

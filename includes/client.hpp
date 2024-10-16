@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:09:57 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/16 11:34:24 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ class Client
 		~Client();
 		Client	&operator=(const Client &other);
 
-		std::string			stringifyCode(int code);
-		std::string			to_string(int value);
+	// Member Functions
 		void				sendMessage(const std::string &command, const std::string &args);
 		void				sendMessage(int response_code, const std::string &args);
 		void				sendMessage(const std::string &source, const std::string &command, const std::string &args);
 
+	// Accessors
 		const size_t		&getNbChannels(void) const;
 		void				setNbChannels(size_t nb_channels);
 		const std::string	&getNickname(void) const;
@@ -54,6 +54,10 @@ class Client
 		void				setStatus(const int &status);
 		const int			&getSocket(void) const;
 		const  sockaddr_in	&getAddress(void) const;
+
+	// Util Functions
+		std::string			stringifyCode(int code); // returns the string representation of error codes
+		std::string			to_string(int value); // custom implementation due to c++98 std limitations
 };
 
 #endif
