@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 11:29:29 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 13:00:43 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ std::string Server::parseClientMessage(std::string message, int& client)
 		return (inviteCommand(parameters, client));
 	else if (command == "KICK")
 		return (kickCommand(parameters, client));
-	return (invalidCommand());
+	return (invalidCommand(message));
 }
 
 /* Spits client message in multiple command arguments */
@@ -79,6 +79,11 @@ strings	Server::splitMessage(const std::string& message)
 	std::istringstream	stream(message);
 	std::string			command;
 
+	if (message.empty() || std::all_of(message.begin(), message.end(), isspace))
+	{
+		commands.push_back("Invalid command");
+		return (commands);
+	}
 	while (std::getline(stream, command, ' '))
 	{
 		if (command.empty() || command[0] == ' ')
@@ -97,10 +102,12 @@ strings	Server::splitMessage(const std::string& message)
 }
 
 /* Displays Invalid command message */
-std::string	Server::invalidCommand()
+std::string	Server::invalidCommand(std::string message)
 {
 	std::string	msg;
 
+	if (message.empty())
+		return (message);
 	msg.append(RED);
 	msg.append("Invalid command\n");
 	msg.append(RESET);

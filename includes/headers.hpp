@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/14 13:31:12 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 12:07:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,15 @@
 # define MAX_ALLOWED_PORT 65535
 # define DEFAULT_FDS 4
 
+// Print Message
 # define SERVER 0
+# define LISTENING 1
 # define NEW_CONNECTION 2
 # define DISCONNECTED 3
-# define LISTENING 1
+
+// Feedback Client
+# define ERR_ALREADYREGISTERED 462
+# define ERR_NEEDMOREPARAMS 461
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"

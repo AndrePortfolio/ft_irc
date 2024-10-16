@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:44:36 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 12:42:32 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ Client::Client(int clientSocket, sockaddr_in clientAddress)
 		username(),
 		realname(),
 		socketFd(clientSocket),
-		address(clientAddress){}
+		address(clientAddress),
+		password(){}
 
 Client::Client()
 	:	status(false),
@@ -30,7 +31,8 @@ Client::Client()
 		username(),
 		realname(),
 		socketFd(-1),
-		address(){}
+		address(),
+		password(){}
 
 Client::Client(const Client &copy)
 {
@@ -57,6 +59,7 @@ Client &Client::operator=(Client const &other)
 		this->status = other.status;
 		this->socketFd = other.socketFd;
 		this->address = other.address;
+		this->password = other.password;
 	}
 	return (*this);
 }
@@ -71,11 +74,13 @@ const std::string	&Client::getUsername(void) const { return (this->username); }
 const std::string	&Client::getRealname(void) const { return (this->realname); }
 const bool			&Client::getStatus(void) const { return (this->status); }
 const int			&Client::getSocket(void) const { return (this->socketFd); }
-const  sockaddr_in	&Client::getAddress(void) const { return (this->address); }
+const sockaddr_in	&Client::getAddress(void) const { return (this->address); }
+const std::string	&Client::getPassword(void) const { return (this->password); }
 
 /* -------------------------------- Setters ----------------------------------*/
 void	Client::setNickname(const std::string &src) { this->nickname = src; }
 void	Client::setUsername(const std::string &src) { this->username = src; }
 void	Client::setRealname(const std::string &src) { this->realname = src; }
 void	Client::setStatus(const int &status) { this->status = status; }
+void	Client::setPassword(const std::string  &password) { this->password = password; }
 

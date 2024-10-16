@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 11:29:51 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 12:56:53 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,13 @@ class Server
 		std::string	operCommand(const strings& parameters);
 		std::string	quitCommand(const strings& parameters);
 		std::string	pingCommand(const strings& parameters);
-		std::string	invalidCommand();
+		std::string	invalidCommand(std::string message);
 
 	// Util Functions
 		std::string			welcomeMsg() const;
 		const std::string	currentDateTime();
-		void				printMessage(int msg, int index);
+		void				printMessage(int input, int index);
+		std::string			feedbackClient(int input, int& client, const strings& parameters);
 
 	public:
 		Server(std::string port, std::string password);

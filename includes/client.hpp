@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:44:47 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 12:40:37 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Client
 		std::string	realname;
 		int			socketFd;
 		sockaddr_in	address;
+		std::string	password;
 
 	public:
 		Client();
@@ -42,6 +43,8 @@ class Client
 		void				setStatus(const int &status);
 		const int			&getSocket(void) const;
 		const  sockaddr_in	&getAddress(void) const;
+		void				setPassword(const std::string &password);
+		const std::string	&getPassword(void) const;
 };
 
 #endif
