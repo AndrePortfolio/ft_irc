@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:20:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:44:36 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,14 @@ Client::Client(int clientSocket, sockaddr_in clientAddress)
 		realname(),
 		socketFd(clientSocket),
 		address(clientAddress){}
+
+Client::Client()
+	:	status(false),
+		nickname(),
+		username(),
+		realname(),
+		socketFd(-1),
+		address(){}
 
 Client::Client(const Client &copy)
 {

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:20:17 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/16 11:44:47 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Client
 		sockaddr_in	address;
 
 	public:
-		Client(){}
+		Client();
 		Client(int clientSocket, sockaddr_in clientAddress);
 		Client(const Client &copy);
 		~Client();
