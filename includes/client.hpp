@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:34:24 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/18 11:28:37 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@
 class Client
 {
 	private:
-		bool		status;
 		std::string	nickname;
 		std::string	username;
 		std::string	realname;
 		std::string	buffer;		// unsure if we need this in this scope
 		int			socketFd;
 		sockaddr_in	address;
+		bool		status;		// unsure if we need this in this scope
 		size_t		nb_channels; // # of channels the client is in
 
 	public:
-		Client(){};
+		Client(){Client(0, sockaddr_in());};
 		Client(int clientSocket, sockaddr_in clientAddress);
 		Client(const Client &copy);
 		~Client();

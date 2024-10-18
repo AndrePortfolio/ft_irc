@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 09:25:13 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/18 10:54:10 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,3 +145,4 @@ std::vector<std::string> Server::split(std::string str, char c) const
 	result.push_back(tmp);
 	return result;
 }
+

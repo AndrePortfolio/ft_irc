@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 11:36:06 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/18 10:53:46 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ class Server
 		sockaddr_in			address;
 		Clients				clients;
 		t_nameMapChannel	channels;
+		std::string			chanmodes;
+		std::string			chantypes;
+		size_t				chanlimit;
+		size_t				channellen;
+		size_t				modes;
+		size_t				topiclen;
 
 	// Contructors
 		Server(){}
@@ -89,6 +95,10 @@ class Server
 		const std::string			currentDateTime();
 		void						printMessage(int msg, int index);
 		std::vector<std::string>	split(std::string str, char c) const;
+		const t_nameMapChannel&		getChannels(void) const { return (channels); };
+		t_nameMapChannel&			getChannels(void) { return (channels); };
+		void 						setChannels(const t_nameMapChannel &src) { channels = src; };
+
 
 
 	public:

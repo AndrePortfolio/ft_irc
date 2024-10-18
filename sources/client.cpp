@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 11:10:15 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/18 11:32:23 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@
 //----------------------------------------------------------------------------//
 
 Client::Client(int clientSocket, sockaddr_in clientAddress)
-	:	status(false),
-		nickname(),
+	:	nickname(),
 		username(),
 		realname(),
 		buffer(),
 		socketFd(clientSocket),
-		address(clientAddress){}
+		address(clientAddress),
+		status(false)
+{
+	this->buffer = "";
+	this->nb_channels = 0;
+}
 
 Client::Client(const Client &copy)
 {
@@ -51,6 +55,7 @@ Client &Client::operator=(Client const &other)
 		this->status = other.status;
 		this->socketFd = other.socketFd;
 		this->address = other.address;
+		this->nb_channels = other.nb_channels;
 	}
 	return (*this);
 }
@@ -116,4 +121,4 @@ void	Client::setUsername(const std::string &src) { this->username = src; }
 void	Client::setRealname(const std::string &src) { this->realname = src; }
 void	Client::setBuffer(const std::string &src) { this->buffer = src; }
 void	Client::setStatus(const int &status) { this->status = status; }
-void Client::setNbChannels(size_t nb_channels) { this->nb_channels = nb_channels; }
+void 	Client::setNbChannels(size_t nb_channels) { this->nb_channels = nb_channels; }
