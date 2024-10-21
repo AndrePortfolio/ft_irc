@@ -52,7 +52,7 @@ public:
 	const std::string		&getKey(void) const;
 	void					setKey(std::string &src);
 	const std::string		&getTopic(void) const;
-	void					setTopic(std::string &src);
+	void					setTopic(const std::string &src);
 	std::string				getSymbol(void) const;
 	void					setInvited(t_nickMapClient &src);
 	const t_nickMapClient	&getInvited(void) const;

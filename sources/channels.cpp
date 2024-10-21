@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/16 08:38:15 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 10:04:15 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Channel::Channel(std::string mode, std::string name, Client *op)
 	this->mode = mode;
 	this->name = name;
 	this->op = op;
-	this->topic = "Reeeee_IRC";
+	this->topic = "";
 }
 
 Channel::Channel(Channel const &src)
@@ -194,7 +194,7 @@ const std::string &Channel::getKey(void) const { return (this->key); }
 void Channel::setKey(std::string &src) { this->key = src; }
 
 const std::string &Channel::getTopic(void) const { return (this->topic); }
-void Channel::setTopic(std::string &src) { this->topic = src; }
+void Channel::setTopic(const std::string &src) { this->topic = src; }
 
 // Returns the symbol of the channel, depending on its mode (s = secret, p = private)
 std::string Channel::getSymbol(void) const

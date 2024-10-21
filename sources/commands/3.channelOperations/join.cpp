@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/18 11:21:37 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 08:50:18 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	Server::joinCommand(const strings& commands, int &cindex)
 			// If the channel does not exist, create a new one and add it to the map
 			std::string s = "";
 			Channel *channel_to_add = new Channel(s, *it_names, &clients[cindex]);
-			channel_to_add->addClient(&clients[-1]);
+			channel_to_add->addClient(&clients[cindex]);
 			channels_to_sub.push_back(channel_to_add);
 			channels[*it_names] = channel_to_add;
 		}
@@ -90,10 +90,10 @@ void	Server::joinCommand(const strings& commands, int &cindex)
 		if ((*it)->isInvited(&clients[cindex]))
 			(*it)->delInvited(&clients[cindex]);
 		// Send JOIN message to all channel members
-		(*it)->sendMessage(clients[cindex].getNickname(), "JOIN", commands[1]);
+		(*it)->sendMessage(clients[cindex].getNickname(), "JOIN", (*it)->getName());
 		// If the channel has a topic, send it to the user
 		if ((*it)->getTopic() != "")
-			clients[cindex].sendMessage(RPL_TOPIC, clients[cindex].getNickname() + " " + commands[1] + " :" + (*it)->getTopic());
+			clients[cindex].sendMessage(RPL_TOPIC, clients[cindex].getNickname() + " " + (*it)->getName() + " :" + (*it)->getTopic());
 		// Increment the number of channels the user is part of
 		clients[cindex].setNbChannels(clients[cindex].getNbChannels() + 1);
 		// Send the list of users in the channel
