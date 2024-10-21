@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/18 10:53:46 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:43:23 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ class Server
 	//Channels
 		bool			existsChannel(std::string name) const;
 		void			removeChannel(std::string channel_name);
+		bool 			existsClient(const std::string& name) const;
+		char  			closestPlusMinus(const std::string &str, const char &mode) const;
+		int				findClientIndexByNickname(const std::string& nickname) const;
 
 	// Util Functions
 		std::string					welcomeMsg() const;

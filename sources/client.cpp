@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/18 11:32:23 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:57:28 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,26 @@ void Client::sendMessage(const std::string &source, const std::string &command, 
 	send(this->socketFd, editable.c_str(), editable.length(), 0);
 }
 
+
+void	Client::addMode(const std::string &mode)
+{
+	for (size_t i = 0; i < mode.length(); i++)
+	{
+		if (std::find(this->mode.begin(), this->mode.end(), mode[0]) == this->mode.end())
+			continue;
+		this->mode += mode[i];
+	}
+}
+
+void	Client::delMode(const std::string &mode)
+{
+	for (size_t i = 0; i < mode.length(); i++)
+	{
+		if (find(this->mode.begin(), this->mode.end(), mode[0]) != this->mode.end())
+			continue;
+		this->mode.erase(std::remove(this->mode.begin(), this->mode.end(), mode[i]), this->mode.end());
+	}
+}
 /* -------------------------------- Getters ----------------------------------*/
 const std::string	&Client::getNickname(void) const { return (this->nickname); }
 const std::string	&Client::getUsername(void) const { return (this->username); }
@@ -113,7 +133,8 @@ const std::string	&Client::getBuffer(void) const { return (this->buffer); }
 const bool			&Client::getStatus(void) const { return (this->status); }
 const int			&Client::getSocket(void) const { return (this->socketFd); }
 const  sockaddr_in	&Client::getAddress(void) const { return (this->address); }
-const size_t &Client::getNbChannels(void) const { return this->nb_channels; }
+const size_t 		&Client::getNbChannels(void) const { return this->nb_channels; }
+const std::string	&Client::getMode(void) const { return this->mode; }
 
 /* -------------------------------- Setters ----------------------------------*/
 void	Client::setNickname(const std::string &src) { this->nickname = src; }

@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/21 11:51:47 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:00:41 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,18 +146,25 @@ bool Channel::isOperator(Client* client) const
 }
 
 // Add an operator to the vector
-void Channel::addOperator(Client* client)
+bool Channel::addOperator(Client* client)
 {
 	if (!isOperator(client))
 	{
 		operators.push_back(client);
+		return (1);
 	}
+	return (0);
 }
 
-// Remove an operator
-void Channel::removeOperator(Client* client)
+bool Channel::removeOperator(Client* client)
 {
-	operators.erase(std::remove(operators.begin(), operators.end(), client), operators.end());
+	std::vector<Client*>::iterator it = std::remove(operators.begin(), operators.end(), client);
+	if (it != operators.end())
+	{
+		operators.erase(it, operators.end());
+		return true;
+	}
+	return false;
 }
 
 // Try to add the given mode(s) to the channel and return the effectively added mode(s)
@@ -210,19 +217,23 @@ void	Channel::delInvited(Client *client)
  */
 
 const std::string &Channel::getName(void) const { return (this->name); }
-void Channel::setName(const std::string &src) { this->name = src; }
+void 				Channel::setName(const std::string &src) { this->name = src; }
 
 const Channel::t_nickMapClient &Channel::getClients(void) const { return (this->clients); }
-void Channel::setClients(Channel::t_nickMapClient &src) { this->clients = src; }
+void 				Channel::setClients(Channel::t_nickMapClient &src) { this->clients = src; }
 
 const std::string &Channel::getMode(void) const { return (this->mode); }
-void Channel::setMode(std::string &src) { this->mode = src; }
+void 				Channel::setMode(std::string &src) { this->mode = src; }
 
 const std::string &Channel::getKey(void) const { return (this->key); }
-void Channel::setKey(std::string &src) { this->key = src; }
+void 				Channel::setKey(std::string &src) { this->key = src; }
 
 const std::string &Channel::getTopic(void) const { return (this->topic); }
-void Channel::setTopic(const std::string &src) { this->topic = src; }
+void 				Channel::setTopic(const std::string &src) { this->topic = src; }
+
+int 				Channel::getUserLimit() const { return usersLimit; }
+void 				Channel::setUserLimit(int limit){ this->usersLimit = limit; }
+void 				Channel::removeUserLimit(){ this->usersLimit = 0; }
 
 // Returns the symbol of the channel, depending on its mode (s = secret, p = private)
 std::string Channel::getSymbol(void) const

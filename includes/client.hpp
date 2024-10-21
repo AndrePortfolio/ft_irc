@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:46 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/18 11:28:37 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:57:59 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class Client
 		int			socketFd;
 		sockaddr_in	address;
 		bool		status;		// unsure if we need this in this scope
+		std::string	mode;
 		size_t		nb_channels; // # of channels the client is in
 
 	public:
@@ -38,6 +39,8 @@ class Client
 		void				sendMessage(const std::string &command, const std::string &args);
 		void				sendMessage(int response_code, const std::string &args);
 		void				sendMessage(const std::string &source, const std::string &command, const std::string &args);
+		void				addMode(const std::string &mode);
+		void				delMode(const std::string &mode);
 
 	// Accessors
 		const size_t		&getNbChannels(void) const;
@@ -54,6 +57,7 @@ class Client
 		void				setStatus(const int &status);
 		const int			&getSocket(void) const;
 		const  sockaddr_in	&getAddress(void) const;
+		const std::string	&getMode(void) const;
 
 	// Util Functions
 		std::string			stringifyCode(int code); // returns the string representation of error codes

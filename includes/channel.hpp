@@ -19,6 +19,7 @@ private:
 	std::string				name;
 	std::string				key;
 	std::string				topic;
+	int						usersLimit;
 
 
 public:
@@ -44,8 +45,8 @@ public:
 
 	// Operator methods
 	bool			isOperator(Client *client) const;
-	void			addOperator(Client* client);
-	void			removeOperator(Client* client);
+	bool			addOperator(Client* client);
+	bool			removeOperator(Client* client);
 
 	const std::string		&getName(void) const;
 	void					setName(const std::string &src);
@@ -60,6 +61,9 @@ public:
 	const t_nickMapClient	&getInvited(void) const;
 	const std::string		&getMode(void) const;
 	void					setMode(std::string &src);
+	int 					getUserLimit() const;
+	void					setUserLimit(int limit);
+	void 					removeUserLimit();
 
 	std::ostream &operator<<(std::ostream &o) const;
 };
