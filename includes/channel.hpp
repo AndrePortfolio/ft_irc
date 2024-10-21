@@ -12,13 +12,13 @@ class Channel
 private:
 	typedef std::map<std::string, Client *> t_nickMapClient;
 
-	t_nickMapClient	clients;
-	t_nickMapClient	invited;
-	Client			*op;
-	std::string		mode;
-	std::string		name;
-	std::string		key;
-	std::string		topic;
+	t_nickMapClient			clients;
+	t_nickMapClient			invited;
+	std::vector<Client*>	operators;
+	std::string				mode;
+	std::string				name;
+	std::string				key;
+	std::string				topic;
 
 
 public:
@@ -35,20 +35,22 @@ public:
 	void			sendMessage(const std::string &source, const std::string &command, const std::string &args);
 	void			privateMessage(const std::string &source, const std::string &command, const std::string &args);
 	bool    		isEmpty(void);
-	std::string		getPrefix(Client *client);
+	std::string		getPrefix(Client *client) const;
 	bool			isInvited(Client *client);
 	std::string		addMode(const std::string &mode);
 	std::string		delMode(const std::string &mode);
 	void			addInvited(Client *client);
 	void			delInvited(Client *client);
-	bool			isOperator(Client *client);
+
+	// Operator methods
+	bool			isOperator(Client *client) const;
+	void			addOperator(Client* client);
+	void			removeOperator(Client* client);
 
 	const std::string		&getName(void) const;
 	void					setName(const std::string &src);
 	const t_nickMapClient	&getClients(void) const;
 	void					setClients(t_nickMapClient &src);
-	const Client			*getOp(void) const;
-	void					setOp(Client *src);
 	const std::string		&getKey(void) const;
 	void					setKey(std::string &src);
 	const std::string		&getTopic(void) const;
@@ -58,8 +60,10 @@ public:
 	const t_nickMapClient	&getInvited(void) const;
 	const std::string		&getMode(void) const;
 	void					setMode(std::string &src);
+
+	std::ostream &operator<<(std::ostream &o) const;
 };
 
-std::ostream &operator<<(std::ostream &o, const Channel &i);
+std::ostream &operator<<(std::ostream &o, const Channel &src);
 
 #endif

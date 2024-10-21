@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/21 10:08:56 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:34:32 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Server::topicCommand(const strings& commands, int& cindex)
 	else
 	{
 		// Check if the user has permission to set the topic
-		if (channel->getMode().find('t') == std::string::npos || channel->getOp() == &clients[cindex])
+		if (channel->getMode().find('t') == std::string::npos || channel->isOperator(&clients[cindex]))
 		{
 			// Concatenate all parts of the topic starting from commands[2]
 			std::string newTopic = commands[2];

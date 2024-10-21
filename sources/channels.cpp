@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/21 10:04:15 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:51:47 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ Channel::Channel(std::string mode, std::string name, Client *op)
 {
 	this->mode = mode;
 	this->name = name;
-	this->op = op;
 	this->topic = "";
+	addOperator(op);
 }
 
 Channel::Channel(Channel const &src)
@@ -48,18 +48,34 @@ Channel &Channel::operator=(Channel const &src)
 	{
 		this->mode = src.mode;
 		this->name = src.name;
-		this->op = src.op;
+		this->topic = src.topic;
+		this->operators = src.operators;
 		this->clients = src.clients;
 	}
 
 	return (*this);
 }
 
+/*
+ * Overload the stream insertion operator for Channel to print details about the channel.
+ */
+std::ostream &Channel::operator<<(std::ostream &o) const
+{
+	o << "Channel(operators: [";
+	for (std::vector<Client*>::const_iterator it = operators.begin(); it != operators.end(); ++it)
+	{
+		if (it != operators.begin())
+			o << ", ";
+		o << (*it)->getNickname();
+	}
+	o << "], name: " << getName()
+	  << ", mode: " << getMode() << ")";
+	return o;
+}
+
 std::ostream &operator<<(std::ostream &o, const Channel &src)
 {
-	o << "Channel(op: " << src.getOp() << ", name: " << src.getName()
-	  << ", mode: " << src.getMode() << ")";
-	return (o);
+	return src.operator<<(o);
 }
 
 /*
@@ -110,9 +126,9 @@ bool    Channel::isEmpty(void)
 }
 
 // Return the prefix of the given client in the channel (in this case, only @ for operator)
-std::string	Channel::getPrefix(Client *client)
+std::string Channel::getPrefix(Client *client) const
 {
-	if (op == client)
+	if (isOperator(client))
 		return "@";
 	return "";
 }
@@ -123,10 +139,25 @@ bool	Channel::isInvited(Client *client)
 	return (invited.find(client->getNickname()) != invited.end());
 }
 
-// Check if the given client is the operator of the channel
-bool	Channel::isOperator(Client *client)
+// Check if a user is an operator
+bool Channel::isOperator(Client* client) const
 {
-	return (op == client);
+	return (std::find(operators.begin(), operators.end(), client) != operators.end());
+}
+
+// Add an operator to the vector
+void Channel::addOperator(Client* client)
+{
+	if (!isOperator(client))
+	{
+		operators.push_back(client);
+	}
+}
+
+// Remove an operator
+void Channel::removeOperator(Client* client)
+{
+	operators.erase(std::remove(operators.begin(), operators.end(), client), operators.end());
 }
 
 // Try to add the given mode(s) to the channel and return the effectively added mode(s)
@@ -183,9 +214,6 @@ void Channel::setName(const std::string &src) { this->name = src; }
 
 const Channel::t_nickMapClient &Channel::getClients(void) const { return (this->clients); }
 void Channel::setClients(Channel::t_nickMapClient &src) { this->clients = src; }
-
-const Client *Channel::getOp(void) const { return (this->op); }
-void Channel::setOp(Client *src) { this->op = src; }
 
 const std::string &Channel::getMode(void) const { return (this->mode); }
 void Channel::setMode(std::string &src) { this->mode = src; }
