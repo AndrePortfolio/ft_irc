@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/26 13:20:36 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 15:07:23 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ class Server
 		void		bindServerSocket();
 		void		listenToServerSocket();
 		void		acceptClients();
-		void		updatePool(struct pollfd& fds, int& activeFds, int socket);
-		void		checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
-		void		adjustClients(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
-		void		handleData(char	buffer[BUFFER_SIZE], int& client);
-		std::string	parseClientMessage(std::string message, int& client);
+		void		updatePool(pollfd& fds, int& activeFds, int socket);
+		void		checkForEvent(pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		listenForClients(pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
+		void		adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds);
+		void		handleData(char	buffer[BUFFER_SIZE], int& client, pollfd(&fds)[MAX_FDS]);
+		std::string	parseClientMessage(std::string message, int& client, pollfd(&fds)[MAX_FDS]);
 
 	// Commands
 		strings		splitMessage(const std::string& message);
@@ -70,7 +70,7 @@ class Server
 		std::string	inviteCommand(const strings& parameters, int& client);
 		std::string	kickCommand(const strings& parameters, int& client);
 		std::string	operCommand(const strings& parameters, int& client);
-		std::string	quitCommand(const strings& parameters, int& client);
+		std::string	quitCommand(const strings& parameters, int& client, pollfd(&fds)[MAX_FDS]);
 		std::string	pingCommand(const strings& parameters, int& client);
 		std::string	invalidCommand(std::string message);
 

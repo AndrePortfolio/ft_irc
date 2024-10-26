@@ -6,20 +6,20 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 13:21:40 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 14:55:47 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
 /* Removes ENTER from the command, prepares for parsing and outputs to client */
-void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
+void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS])
 {
 	std::string	message(buffer, strlen(buffer) - 1);
 	if (!message.empty() && message.back() == '\r')
 		message.erase(message.end() - 1);
 
-	std::string	outputMsg = parseClientMessage(message, client);
+	std::string	outputMsg = parseClientMessage(message, client, fds);
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
@@ -31,7 +31,7 @@ static std::string toUpper(std::string cmd)
 }
 
 /* Parses client input, split into commands and execute them */
-std::string Server::parseClientMessage(std::string message, int& client)
+std::string Server::parseClientMessage(std::string message, int& client, struct pollfd(&fds)[MAX_FDS])
 {
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
@@ -46,7 +46,7 @@ std::string Server::parseClientMessage(std::string message, int& client)
 	else if (command == "PING")
 		return (pingCommand(parameters, client));
 	else if (command == "QUIT")
-		return (quitCommand(parameters, client));
+		return (quitCommand(parameters, client, fds));
 	// Login Commands:
 	else if (command == "PASS")
 		return (passCommand(parameters, client));
