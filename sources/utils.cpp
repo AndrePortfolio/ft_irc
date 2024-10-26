@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 11:31:01 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 12:17:14 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,4 +178,28 @@ const std::string Server::getMessage(int input, int index)
 	msg.append("\n");
 	msg.append(RESET);
 	return (msg);
+}
+
+void	Server::informOtherClients(int index, std::string nickname)
+{
+	std::string	msg;
+
+	msg.append(CYAN);
+	msg.append("<server> ");
+	msg.append(RESET);
+	msg.append(":");
+	if (clients[index].getNickname() != "")
+		msg.append(clients[index].getNickname());
+	else
+		msg.append(nickname);
+	msg.append(CYAN);
+	msg.append(" NICK ");
+	msg.append(RESET);
+	msg.append(":");
+	msg.append(nickname);
+	msg.append("\n");
+
+	for (size_t i = 0; i < clients.size(); i++)
+		if ((size_t)index != i)
+			send(clients[i].getSocket(), msg.c_str(), msg.length(), DEFAULT);
 }

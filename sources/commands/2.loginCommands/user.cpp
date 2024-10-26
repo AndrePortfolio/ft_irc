@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 11:18:23 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 11:54:49 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,12 @@ std::string	Server::userCommand(const strings& parameters, int& client)
 		username = parameters[1].substr(0, USERLEN);
 	else
 		username = parameters[1];
-
 	realname = parameters[4];
+	// if no meaningfull value, fallback to nickname
+	if (invalidChars(username))
+		username = clients[client].getNickname();
+	if (invalidChars(realname))
+		realname = clients[client].getNickname();
 	clients[client].setUsername(username);
 	clients[client].setRealname(realname);
 	clients[client].setStatus(true);

@@ -6,13 +6,11 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 11:18:17 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 12:04:10 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
-
-static bool	invalidChars(std::string nick);
 
 /* Sets the client nickname or displays changes to all clients */
 std::string	Server::nickCommand(const strings& parameters, int& client)
@@ -33,11 +31,12 @@ std::string	Server::nickCommand(const strings& parameters, int& client)
 				return (feedbackClient(ERR_NICKNAMEINUSE));
 	}
 	nickname = parameters[1];
+	informOtherClients(client, nickname);
 	clients[client].setNickname(nickname);
 	return (getMessage(NICKNAME_SUCCESS, client));
 }
 
-static bool	invalidChars(std::string nick)
+bool	Server::invalidChars(std::string nick)
 {
 	int	foundAlphaNumeric = 0;
 

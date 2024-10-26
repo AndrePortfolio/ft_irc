@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 15:00:46 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 11:40:42 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ std::string Server::parseClientMessage(std::string message, int& client)
 	return (invalidCommand(message));
 }
 
-/* Spits client message in multiple command arguments */
+/* Spits client message in multiple command arguments, purposly not handling quotes */
 strings	Server::splitMessage(const std::string& message)
 {
 	strings				commands;
