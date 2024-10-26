@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 11:54:49 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 13:28:17 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ std::string	Server::userCommand(const strings& parameters, int& client)
 	std::string	username;
 	std::string	realname;
 	bool		authenticated = clients[client].getStatus();
+	bool		passwordAssigned = !clients[client].getPassword().empty();
+	bool		nickAssigned = !clients[client].getNickname().empty();
 
-	if (authenticated == true)
+	if (!passwordAssigned || !nickAssigned)
+		return (feedbackClient(ERR_NOTAUTHENTICATED));
+	else if (authenticated == true)
 		return (feedbackClient(ERR_ALREADYREGISTERED));
 	else if (parameters.size() != 5 || parameters[1].size() < 1)
 		return (feedbackClient(ERR_NEEDMOREPARAMS));

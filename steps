@@ -50,7 +50,7 @@ Requirements:
 6. Communication between client and server has to be done via TCP/IP (v4 or v6)
 7. Features to implement:
 	1. Able to authenticate, set a nickname and username, join a channel,
-		send and receive private messages using your reference cliente.
+		send and receive private messages using your reference client.
 	2. All the messages sent from on client to a channel have to be forwarded
 		to every other clienet that joined the channel.
 	3. You must have *operators* and regular users.

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/26 12:04:24 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 13:20:36 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ class Server
 		std::string	privmsgCommand(const strings& parameters, int& client);
 		std::string	inviteCommand(const strings& parameters, int& client);
 		std::string	kickCommand(const strings& parameters, int& client);
-		std::string	operCommand(const strings& parameters);
-		std::string	quitCommand(const strings& parameters);
-		std::string	pingCommand(const strings& parameters);
+		std::string	operCommand(const strings& parameters, int& client);
+		std::string	quitCommand(const strings& parameters, int& client);
+		std::string	pingCommand(const strings& parameters, int& client);
 		std::string	invalidCommand(std::string message);
 
 	// Util Functions

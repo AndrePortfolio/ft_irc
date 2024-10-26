@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 11:40:42 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 13:21:40 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ std::string Server::parseClientMessage(std::string message, int& client)
 	if (command == "HELP")
 		return (helpCommand());
 	else if (command == "OPER")
-		return (operCommand(parameters));
+		return (operCommand(parameters, client));
 	else if (command == "PING")
-		return (pingCommand(parameters));
+		return (pingCommand(parameters, client));
 	else if (command == "QUIT")
-		return (quitCommand(parameters));
+		return (quitCommand(parameters, client));
 	// Login Commands:
 	else if (command == "PASS")
 		return (passCommand(parameters, client));
