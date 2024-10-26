@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 12:17:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 16:23:32 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,10 @@ std::string Server::feedbackClient(int input)
 	msg.append(RED);
 	switch (input)
 	{
+		case 381:
+			msg.append(GREEN);
+			msg.append("381: You are now an IRC operator.");
+			break ;
 		case 421:
 			msg.append("461 :Unknown command or invalid parameter.");
 			break ;
@@ -135,6 +139,9 @@ std::string Server::feedbackClient(int input)
 			break ;
 		case 465:
 			msg.append("465 :Invalid password provided.");
+			break ;
+		case 491:
+			msg.append("491 :host not allowed OPER privileges.");
 			break ;
 		default:
 			break ;

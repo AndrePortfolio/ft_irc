@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/26 15:07:23 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 15:57:06 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ class Client;
 typedef std::map<int, Client> Clients;
 typedef std::vector<std::string> strings;
 typedef std::vector<std::string>::const_iterator stringConsIterator;
+typedef std::vector<std::pair<std::string, std::string> > Operators;
+typedef std::vector<std::pair<std::string, std::string> >::iterator	opIterator;
 
 class Server
 {

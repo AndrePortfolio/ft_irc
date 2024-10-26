@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/26 11:12:55 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 16:24:43 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@
 # define PASSWORD_SUCCESS 0
 # define NICKNAME_SUCCESS 1
 # define USERNAME_SUCCESS 2
+# define RPL_YOUREOPER 381
 # define ERR_UNKNOWNCOMMAND 421
 # define ERR_NONICKNAMEGIVEN 431
 # define ERR_ERRONEUSNICKNAME 432
@@ -74,6 +75,7 @@
 # define ERR_NOTAUTHENTICATED 463
 # define ERR_PASSWDMISMATCH 464
 # define ERR_INVALIDPASSWORD 465
+# define ERR_NOOPERHOST 491
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"
