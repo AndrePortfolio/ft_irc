@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 15:12:47 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 11:18:17 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static bool	invalidChars(std::string nick);
 /* Sets the client nickname or displays changes to all clients */
 std::string	Server::nickCommand(const strings& parameters, int& client)
 {
-	bool	passwordAssigned = !clients[client].getPassword().empty();
+	std::string	nickname;
+	bool		passwordAssigned = !clients[client].getPassword().empty();
 
 	if (!passwordAssigned)
 		return (feedbackClient(ERR_NOTAUTHENTICATED));
@@ -28,13 +29,12 @@ std::string	Server::nickCommand(const strings& parameters, int& client)
 	else
 	{
 		for (size_t i = 0; i < clients.size(); i++)
-		{
 			if (parameters[1] == clients[i].getNickname())
 				return (feedbackClient(ERR_NICKNAMEINUSE));
-		}
 	}
-	clients[client].setNickname(parameters[1]);
-	return ("");	// still unsure if I want to display a message. will decide later
+	nickname = parameters[1];
+	clients[client].setNickname(nickname);
+	return (getMessage(NICKNAME_SUCCESS, client));
 }
 
 static bool	invalidChars(std::string nick)

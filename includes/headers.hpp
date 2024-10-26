@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/16 14:14:12 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 11:12:55 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 # define MIN_ALLOWED_PORT 1024
 # define MAX_ALLOWED_PORT 65535
 # define DEFAULT_FDS 4
+# define USERLEN 12
 
 // Print Message
 # define SERVER 0
@@ -60,14 +61,19 @@
 # define DISCONNECTED 3
 
 // Feedback Client
-# define ERR_NEEDMOREPARAMS 461
-# define ERR_ALREADYREGISTERED 462
-# define ERR_NOTAUTHENTICATED 463
-# define ERR_INVALIDPASSWORD 464
+# define PASSWORD_SUCCESS 0
+# define NICKNAME_SUCCESS 1
+# define USERNAME_SUCCESS 2
+# define ERR_UNKNOWNCOMMAND 421
 # define ERR_NONICKNAMEGIVEN 431
 # define ERR_ERRONEUSNICKNAME 432
 # define ERR_NICKNAMEINUSE 433
 # define ERR_NICKCOLLISION 436
+# define ERR_NEEDMOREPARAMS 461
+# define ERR_ALREADYREGISTERED 462
+# define ERR_NOTAUTHENTICATED 463
+# define ERR_PASSWDMISMATCH 464
+# define ERR_INVALIDPASSWORD 465
 
 # define RED	"\x1b[31;1m"
 # define GREEN	"\x1b[32;1m"
