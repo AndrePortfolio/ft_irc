@@ -19,6 +19,7 @@ private:
 	std::string				name;
 	std::string				key;
 	std::string				topic;
+	std::string				password;
 	int						usersLimit;
 	int						usersCount;
 
@@ -49,6 +50,12 @@ public:
 	bool			addOperator(Client* client);
 	bool			removeOperator(Client* client);
 
+	// Password methods
+	void			setPassword(const std::string& password);
+	const std::string& getPassword() const;
+	void			removePassword();
+
+	// Getters and setters
 	const std::string		&getName(void) const;
 	void					setName(const std::string &src);
 	const t_nickMapClient	&getClients(void) const;
@@ -60,8 +67,7 @@ public:
 	std::string				getSymbol(void) const;
 	void					setInvited(t_nickMapClient &src);
 	const t_nickMapClient	&getInvited(void) const;
-	const std::string		&getMode(void) const;
-	void					setMode(std::string &src);
+	const std::string		getMode(void) const;
 	int 					getUserLimit() const;
 	void					setUserLimit(int limit);
 	void 					removeUserLimit();

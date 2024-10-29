@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/29 08:38:02 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 13:15:47 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Channel::Channel(std::string mode, std::string name, Client *op)
 	this->mode = mode;
 	this->name = name;
 	this->topic = "";
+	this->password = "";
 	addOperator(op);
 	this->usersCount = 0;
 }
@@ -54,6 +55,7 @@ Channel &Channel::operator=(Channel const &src)
 		this->name = src.name;
 		this->key = src.key;
 		this->topic = src.topic;
+		this->password = src.topic;
 		this->usersLimit = src.usersLimit;
 		this->usersCount = src.usersCount;
 	}
@@ -184,6 +186,7 @@ std::string	Channel::addMode(const std::string &real_mode)
 		this->mode += real_mode[i];
 		ret += real_mode[i];
 	}
+	std::cout << "mode: " << mode << std::endl;
 	return (ret);
 }
 
@@ -217,23 +220,16 @@ void	Channel::delInvited(Client *client)
  ******************************** ACCESSORS ************************************
  */
 
-/*
- ******************************** ACCESSORS ************************************
- */
+const	std::string&Channel::getName(void) const { return (this->name); }
+void				Channel::setName(const std::string &src) { this->name = src; }
 
-const std::string &Channel::getName(void) const { return (this->name); }
-void 				Channel::setName(const std::string &src) { this->name = src; }
+const				Channel::t_nickMapClient &Channel::getClients(void) const { return (this->clients); }
+void				Channel::setClients(Channel::t_nickMapClient &src) { this->clients = src; }
 
-const Channel::t_nickMapClient &Channel::getClients(void) const { return (this->clients); }
-void 				Channel::setClients(Channel::t_nickMapClient &src) { this->clients = src; }
+const	std::string&Channel::getKey(void) const { return (this->key); }
+void				Channel::setKey(std::string &src) { this->key = src; }
 
-const std::string &Channel::getMode(void) const { return (this->mode); }
-void 				Channel::setMode(std::string &src) { this->mode = src; }
-
-const std::string &Channel::getKey(void) const { return (this->key); }
-void 				Channel::setKey(std::string &src) { this->key = src; }
-
-const std::string &Channel::getTopic(void) const { return (this->topic); }
+const	std::string&Channel::getTopic(void) const { return (this->topic); }
 void 				Channel::setTopic(const std::string &src) { this->topic = src; }
 
 int 				Channel::getUserLimit() const { return usersLimit; }
@@ -242,6 +238,26 @@ void 				Channel::removeUserLimit(){ this->usersLimit = 0; }
 
 int 				Channel::getUserCount() const { return usersCount; }
 void 				Channel::setUserCount(int count){ this->usersCount = count; }
+
+void 				Channel::setPassword(const std::string& password) { this->password = password; }
+const	std::string&Channel::getPassword() const { return this->password; }
+void				Channel::removePassword() { this->password.clear(); }
+
+const Channel::t_nickMapClient &Channel::getInvited(void) const { return (this->invited); }
+void Channel::setInvited(t_nickMapClient &src) { this->invited = src; }
+
+const std::string Channel::getMode() const
+{
+    std::string modeString = "+" + mode; // Start with '+' and add all active mode characters
+
+    if (mode.find('l') != std::string::npos)
+        modeString += " " + std::to_string(usersLimit); // Append the user limit if in `+l` mode first
+
+    if (mode.find('k') != std::string::npos)
+        modeString += " " + password; // Append the key if in `+k` mode
+
+    return modeString;
+}
 
 // Returns the symbol of the channel, depending on its mode (s = secret, p = private)
 std::string Channel::getSymbol(void) const
@@ -254,6 +270,4 @@ std::string Channel::getSymbol(void) const
 		return "=";
 }
 
-const Channel::t_nickMapClient &Channel::getInvited(void) const { return (this->invited); }
-void Channel::setInvited(t_nickMapClient &src) { this->invited = src; }
 
