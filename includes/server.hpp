@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/21 13:43:23 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 09:13:03 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ class Server
 		std::string	nickCommand(const strings& commands);
 		std::string	userCommand(const strings& commands);
 		void		joinCommand(const strings& commands, int& client);
-		void		modeCommand(const strings& commands, int& client);
 		void		topicCommand(const strings& commands, int& client);
 		void		partCommand(const strings& commands, int& client);
 		void		privmsgCommand(const strings& commands, int& client);
@@ -85,6 +84,17 @@ class Server
 		std::string	quitCommand(const strings& commands);
 		std::string	pingCommand(const strings& commands);
 		std::string	invalidCommand();
+
+	// Mode command and aux's
+		void		modeCommand(const strings& commands, int& client);
+		void		handleChannelMode(const strings& commands, int& cindex);
+		void		validateModeCharacters(const strings& commands, int& cindex);
+		void		updateChannelMode(const strings& commands, int& cindex, Channel* channel);
+		void		handleInviteOnlyMode(bool addMode, Channel* channel, std::string& buffer_add, std::string& buffer_del);
+		void		handleTopicMode(bool addMode, Channel* channel, std::string& buffer_add, std::string& buffer_del);
+		void		handleOperatorMode(bool addMode, const strings& commands, int& cindex, Channel* channel, size_t& argIndex, std::string& buffer_add, std::string& buffer_del);
+		void		handleLimitMode(bool addMode, const strings& commands, int& cindex, Channel* channel, size_t& argIndex, std::string& buffer_add, std::string& buffer_del);
+		void		handleUserMode(const strings& commands, int& cindex);
 
 	//Channels
 		bool			existsChannel(std::string name) const;
