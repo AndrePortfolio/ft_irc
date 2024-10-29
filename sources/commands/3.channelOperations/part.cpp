@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/18 12:13:36 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 08:33:51 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ void	Server::partCommand(const strings& commands, int& cindex)
 		}
 		else
 			channel->sendMessage(clients[cindex].getNickname(), "PART", *it);
+
+		// Remove client from channel and update user count
 		channel->removeClient(&clients[cindex]);
+		channel->setUserCount(channel->getUserCount() - 1);
 		if (channel->isEmpty())
 			removeChannel(*it); // if user is the last in the channel, delete it
 	}

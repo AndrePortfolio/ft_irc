@@ -20,6 +20,7 @@ private:
 	std::string				key;
 	std::string				topic;
 	int						usersLimit;
+	int						usersCount;
 
 
 public:
@@ -64,6 +65,8 @@ public:
 	int 					getUserLimit() const;
 	void					setUserLimit(int limit);
 	void 					removeUserLimit();
+	int 					getUserCount() const;
+	void					setUserCount(int count);
 
 	std::ostream &operator<<(std::ostream &o) const;
 };

@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/21 14:00:49 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 08:33:17 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,26 +91,26 @@ void Server::modeCommand(const strings& commands, int& cindex)
 						buffer_del += channel->delMode("t");
 					break;
 
-				case 'k': // Key (password) mode
-					if (addMode)
-					{
-						if (commands.size() > argIndex)
-						{
-							channel->setPassword(commands[argIndex++]);
-							buffer_add += "k";
-						}
-						else
-						{
-							clients[cindex].sendMessage(ERR_NEEDMOREPARAMS, clients[cindex].getNickname() + " " + commands[0] + " :Not enough parameters for +k");
-							return;
-						}
-					}
-					else
-					{
-						channel->removePassword();
-						buffer_del += "k";
-					}
-					break;
+				// case 'k': // Key (password) mode
+				// 	if (addMode)
+				// 	{
+				// 		if (commands.size() > argIndex)
+				// 		{
+				// 			channel->setPassword(commands[argIndex++]);
+				// 			buffer_add += "k";
+				// 		}
+				// 		else
+				// 		{
+				// 			clients[cindex].sendMessage(ERR_NEEDMOREPARAMS, clients[cindex].getNickname() + " " + commands[0] + " :Not enough parameters for +k");
+				// 			return;
+				// 		}
+				// 	}
+				// 	else
+				// 	{
+				// 		channel->removePassword();
+				// 		buffer_del += "k";
+				// 	}
+				// 	break;
 
 				case 'o': // Operator mode
 					if (addMode)
@@ -120,8 +120,10 @@ void Server::modeCommand(const strings& commands, int& cindex)
 							std::string targetNick = commands[argIndex++];
 							int targetIndex = findClientIndexByNickname(targetNick);
 							if (targetIndex != -1)
+							{
 								if (channel->addOperator(&clients[targetIndex]))
 									buffer_add += "o";
+							}
 							else
 								clients[cindex].sendMessage(ERR_NOSUCHNICK, clients[cindex].getNickname() + " " + targetNick + " :No such nick");
 						}

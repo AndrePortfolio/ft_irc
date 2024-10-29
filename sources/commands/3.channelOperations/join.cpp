@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/21 08:50:18 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 08:46:29 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,13 @@ void	Server::joinCommand(const strings& commands, int &cindex)
 		// If the channel exists, add it to the list of channels to join
 		if (existsChannel(*it_names))
 		{
+			Channel* channel = this->getChannels()[*it_names];
+			// Check if channel is in l mode and the user limit has been reached
+			if (channel->getMode().find('l') != std::string::npos && channel->getUserCount() >= channel->getUserLimit())
+			{
+				clients[cindex].sendMessage(ERR_CHANNELISFULL, clients[cindex].getNickname() + " " + *it_names + " :Cannot join channel (+l)");
+				continue;
+			}
 			channels_to_sub.push_back(this->getChannels()[*it_names]);
 		}
 		else
@@ -85,7 +92,9 @@ void	Server::joinCommand(const strings& commands, int &cindex)
 			clients[cindex].sendMessage(ERR_INVITEONLYCHAN, clients[cindex].getNickname() + " " + (*it)->getName() + " :Cannot join channel (+i)");
 			continue ;
 		}
+		// Adds the client to the channel and increments usercount
 		(*it)->addClient(&clients[cindex]);
+		(*it)->setUserCount((*it)->getUserCount() + 1);
 		// If the user was previously invited, remove the invitation
 		if ((*it)->isInvited(&clients[cindex]))
 			(*it)->delInvited(&clients[cindex]);

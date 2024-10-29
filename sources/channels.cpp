@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/21 14:00:41 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 08:38:02 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ Channel::Channel(std::string mode, std::string name, Client *op)
 	this->name = name;
 	this->topic = "";
 	addOperator(op);
+	this->usersCount = 0;
 }
 
 Channel::Channel(Channel const &src)
@@ -46,11 +47,15 @@ Channel &Channel::operator=(Channel const &src)
 {
 	if (this != &src)
 	{
+		this->clients = src.clients;
+		this->invited = src.invited;
+		this->operators = src.operators;
 		this->mode = src.mode;
 		this->name = src.name;
+		this->key = src.key;
 		this->topic = src.topic;
-		this->operators = src.operators;
-		this->clients = src.clients;
+		this->usersLimit = src.usersLimit;
+		this->usersCount = src.usersCount;
 	}
 
 	return (*this);
@@ -234,6 +239,9 @@ void 				Channel::setTopic(const std::string &src) { this->topic = src; }
 int 				Channel::getUserLimit() const { return usersLimit; }
 void 				Channel::setUserLimit(int limit){ this->usersLimit = limit; }
 void 				Channel::removeUserLimit(){ this->usersLimit = 0; }
+
+int 				Channel::getUserCount() const { return usersCount; }
+void 				Channel::setUserCount(int count){ this->usersCount = count; }
 
 // Returns the symbol of the channel, depending on its mode (s = secret, p = private)
 std::string Channel::getSymbol(void) const
