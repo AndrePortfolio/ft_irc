@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/29 13:15:47 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:16:51 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,8 +253,8 @@ const std::string Channel::getMode() const
     if (mode.find('l') != std::string::npos)
         modeString += " " + std::to_string(usersLimit); // Append the user limit if in `+l` mode first
 
-    if (mode.find('k') != std::string::npos)
-        modeString += " " + password; // Append the key if in `+k` mode
+    // if (mode.find('k') != std::string::npos)
+    //     modeString += " " + password; // Append the key if in `+k` mode
 
     return modeString;
 }
