@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/30 16:36:29 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:57:16 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ void Server::joinCommand(const strings& commands, int &cindex)
 	}
 
 	// Handling in case user wants to leave all channels
-	handleLeaveAllChannels(commands, cindex);
+    if (commands[1] == "0")
+	{
+		handleLeaveAllChannels(commands, cindex);
+		return ;
+	}
 
 	// Split the provided channel names by comma (',') and handle potential passwords
 	std::vector<std::string> channel_names;
@@ -59,23 +63,34 @@ void Server::joinCommand(const strings& commands, int &cindex)
 
 void Server::handleLeaveAllChannels(const strings& commands, int &cindex)
 {
-	if (commands[1] == "0")
-	{
-		for (t_channelIterator it = channels.begin(); it != channels.end(); it++)
-		{
-			if (it->second->isMember(&clients[cindex]))
-			{
-				std::vector<std::string> partTokens;
+	(void) commands;
+        // Create a temporary list to store channels to leave
+        std::vector<std::string> channelsToLeave;
 
-				// Prepare PART command to leave the channel
-				partTokens.push_back("PART");
-				partTokens.push_back(it->second->getName());
-				partCommand(partTokens, cindex);
-			}
-		}
-		clients[cindex].setNbChannels(0);
-	}
+        // Populate the list with channel names the user is currently a member of
+        for (t_channelIterator it = channels.begin(); it != channels.end(); it++)
+        {
+            if (it->second->isMember(&clients[cindex]))
+            {
+                channelsToLeave.push_back(it->second->getName());
+            }
+        }
+
+        // Iterate over the list and leave each channel
+        for (std::vector<std::string>::iterator it = channelsToLeave.begin(); it != channelsToLeave.end(); ++it)
+        {
+            std::vector<std::string> partTokens;
+
+            // Prepare PART command to leave the channel
+            partTokens.push_back("PART");
+            partTokens.push_back(*it);
+            partCommand(partTokens, cindex);
+        }
+
+        // Reset the number of channels the client is part of
+        clients[cindex].setNbChannels(0);
 }
+
 
 void Server::parseChannelNamesAndPasswords(const std::string& input, std::vector<std::string>& channel_names, std::vector<std::string>& passwords)
 {
@@ -195,16 +210,13 @@ void Server::joinChannels(std::vector<Channel *>& channels_to_sub, int &cindex)
 		// If the user was previously invited, remove the invitation
 		if ((*it)->isInvited(&clients[cindex]))
 			(*it)->delInvited(&clients[cindex]);
-//---------------------
-		// Full prefix for the join message (nickname, username, hostname)
-		std::string fullPrefix = clients[cindex].getNickname() + "!" + clients[cindex].getUsername() + "@" + "";
 
 		// Send JOIN message to all channel members, including the one joining
 		for (std::map<std::string, Client *>::const_iterator it_client = (*it)->getClients().begin(); it_client != (*it)->getClients().end(); it_client++)
 		{
-			it_client->second->sendMessage(fullPrefix, "JOIN", (*it)->getName());
+			it_client->second->sendMessage(clients[cindex].getNickname(), "JOIN", (*it)->getName());
 		}
-//----------------------
+
 		// Send information about the topic of the channel
 		if (!(*it)->getTopic().empty())
 			clients[cindex].sendMessage(RPL_TOPIC, clients[cindex].getNickname() + " " + (*it)->getName() + " :" + (*it)->getTopic());
