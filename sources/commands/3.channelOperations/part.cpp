@@ -3,21 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 15:34:37 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/29 08:33:51 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
-/* Unsure of what this does, just replicating behavior from previous code */
-std::string	Server::partCommand(const strings& commands, int& client)
+
+/*
+ * The PART command is used to leave a channel.
+ * If the client is the last one in the channel, the channel is destroyed.
+ */
+void	Server::partCommand(const strings& commands, int& cindex)
 {
-	(void)client;
-	(void)commands;
-	// if (channel.empty())
-		// 	return (":server 461 * PART :No channel specified\r\n");
-	return (":server 331 nick :Left channel " "+ channel +" "\r\n");
+	// error handling
+	if (commands.size() < 2)
+	{
+		clients[cindex].sendMessage(ERR_NEEDMOREPARAMS, clients[cindex].getNickname() + " " + commands[0] + " :Not enough parameters");
+		return;
+	}
+
+	// handling for example: PART #channel1,#channel2 :Goodbye cruel world!
+	std::vector<std::string> channel_names = split(commands[1], ',');
+	for (std::vector<std::string>::iterator it = channel_names.begin(); it != channel_names.end(); it++)
+	{
+		if (!existsChannel(*it))
+		{
+			clients[cindex].sendMessage(ERR_NOSUCHCHANNEL, clients[cindex].getNickname() + " " + *it + " :No such channel");
+			continue ;
+		}
+		Channel *channel = channels[*it];
+		//after checking if channel exists, check if user is in the channel
+		if (!channel->isMember(&clients[cindex]))
+		{
+			clients[cindex].sendMessage(ERR_NOTONCHANNEL, clients[cindex].getNickname() + " " + *it + " :You're not on that channel");
+			continue ;
+		}
+		// checks if user has a parting message, if so, send it to the channel
+		if (commands.size() > 2 && !commands[2].empty())
+		{
+			std::string fullMessage;
+			std::string::size_type i = 2;
+			while (i < commands.size())
+			{
+				fullMessage.append(commands[i]);
+				++i;
+				if (i < commands.size())
+					fullMessage.append(" ");
+			}
+    		channel->sendMessage(clients[cindex].getNickname(), "PART", *it + " " + fullMessage);
+		}
+		else
+			channel->sendMessage(clients[cindex].getNickname(), "PART", *it);
+
+		// Remove client from channel and update user count
+		channel->removeClient(&clients[cindex]);
+		channel->setUserCount(channel->getUserCount() - 1);
+		if (channel->isEmpty())
+			removeChannel(*it); // if user is the last in the channel, delete it
+	}
 }

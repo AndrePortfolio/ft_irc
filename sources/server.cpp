@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/13 11:14:39 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/21 13:43:50 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,84 @@ void	Server::acceptClients()
 		listenForClients(fds, activeFds);
 		CheckForClientData(fds, activeFds);
 	}
+}
+
+// Check if a channel exists
+bool	Server::existsChannel(std::string name) const
+{
+	if (this->channels.find(name) != this->channels.end())
+		return true;
+	return false;
+}
+
+// Check if a client exists by nickname
+bool Server::existsClient(const std::string& name) const
+{
+	for (Clients::const_iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (it->second.getNickname() == name)
+		{
+			return (true);
+		}
+	}
+	return (false);
+}
+
+// Remove a channel from the server by its name
+void Server::removeChannel(std::string channel_name)
+{
+	channels.erase(channel_name);
+}
+
+std::vector<std::string> Server::split(std::string str, char c) const
+{
+	std::vector<std::string> result;
+	std::string tmp;
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (str[i] == c)
+		{
+			result.push_back(tmp);
+			tmp.clear();
+		}
+		else
+			tmp += str[i];
+	}
+	result.push_back(tmp);
+	return result;
+}
+
+char  Server::closestPlusMinus(const std::string &str, const char &mode) const
+{
+	//reverse find to get the last occurence of the mode and the closest + or -
+    size_t lastMode = str.rfind(mode);
+    if (lastMode == std::string::npos)
+        return ('\0');
+
+    size_t closestPlus = str.rfind('+', lastMode);
+    size_t closestMinus = str.rfind('-', lastMode);
+	//if neither is found, default is +
+    if (closestPlus == std::string::npos && closestMinus == std::string::npos)
+        return '+';
+    if (closestPlus == std::string::npos)
+        return '-';
+    if (closestMinus == std::string::npos)
+        return '+';
+	// if the last occurence of the mode is closer to + than -
+    if (closestPlus > closestMinus)
+        return '+';
+    return '-';
+}
+
+// Returns -1 if client is not found, otherwise returns the index of the client in the map
+int Server::findClientIndexByNickname(const std::string& nickname) const
+{
+	for (Clients::const_iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (it->second.getNickname() == nickname)
+		{
+			return it->first; // Return the index/key of the client in the map
+		}
+	}
+	return -1; // Return -1 if client is not found
 }

@@ -2,6 +2,7 @@ Usefull copy/paste commands to test the program:
 	./ircserv 4242 42
 	irssi
 	/connect localhost 4242 42
+	make re && clear && ./ircserv 4242 42
 
 To pass raw commands to our server using IRSSI -> /QUOTE command
 
