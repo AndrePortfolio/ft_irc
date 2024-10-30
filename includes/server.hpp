@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/30 15:43:59 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:03:19 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ class Server
 		void		joinCommand(const strings& commands, int& client);
 		void		topicCommand(const strings& commands, int& client);
 		void		partCommand(const strings& commands, int& client);
-		void		privmsgCommand(const strings& commands, int& client);
+		void		privmsgCommand(const strings& commands, int& cindex);
 		void		inviteCommand(const strings& commands, int& client);
 		void		kickCommand(const strings& commands, int& client);
 		std::string	operCommand(const strings& commands);

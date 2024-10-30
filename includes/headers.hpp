@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/30 16:17:49 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:10:38 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ enum numeric_err
 	ERR_NOSUCHNICK = 401,
 	ERR_NOSUCHSERVER = 402,
 	ERR_NOSUCHCHANNEL = 403,
+	ERR_CANNOTSENDTOCHAN = 404,
 	ERR_TOOMANYCHANNELS = 405,
 	ERR_UNKNOWNCOMMAND = 421,
 	ERR_NOMOTD = 422,
