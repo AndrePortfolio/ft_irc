@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/29 13:44:10 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:36:29 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,29 @@ void Server::joinCommand(const strings& commands, int &cindex)
 	// Handling in case user wants to leave all channels
 	handleLeaveAllChannels(commands, cindex);
 
-	// Split the provided channel names and password by space (' ')
-	std::vector<std::string> channelAndPassword = split(commands[1], ' ');
-	std::string channelsString = channelAndPassword[0];
-	std::string channelPassword = "";
-	if (channelAndPassword.size() > 1)
-		channelPassword = channelAndPassword[1];
+	// Split the provided channel names by comma (',') and handle potential passwords
+	std::vector<std::string> channel_names;
+	std::vector<std::string> passwords;
+	parseChannelNamesAndPasswords(commands[1], channel_names, passwords);
 
-	// Split the provided channel names by comma (',')
-	std::vector<std::string> channel_names = split(channelsString, ',');
 	std::vector<Channel *> channels_to_sub;
 
-	std::cout << channelPassword << std::endl;
-	std::cout << "----\n" << commands[1] << std::endl;
 	// Process each channel name
-	processChannelNames(channel_names, channelPassword, cindex, channels_to_sub);
+	processChannelNames(channel_names, cindex);
+
+	// Process each channel name along with its password
+	for (size_t i = 0; i < channel_names.size(); ++i)
+	{
+		std::string channelName = channel_names[i];
+		std::string channelPassword;
+		if (i < passwords.size())
+			channelPassword = passwords[i];
+		else
+			channelPassword = "";
+
+		// Validate and process the channel with its respective password
+		handleExistingOrNewChannel(channelName, channelPassword, cindex, channels_to_sub);
+	}
 
 	// Join the channels
 	joinChannels(channels_to_sub, cindex);
@@ -69,7 +77,20 @@ void Server::handleLeaveAllChannels(const strings& commands, int &cindex)
 	}
 }
 
-void Server::processChannelNames(const std::vector<std::string>& channel_names, const std::string& channelPassword, int &cindex, std::vector<Channel *>& channels_to_sub)
+void Server::parseChannelNamesAndPasswords(const std::string& input, std::vector<std::string>& channel_names, std::vector<std::string>& passwords)
+{
+	// Split by space to separate channels and passwords
+	std::vector<std::string> splitInput = split(input, ' ');
+
+	// Split channel names by comma
+	channel_names = split(splitInput[0], ',');
+
+	// If there are passwords provided, split them by comma
+	if (splitInput.size() > 1)
+		passwords = split(splitInput[1], ',');
+}
+
+void Server::processChannelNames(const std::vector<std::string>& channel_names, int &cindex)
 {
 	for (std::vector<std::string>::const_iterator it_names = channel_names.begin(); it_names != channel_names.end(); it_names++)
 	{
@@ -86,9 +107,6 @@ void Server::processChannelNames(const std::vector<std::string>& channel_names, 
 			clients[cindex].sendMessage(ERR_TOOMANYCHANNELS, clients[cindex].getNickname() + " " + *(it_names) + " :You have joined too many channels");
 			continue;
 		}
-
-		// Handle existing or new channels
-		handleExistingOrNewChannel(*it_names, channelPassword, cindex, channels_to_sub);
 	}
 }
 
@@ -138,6 +156,8 @@ void Server::handleExistingOrNewChannel(const std::string& channelName, const st
 		createNewChannel(channelName, channelPassword, cindex, channels_to_sub);
 		// Assign the user as the operator of the newly created channel
 		channels_to_sub.back()->addOperator(&clients[cindex]);
+		// Notify the user that they are the channel operator
+		clients[cindex].sendMessage(RPL_YOUAREOPER, clients[cindex].getNickname() + " " + channelName + " :You are now the channel operator");
 	}
 }
 
@@ -169,18 +189,27 @@ void Server::joinChannels(std::vector<Channel *>& channels_to_sub, int &cindex)
 			continue;
 		}
 
+		// Add client to channel
 		(*it)->addClient(&clients[cindex]);
 
 		// If the user was previously invited, remove the invitation
 		if ((*it)->isInvited(&clients[cindex]))
 			(*it)->delInvited(&clients[cindex]);
+//---------------------
+		// Full prefix for the join message (nickname, username, hostname)
+		std::string fullPrefix = clients[cindex].getNickname() + "!" + clients[cindex].getUsername() + "@" + "";
 
-		// Send JOIN message to all channel members
-		(*it)->sendMessage(clients[cindex].getNickname(), "JOIN", (*it)->getName());
-
-		// If the channel has a topic, send it to the user
+		// Send JOIN message to all channel members, including the one joining
+		for (std::map<std::string, Client *>::const_iterator it_client = (*it)->getClients().begin(); it_client != (*it)->getClients().end(); it_client++)
+		{
+			it_client->second->sendMessage(fullPrefix, "JOIN", (*it)->getName());
+		}
+//----------------------
+		// Send information about the topic of the channel
 		if (!(*it)->getTopic().empty())
 			clients[cindex].sendMessage(RPL_TOPIC, clients[cindex].getNickname() + " " + (*it)->getName() + " :" + (*it)->getTopic());
+		else
+			clients[cindex].sendMessage(RPL_NOTOPIC, clients[cindex].getNickname() + " " + (*it)->getName() + " :No topic is set");
 
 		// Increment the number of channels the user is part of
 		clients[cindex].setNbChannels(clients[cindex].getNbChannels() + 1);
@@ -188,13 +217,15 @@ void Server::joinChannels(std::vector<Channel *>& channels_to_sub, int &cindex)
 		// Update the user count for the channel
 		(*it)->setUserCount((*it)->getUserCount() + 1);
 
-		// Send the list of users in the channel
+		// Send the list of users in the channel (RPL_NAMREPLY)
+		std::string usersList;
 		for (std::map<std::string, Client *>::const_iterator it_client = (*it)->getClients().begin(); it_client != (*it)->getClients().end(); it_client++)
 		{
-			clients[cindex].sendMessage(RPL_NAMREPLY, clients[cindex].getNickname() + " " + (*it)->getSymbol() + " " + (*it)->getName() + " :" + (*it)->getPrefix(it_client->second) + (*it_client).second->getNickname());
+			usersList += (*it)->getPrefix(it_client->second) + it_client->second->getNickname() + " ";
 		}
+		clients[cindex].sendMessage(RPL_NAMREPLY, clients[cindex].getNickname() + " " + (*it)->getSymbol() + " " + (*it)->getName() + " :" + usersList);
 
-		// Signal end of NAMES list
+		// Signal end of NAMES list (RPL_ENDOFNAMES)
 		clients[cindex].sendMessage(RPL_ENDOFNAMES, clients[cindex].getNickname() + " " + (*it)->getName() + " :End of /NAMES list");
 	}
 }

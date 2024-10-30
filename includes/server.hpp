@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/29 12:11:04 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:43:59 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ class Server
 		void		handleLimitMode(bool addMode, const strings& commands, int& cindex, Channel* channel, size_t& argIndex, std::string& buffer_add, std::string& buffer_del);
 		void		handleUserMode(const strings& commands, int& cindex);
 		void		handlePasswordMode(bool addMode, const strings& commands, int& cindex, Channel* channel, size_t& argIndex, std::string& buffer_add, std::string& buffer_del);
-
+		void		parseChannelNamesAndPasswords(const std::string& input, std::vector<std::string>& channel_names, std::vector<std::string>& passwords);
 
 	// Channels
 		bool			existsChannel(std::string name) const;
@@ -105,7 +105,7 @@ class Server
 		char  			closestPlusMinus(const std::string &str, const char &mode) const;
 		int				findClientIndexByNickname(const std::string& nickname) const;
 		void			handleLeaveAllChannels(const strings& commands, int &cindex);
-		void			processChannelNames(const std::vector<std::string>& channel_names, const std::string& channelPassword, int &cindex, std::vector<Channel *>& channels_to_sub);
+		void			processChannelNames(const std::vector<std::string>& channel_names, int &cindex);
 		bool			isValidChannelName(const std::string& channelName);
 		void			handleExistingOrNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
 		void			createNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
