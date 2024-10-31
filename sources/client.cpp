@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:48 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/21 12:57:28 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:27:07 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,30 @@ Client::Client(int clientSocket, sockaddr_in clientAddress)
 	:	nickname(),
 		username(),
 		realname(),
-		buffer(),
 		socketFd(clientSocket),
+		status(false),
+		mode(),
+		nb_channels(),
 		address(clientAddress),
-		status(false)
+		password(),
+		serverOperator(false)
 {
 	this->buffer = "";
 	this->nb_channels = 0;
 }
+
+Client::Client()
+	:	nickname(),
+		username(),
+		realname(),
+		buffer(),
+		socketFd(-1),
+		status(false),
+		mode(),
+		nb_channels(),
+		address(),
+		password(),
+		serverOperator(false){}
 
 Client::Client(const Client &copy)
 {
@@ -51,11 +67,12 @@ Client &Client::operator=(Client const &other)
 		this->nickname = other.nickname;
 		this->username = other.username;
 		this->realname = other.realname;
-		this->buffer = other.buffer;
 		this->status = other.status;
 		this->socketFd = other.socketFd;
 		this->address = other.address;
 		this->nb_channels = other.nb_channels;
+		this->password = other.password;
+		this->serverOperator = other.serverOperator;
 	}
 	return (*this);
 }
@@ -129,17 +146,21 @@ void	Client::delMode(const std::string &mode)
 const std::string	&Client::getNickname(void) const { return (this->nickname); }
 const std::string	&Client::getUsername(void) const { return (this->username); }
 const std::string	&Client::getRealname(void) const { return (this->realname); }
-const std::string	&Client::getBuffer(void) const { return (this->buffer); }
 const bool			&Client::getStatus(void) const { return (this->status); }
+const bool			&Client::getOperator(void) const { return (this->serverOperator); }
 const int			&Client::getSocket(void) const { return (this->socketFd); }
-const  sockaddr_in	&Client::getAddress(void) const { return (this->address); }
 const size_t 		&Client::getNbChannels(void) const { return this->nb_channels; }
 const std::string	&Client::getMode(void) const { return this->mode; }
+const sockaddr_in	&Client::getAddress(void) const { return (this->address); }
+const std::string	&Client::getPassword(void) const { return (this->password); }
 
 /* -------------------------------- Setters ----------------------------------*/
 void	Client::setNickname(const std::string &src) { this->nickname = src; }
 void	Client::setUsername(const std::string &src) { this->username = src; }
 void	Client::setRealname(const std::string &src) { this->realname = src; }
 void	Client::setBuffer(const std::string &src) { this->buffer = src; }
-void	Client::setStatus(const int &status) { this->status = status; }
 void 	Client::setNbChannels(size_t nb_channels) { this->nb_channels = nb_channels; }
+void	Client::setStatus(const bool &status) { this->status = status; }
+void	Client::setOperator(const bool &status) { this->serverOperator = status; }
+void	Client::setPassword(const std::string  &password) { this->password = password; }
+

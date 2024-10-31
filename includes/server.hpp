@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/30 13:03:19 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:28:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ typedef std::vector<std::string> strings;
 typedef std::vector<std::string>::const_iterator stringConsIterator;
 typedef std::map<std::string, Channel *>	t_nameMapChannel;	// map of channel name to channel object
 typedef t_nameMapChannel::iterator			t_channelIterator;	// iterator for the map
+typedef std::vector<std::pair<std::string, std::string> > Operators;
+typedef std::vector<std::pair<std::string, std::string> >::iterator	opIterator;
 
 class Server
 {
@@ -57,33 +59,31 @@ class Server
 		void		bindServerSocket();
 		void		listenToServerSocket();
 		void		acceptClients();
-		void		updatePool(struct pollfd& fds, int& activeFds, int socket);
-		void		checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds);
-		void		receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
-		void		adjustClients(struct pollfd(&fds)[MAX_FDS], int& i, int& activeFds);
-		void		handleData(char	buffer[BUFFER_SIZE], int& client);
-		void		parseClientMessage(std::string message, int& client);
+		void		updatePool(pollfd& fds, int& activeFds, int socket);
+		void		checkForEvent(pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		listenForClients(pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
+		void		adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds);
+		void		handleData(char	buffer[BUFFER_SIZE], int& client, pollfd(&fds)[MAX_FDS]);
+		std::string	parseClientMessage(std::string message, int& client, pollfd(&fds)[MAX_FDS]);
 
 	// Commands
-		strings		splitCommands(const std::string& message);
+		strings		splitMessage(const std::string& message);
 		std::string	helpCommand();
-		std::string	capCommand(const strings& commands);
-
-		std::string	passCommand(const strings& commands);
-		std::string	nickCommand(const strings& commands);
-		std::string	userCommand(const strings& commands);
-		void		joinCommand(const strings& commands, int& client);
-		void		topicCommand(const strings& commands, int& client);
-		void		partCommand(const strings& commands, int& client);
-		void		privmsgCommand(const strings& commands, int& cindex);
-		void		inviteCommand(const strings& commands, int& client);
-		void		kickCommand(const strings& commands, int& client);
-		std::string	operCommand(const strings& commands);
-		std::string	quitCommand(const strings& commands);
-		std::string	pingCommand(const strings& commands);
-		std::string	invalidCommand();
+		std::string	passCommand(const strings& parameters, int& client);
+		std::string	nickCommand(const strings& parameters, int& client);
+		std::string	userCommand(const strings& parameters, int& client);
+		std::string	operCommand(const strings& parameters, int& client);
+		std::string	quitCommand(const strings& parameters, int& client, pollfd(&fds)[MAX_FDS]);
+		std::string	pingCommand(const strings& parameters, int& client);
+		void		joinCommand(const strings& parameters, int& client);
+		void		topicCommand(const strings& parameters, int& client);
+		void		partCommand(const strings& parameters, int& client);
+		void		privmsgCommand(const strings& parameters, int& client);
+		void		inviteCommand(const strings& parameters, int& client);
+		void		kickCommand(const strings& parameters, int& client);
+		std::string	invalidCommand(std::string message);
 
 	// Mode command and aux's
 		void		modeCommand(const strings& commands, int& client);
@@ -119,8 +119,10 @@ class Server
 		const t_nameMapChannel&		getChannels(void) const { return (channels); };
 		t_nameMapChannel&			getChannels(void) { return (channels); };
 		void 						setChannels(const t_nameMapChannel &src) { channels = src; };
-
-
+		std::string					feedbackClient(int input);
+		const std::string			getMessage(int input, int index);
+		void						informOtherClients(int index, std::string nickname);
+		bool						invalidChars(std::string nick);
 
 	public:
 		Server(std::string port, std::string password);

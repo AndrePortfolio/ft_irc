@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/30 13:10:38 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:32:13 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,28 @@
 # define MIN_ALLOWED_PORT 1024
 # define MAX_ALLOWED_PORT 65535
 # define DEFAULT_FDS 4
+# define USERLEN 12
 
+// Print Message
 # define SERVER 0
+# define LISTENING 1
 # define NEW_CONNECTION 2
 # define DISCONNECTED 3
-# define LISTENING 1
+
+// Feedback Client
+# define PASSWORD_SUCCESS 0
+# define NICKNAME_SUCCESS 1
+# define USERNAME_SUCCESS 2
+// # define RPL_YOUREOPER 381
+// # define ERR_UNKNOWNCOMMAND 421
+// # define ERR_NONICKNAMEGIVEN 431
+// # define ERR_ERRONEUSNICKNAME 432
+// # define ERR_NICKNAMEINUSE 433
+// # define ERR_NICKCOLLISION 436
+// # define ERR_NEEDMOREPARAMS 461
+// # define ERR_ALREADYREGISTERED 462
+// # define ERR_PASSWDMISMATCH 464
+// # define ERR_INVALIDPASSWORD 465
 
 enum numeric_rpl
 {
@@ -96,13 +113,16 @@ enum numeric_err
 	ERR_NOTREGISTERED = 451,
 	ERR_NEEDMOREPARAMS = 461,
 	ERR_ALREADYREGISTERED = 462,
+	ERR_NOTAUTHENTICATED = 463,
 	ERR_PASSWDMISMATCH = 464,
+	ERR_INVALIDPASSWORD = 465,
 	ERR_CHANNELISFULL = 471,
 	ERR_UNKNOWNMODE = 472,
 	ERR_INVITEONLYCHAN = 473,
 	ERR_BADCHANNELKEY = 475,
 	ERR_BADCHANMASK = 476,
 	ERR_CHANOPRIVSNEEDED = 482,
+	ERR_NOOPERHOST = 491,
 	ERR_USERSDONTMATCH = 502,
 };
 

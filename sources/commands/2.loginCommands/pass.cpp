@@ -6,17 +6,29 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/15 11:45:23 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 11:12:26 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
-/* Unsure of what this does, just replicating behavior from previous code */
-std::string	Server::passCommand(const strings& commands)
+/* checks for the Server password and handles password errors */
+std::string	Server::passCommand(const strings& parameters, int& client)
 {
-	(void)commands;
-	// if (password.empty())
-		// 	return (":server 461 * PASS :Not enough parameters\r\n");
-	return (":server 001 * :Password accepted\r\n");
+	std::string	pass;
+	bool		authenticated = clients[client].getStatus();
+
+	if (authenticated == true)
+		return (feedbackClient(ERR_ALREADYREGISTERED));
+	else if (parameters.size() == 1)
+		return (feedbackClient(ERR_NEEDMOREPARAMS));
+	// Password can't have spaces, be smaller than 3 chars or bigger than 255
+	else if (parameters.size() > 2 || parameters[1].size() < 3 || parameters[1].size() > 255)
+		return (feedbackClient(ERR_INVALIDPASSWORD));
+	else if (parameters[1] != password)
+		return (feedbackClient(ERR_PASSWDMISMATCH));
+
+	pass = parameters[1];
+	clients[client].setPassword(password);
+	return (getMessage(PASSWORD_SUCCESS, client));
 }

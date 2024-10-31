@@ -3,95 +3,99 @@
 /*                                                        :::      ::::::::   */
 /*   handleData.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 11:17:00 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:29:44 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
 /* Removes ENTER from the command, prepares for parsing and outputs to client */
-void	Server::handleData(char	buffer[BUFFER_SIZE], int& client)
+void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS])
 {
 	std::string	message(buffer, strlen(buffer) - 1);
 	if (!message.empty() && *(message.end() - 1) == '\r')
 		message.erase(message.end() - 1);
 
-	// std::string	outputMsg = ---> check message below
-	parseClientMessage(message, client);
-	// send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT); ---> implemented send_message into client
-	// and server class to avoid spaghetti code
+	std::string	outputMsg = parseClientMessage(message, client, fds);
+	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
-/* Just for debuging, will delete this */
-static void	debugCommandSplit(strings commands)
+/* Makes the command case-insensitive */
+static std::string toUpper(std::string cmd)
 {
-	std::cout << "Commands received: " << commands.size() << "\n----" << std::endl;
-	for (stringConsIterator it = commands.begin(); it != commands.end(); ++it)
-		std::cout << "Command: " << *it << std::endl;
+	std::transform(cmd.begin(), cmd.end(), cmd.begin(), ::toupper);
+	return (cmd);
 }
 
 /* Parses client input, split into commands and execute them */
-void Server::parseClientMessage(std::string message, int& client)
+std::string Server::parseClientMessage(std::string message, int& client, struct pollfd(&fds)[MAX_FDS])
 {
-	strings	commands = splitCommands(message);
-
-	debugCommandSplit(commands); // Just for debuging, will delete this
+	strings	parameters = splitMessage(message);
+	std::string command = toUpper(parameters[0]);
 
 	// General Commands:
-	// if (commands[0] == "HELP")
-	// 	helpCommand();
-	// else if (commands[0] == "CAP")
-	// 	capCommand(commands);
-	// // Login Commands:
-	// else if (commands[0] == "PASS")
-	// 	passCommand(commands);
-	// else if (commands[0] == "NICK")
-	// 	return (nickCommand(commands));
-	// else if (commands[0] == "USER")
-	// 	return (userCommand(commands));
+	if (command == "CAP")
+		return ("");
+	if (command == "HELP")
+		return (helpCommand());
+	else if (command == "OPER")
+		return (operCommand(parameters, client));
+	else if (command == "PING")
+		return (pingCommand(parameters, client));
+	else if (command == "QUIT")
+		return (quitCommand(parameters, client, fds));
+	// Login Commands:
+	else if (command == "PASS")
+		return (passCommand(parameters, client));
+	else if (command == "NICK")
+		return (nickCommand(parameters, client));
+	else if (command == "USER")
+		return (userCommand(parameters, client));
 	// Channel Operations:
-	if (commands[0] == "JOIN")
-		joinCommand(commands, client);
-	else if (commands[0] == "MODE")
-		modeCommand(commands, client);
-	else if (commands[0] == "TOPIC")
-		topicCommand(commands, client);
-	else if (commands[0] == "PART")
-		partCommand(commands, client);
-	else if (commands[0] == "PRIVMSG")
-		privmsgCommand(commands, client);
-	else if (commands[0] == "INVITE")
-		inviteCommand(commands, client);
-	else if (commands[0] == "KICK")
-		kickCommand(commands, client);
-	// // Server Adminstration and Maintenance:
-	// else if (commands[0] == "OPER")
-	// 	return (operCommand(commands));
-	// else if (commands[0] == "PING")
-	// 	return (pingCommand(commands));
-	// else if (commands[0] == "QUIT")
-	// 	return (quitCommand(commands));
+	else if (command == "JOIN")
+		joinCommand(parameters, client);
+	else if (command == "MODE")
+		modeCommand(parameters, client);
+	else if (command == "TOPIC")
+		topicCommand(parameters, client);
+	else if (command == "PART")
+		partCommand(parameters, client);
+	else if (command == "PRIVMSG")
+		privmsgCommand(parameters, client);
+	else if (command == "INVITE")
+		inviteCommand(parameters, client);
+	else if (command == "KICK")
+		kickCommand(parameters, client);
 	else
-		invalidCommand();
+		return (invalidCommand(message));
+	return ("");
 }
 
-/* Splits client message in multiple command arguments */
-strings	Server::splitCommands(const std::string& message)
+/* Spits client message in multiple command arguments, purposly not handling quotes */
+strings	Server::splitMessage(const std::string& message)
 {
 	strings				commands;
 	std::istringstream	stream(message);
 	std::string			command;
 
-	// still need to protect for double space and space in the beginning
-	// still need to protect for no space before :
+	if (message.empty() || std::all_of(message.begin(), message.end(), isspace))
+	{
+		commands.push_back("Invalid command");
+		return (commands);
+	}
 	while (std::getline(stream, command, ' '))
 	{
+		if (command.empty() || command[0] == ' ')
+		{
+			commands.push_back("Invalid command");
+			return (commands);
+		}
 		if (command[0] == ':')
 		{
-			commands.push_back(message.substr(message.find(':') + 1));
+			commands.push_back(message.substr(message.find(':')));
 			return (commands);
 		}
 		commands.push_back(command);
@@ -100,10 +104,12 @@ strings	Server::splitCommands(const std::string& message)
 }
 
 /* Displays Invalid command message */
-std::string	Server::invalidCommand()
+std::string	Server::invalidCommand(std::string message)
 {
 	std::string	msg;
 
+	if (message.empty())
+		return (message);
 	msg.append(RED);
 	msg.append("Invalid command\n");
 	msg.append(RESET);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/29 13:19:20 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:20:31 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
  * The MODE command is used to set or view the user or channel mode.
  * If the target is a channel and the mode changes, the message is sent to all the users in the channel.
  */
- void Server::modeCommand(const strings& commands, int& cindex)
+void Server::modeCommand(const strings& commands, int& cindex)
 {
 	if (commands.size() < 2)
 	{

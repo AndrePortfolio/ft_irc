@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/21 13:43:50 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:05:05 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	Server::validateInput(std::string port, std::string password)
 
 	if (password.empty())
 		throw std::runtime_error("Error: no password was provided.");
+	if (password.find(' ') != std::string::npos)
+		throw std::runtime_error("Error: password can't contain spaces.");
 
 	if (port.empty())
 		throw std::runtime_error("Error: no port was provided.");
@@ -101,8 +103,8 @@ void	Server::runServer()
 /* Accept client connections and receive data from them */
 void	Server::acceptClients()
 {
-	struct pollfd	fds[MAX_FDS];
-	int				activeFds = 0;
+	pollfd	fds[MAX_FDS];
+	int		activeFds = 0;
 
 	// Init pool with the server socket
 	updatePool(fds[0], activeFds, socketFd);

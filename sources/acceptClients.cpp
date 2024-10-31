@@ -6,14 +6,14 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/14 13:47:09 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/10/26 15:07:57 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
 /* Add new file descriptor to the pool */
-void	Server::updatePool(struct pollfd& fds, int& activeFds, int socket)
+void	Server::updatePool(pollfd& fds, int& activeFds, int socket)
 {
 	fds.fd = socket;
 	fds.events = POLLIN;
@@ -21,7 +21,7 @@ void	Server::updatePool(struct pollfd& fds, int& activeFds, int socket)
 }
 
 /* Listen indefinitely for Events */
-void	Server::checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds)
+void	Server::checkForEvent(pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	int	poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
 	if (poolCount == ERROR)
@@ -29,7 +29,7 @@ void	Server::checkForEvent(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 }
 
 /* Listen for clients wanting to connect to the server and accept them */
-void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
+void	Server::listenForClients(pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	// Checks for pending connection requests
 	if (fds[0].revents & POLLIN)
@@ -52,7 +52,7 @@ void	Server::listenForClients(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 }
 
 /* Checks if there is data to read on the client socket */
-void	Server::CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds)
+void	Server::CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	for (int i = 1; i < activeFds; i++)
 	{
@@ -62,7 +62,7 @@ void	Server::CheckForClientData(struct pollfd(&fds)[MAX_FDS], int& activeFds)
 }
 
 /* Read data from client and output it to the server */
-void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
+void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
@@ -77,21 +77,21 @@ void Server::receivedNewData(struct pollfd(&fds)[MAX_FDS], int& client, int& act
 	}
 	buffer[bytesRead] = '\0';
 	int	clientIndex = client - 1;
-	handleData(buffer, clientIndex);
+	handleData(buffer, clientIndex, fds);
 }
 
 /* Removes client from map and makes sure there are no gaps in the pool of fds */
-void Server::adjustClients(struct pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
+void Server::adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds)
 {
-	int key = fds[client].fd - DEFAULT_FDS;
+	int key = fds[i].fd - DEFAULT_FDS;
 
 	// Remove from map
 	if (clients.find(key) != clients.end())
 		clients.erase(key);
 
 	// Remove from pool
-	close(fds[client].fd);
-	for (int j = client; j < activeFds; j++)
+	close(fds[i].fd);
+	for (int j = i; j < activeFds; j++)
 		fds[j] = fds[j + 1];
 	activeFds--;
 }

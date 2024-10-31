@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/30 13:25:55 by apereira         ###   ########.fr       */
+/*   Updated: 2024/10/31 09:17:54 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
  * If the target is a channel, the message is sent to all the users in the channel.
  * If the target is a user, the message is sent to that user.
  */
-	void	Server::privmsgCommand(const strings& commands, int& cindex)
-	{
+void	Server::privmsgCommand(const strings& commands, int& cindex)
+{
 	// Validate that we have enough parameters
 	if (commands.size() < 3)
 	{
@@ -73,4 +73,4 @@
 		Client* recipient = &clients[findClientIndexByNickname(target)];
 		recipient->sendMessage(clients[cindex].getNickname(), "PRIVMSG", target + " :" + message);
 	}
-	}
+}

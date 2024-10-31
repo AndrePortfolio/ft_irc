@@ -51,7 +51,7 @@ Requirements:
 6. Communication between client and server has to be done via TCP/IP (v4 or v6)
 7. Features to implement:
 	1. Able to authenticate, set a nickname and username, join a channel,
-		send and receive private messages using your reference cliente.
+		send and receive private messages using your reference client.
 	2. All the messages sent from on client to a channel have to be forwarded
 		to every other clienet that joined the channel.
 	3. You must have *operators* and regular users.
@@ -97,6 +97,7 @@ https://stackoverflow.com/questions/10654286/why-should-i-use-non-blocking-or-bl
 https://ircv3.net/irc/
 - IRC Protocol
 https://datatracker.ietf.org/doc/html/rfc1459
+https://modern.ircdocs.horse/#authenticate-message
 - IRC Guide
 https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/
 - YT Guide
