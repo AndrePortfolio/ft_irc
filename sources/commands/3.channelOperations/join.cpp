@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/31 09:15:18 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/04 14:27:00 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,10 @@ void Server::parseChannelNamesAndPasswords(const std::string& input, std::vector
 
 	// Split channel names by comma
 	channel_names = split(splitInput[0], ',');
+
+	// Remove the : from the start of the first channel name
+	if (!channel_names.empty() && channel_names[0][0] == ':')
+		channel_names[0] = channel_names[0].substr(1);
 
 	// If there are passwords provided, split them by comma
 	if (splitInput.size() > 1)
@@ -220,8 +224,6 @@ void Server::joinChannels(std::vector<Channel *>& channels_to_sub, int &cindex)
 		// Send information about the topic of the channel
 		if (!(*it)->getTopic().empty())
 			clients[cindex].sendMessage(RPL_TOPIC, clients[cindex].getNickname() + " " + (*it)->getName() + " :" + (*it)->getTopic());
-		else
-			clients[cindex].sendMessage(RPL_NOTOPIC, clients[cindex].getNickname() + " " + (*it)->getName() + " :No topic is set");
 
 		// Increment the number of channels the user is part of
 		clients[cindex].setNbChannels(clients[cindex].getNbChannels() + 1);
