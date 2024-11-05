@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/31 09:28:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/05 10:25:05 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ class Server
 		void		topicCommand(const strings& parameters, int& client);
 		void		partCommand(const strings& parameters, int& client);
 		void		privmsgCommand(const strings& parameters, int& client);
-		void		inviteCommand(const strings& parameters, int& client);
-		void		kickCommand(const strings& parameters, int& client);
+		void		inviteCommand(const strings& commands, int& cindex);
+		void		kickCommand(std::vector<std::string> tokens, Client *client);
 		std::string	invalidCommand(std::string message);
 
 	// Mode command and aux's

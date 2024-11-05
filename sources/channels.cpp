@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/29 14:16:51 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/05 10:13:56 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ Channel &Channel::operator=(Channel const &src)
 		this->usersLimit = src.usersLimit;
 		this->usersCount = src.usersCount;
 	}
-
 	return (*this);
 }
 
@@ -77,12 +76,12 @@ std::ostream &Channel::operator<<(std::ostream &o) const
 	}
 	o << "], name: " << getName()
 	  << ", mode: " << getMode() << ")";
-	return o;
+	return (o);
 }
 
 std::ostream &operator<<(std::ostream &o, const Channel &src)
 {
-	return src.operator<<(o);
+	return (src.operator<<(o));
 }
 
 /*
@@ -186,7 +185,6 @@ std::string	Channel::addMode(const std::string &real_mode)
 		this->mode += real_mode[i];
 		ret += real_mode[i];
 	}
-	std::cout << "mode: " << mode << std::endl;
 	return (ret);
 }
 
