@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/11/05 10:25:05 by apereira         ###   ########.fr       */
+/*   Created: 2023/10/01 15:32:24 by apereira          #+#    #+#             */
+/*   Updated: 2024/11/05 11:06:13 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,16 @@ class Server
 		std::string	operCommand(const strings& parameters, int& client);
 		std::string	quitCommand(const strings& parameters, int& client, pollfd(&fds)[MAX_FDS]);
 		std::string	pingCommand(const strings& parameters, int& client);
-		void		joinCommand(const strings& parameters, int& client);
-		void		topicCommand(const strings& parameters, int& client);
-		void		partCommand(const strings& parameters, int& client);
-		void		privmsgCommand(const strings& parameters, int& client);
 		void		inviteCommand(const strings& commands, int& cindex);
-		void		kickCommand(std::vector<std::string> tokens, Client *client);
+		void		joinCommand(const strings& parameters, int& cindex);
+		void		kickCommand(std::vector<std::string> tokens, int& cindex);
+		void		partCommand(const strings& parameters, int& cindex);
+		void		privmsgCommand(const strings& parameters, int& cindex);
+		void		topicCommand(const strings& parameters, int& cindex);
 		std::string	invalidCommand(std::string message);
 
 	// Mode command and aux's
-		void		modeCommand(const strings& commands, int& client);
+		void		modeCommand(const strings& commands, int& cindex);
 		void		handleChannelMode(const strings& commands, int& cindex);
 		void		validateModeCharacters(const strings& commands, int& cindex);
 		void		updateChannelMode(const strings& commands, int& cindex, Channel* channel);
@@ -99,19 +99,19 @@ class Server
 		void		parseChannelNamesAndPasswords(const std::string& input, std::vector<std::string>& channel_names, std::vector<std::string>& passwords);
 
 	// Channels
-		bool			existsChannel(std::string name) const;
-		void			removeChannel(std::string channel_name);
-		bool 			existsClient(const std::string& name) const;
-		char  			closestPlusMinus(const std::string &str, const char &mode) const;
-		int				findClientIndexByNickname(const std::string& nickname) const;
-		void			handleLeaveAllChannels(const strings& commands, int &cindex);
-		void			processChannelNames(const std::vector<std::string>& channel_names, int &cindex);
-		bool			isValidChannelName(const std::string& channelName);
-		void			handleExistingOrNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
-		void			createNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
-		void			joinChannels(std::vector<Channel *> &channels_to_sub, int &cindex);
+		bool		existsChannel(std::string name) const;
+		void		removeChannel(std::string channel_name);
+		bool 		existsClient(const std::string& name) const;
+		char  		closestPlusMinus(const std::string &str, const char &mode) const;
+		int			findClientIndexByNickname(const std::string& nickname) const;
+		void		handleLeaveAllChannels(const strings& commands, int &cindex);
+		void		processChannelNames(const std::vector<std::string>& channel_names, int &cindex);
+		bool		isValidChannelName(const std::string& channelName);
+		void		handleExistingOrNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
+		void		createNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
+		void		joinChannels(std::vector<Channel *> &channels_to_sub, int &cindex);
 
-	// Util Functions
+	// Utility Functions
 		std::string					welcomeMsg() const;
 		const std::string			currentDateTime();
 		void						printMessage(int msg, int index);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/10/31 09:05:05 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/05 10:56:25 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
