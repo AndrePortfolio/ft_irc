@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/05 10:56:25 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/06 08:09:08 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,13 @@ void	Server::acceptClients()
 	pollfd	fds[MAX_FDS];
 	int		activeFds = 0;
 
+	// Initialize fds array to prevent uninitialized reads.
+	for (int i = 0; i < MAX_FDS; i++)
+	{
+		fds[i].fd = -1;
+		fds[i].events = 0;
+		fds[i].revents = 0;
+	}
 	// Init pool with the server socket
 	updatePool(fds[0], activeFds, socketFd);
 	while (true)
