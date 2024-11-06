@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/10/31 09:28:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/06 10:12:05 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ class Server
 		void		CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds);
 		void		receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
 		void		adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds);
-		void		handleData(char	buffer[BUFFER_SIZE], int& client, pollfd(&fds)[MAX_FDS]);
-		std::string	parseClientMessage(std::string message, int& client, pollfd(&fds)[MAX_FDS]);
+		void		handleData(char	buffer[BUFFER_SIZE], int& client, pollfd(&fds)[MAX_FDS], int& activeFds);
+		std::string	parseClientMessage(std::string message, int& client, pollfd(&fds)[MAX_FDS], int& activeFds);
 
 	// Commands
 		strings		splitMessage(const std::string& message);
@@ -75,7 +75,7 @@ class Server
 		std::string	nickCommand(const strings& parameters, int& client);
 		std::string	userCommand(const strings& parameters, int& client);
 		std::string	operCommand(const strings& parameters, int& client);
-		std::string	quitCommand(const strings& parameters, int& client, pollfd(&fds)[MAX_FDS]);
+		std::string	quitCommand(const strings& parameters, int& client, pollfd(&fds)[MAX_FDS], int& activeFds);
 		std::string	pingCommand(const strings& parameters, int& client);
 		void		joinCommand(const strings& parameters, int& client);
 		void		topicCommand(const strings& parameters, int& client);
