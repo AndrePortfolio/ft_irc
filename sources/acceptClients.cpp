@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 15:07:57 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/06 10:13:06 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 	}
 	buffer[bytesRead] = '\0';
 	int	clientIndex = client - 1;
-	handleData(buffer, clientIndex, fds);
+	handleData(buffer, clientIndex, fds, activeFds);
 }
 
 /* Removes client from map and makes sure there are no gaps in the pool of fds */

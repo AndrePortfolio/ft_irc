@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 11:12:26 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/04 13:53:35 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,4 @@ std::string	Server::passCommand(const strings& parameters, int& client)
 	clients[client].setPassword(password);
 	return (getMessage(PASSWORD_SUCCESS, client));
 }
+

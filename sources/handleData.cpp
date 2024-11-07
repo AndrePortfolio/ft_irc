@@ -6,20 +6,20 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/31 09:29:44 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/06 10:11:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers.hpp"
 
 /* Removes ENTER from the command, prepares for parsing and outputs to client */
-void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS])
+void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	std::string	message(buffer, strlen(buffer) - 1);
 	if (!message.empty() && *(message.end() - 1) == '\r')
 		message.erase(message.end() - 1);
 
-	std::string	outputMsg = parseClientMessage(message, client, fds);
+	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
@@ -31,7 +31,7 @@ static std::string toUpper(std::string cmd)
 }
 
 /* Parses client input, split into commands and execute them */
-std::string Server::parseClientMessage(std::string message, int& client, struct pollfd(&fds)[MAX_FDS])
+std::string Server::parseClientMessage(std::string message, int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
@@ -46,7 +46,7 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 	else if (command == "PING")
 		return (pingCommand(parameters, client));
 	else if (command == "QUIT")
-		return (quitCommand(parameters, client, fds));
+		return (quitCommand(parameters, client, fds, activeFds));
 	// Login Commands:
 	else if (command == "PASS")
 		return (passCommand(parameters, client));

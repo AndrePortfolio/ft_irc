@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 15:32:24 by andre-da          #+#    #+#             */
-/*   Updated: 2024/11/05 11:18:46 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:23:27 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,6 @@
 # define PASSWORD_SUCCESS 0
 # define NICKNAME_SUCCESS 1
 # define USERNAME_SUCCESS 2
-// # define RPL_YOUREOPER 381
-// # define ERR_UNKNOWNCOMMAND 421
-// # define ERR_NONICKNAMEGIVEN 431
-// # define ERR_ERRONEUSNICKNAME 432
-// # define ERR_NICKNAMEINUSE 433
-// # define ERR_NICKCOLLISION 436
-// # define ERR_NEEDMOREPARAMS 461
-// # define ERR_ALREADYREGISTERED 462
-// # define ERR_PASSWDMISMATCH 464
-// # define ERR_INVALIDPASSWORD 465
 
 enum numeric_rpl
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 07:53:52 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/05 10:13:56 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:23:44 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

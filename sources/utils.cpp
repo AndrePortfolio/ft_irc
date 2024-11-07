@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/26 16:23:32 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/06 09:47:17 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,9 @@ std::string Server::feedbackClient(int input)
 	msg.append(RED);
 	switch (input)
 	{
+		case -1:
+			msg.append("ERROR :Connection timeout");
+			break ;
 		case 381:
 			msg.append(GREEN);
 			msg.append("381: You are now an IRC operator.");
