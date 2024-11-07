@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/06 10:26:58 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/07 11:06:22 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,14 @@ std::string	Server::quitCommand(const strings& parameters, int& client, pollfd(&
 
 	if (clients[client].getNbChannels() > 0)	// send ":nick QUIT <reason>"" to all clients in the same channels
 	{
-		/* code */
+		for (t_channelIterator it = channels.begin(); it != channels.end(); ++it)
+		{
+			Channel* channel = it->second;
+
+			if (channel->isMember(&clients[client]))
+				std::cout << "Channel name: " << it->first << std::endl;
+		}
+
 	}
 	// Send message before disconnecting client
 	std::string outputMsg = feedbackClient(ERROR);
