@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/06 08:09:08 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:26:40 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	Server::acceptClients()
 	{
 		fds[i].fd = -1;
 		fds[i].events = 0;
-		fds[i].revents = 0;
+		fds[i].revents = 0;
 	}
 	// Init pool with the server socket
 	updatePool(fds[0], activeFds, socketFd);

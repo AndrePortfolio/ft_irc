@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/05 10:46:59 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:30:34 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
  */
 void Server::kickCommand(std::vector<std::string> tokens, int& cindex)
 {
+	bool	authenticated = clients[cindex].getStatus();
+
+	if (authenticated != true)
+	{
+		std::string outputMsg = feedbackClient(ERR_NOTAUTHENTICATED);
+		send(clients[cindex].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
+		return ;
+	}
 	// Checks for enough parameters: KICK <channel> <user> [<reason>]
 	if (tokens.size() < 3)
 	{

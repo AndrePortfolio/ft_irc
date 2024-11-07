@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/06 09:47:17 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/07 12:13:22 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,4 +212,24 @@ void	Server::informOtherClients(int index, std::string nickname)
 	for (size_t i = 0; i < clients.size(); i++)
 		if ((size_t)index != i)
 			send(clients[i].getSocket(), msg.c_str(), msg.length(), DEFAULT);
+}
+
+void	Server::feedbackClients(int client, int clientID, std::string reason, Channel* channel)
+{
+	std::string outputMsg;
+
+	outputMsg.append(CYAN);
+	outputMsg.append("<server> ");
+	outputMsg.append(RESET);
+	outputMsg.append(":");
+	outputMsg.append(clients[client].getNickname());
+	outputMsg.append(CYAN);
+	outputMsg.append(" QUIT ");
+	outputMsg.append(channel->getName());
+	outputMsg.append(RESET);
+	outputMsg.append(" ");
+	if (reason != "")
+		outputMsg.append(reason);
+	outputMsg.append("\n");
+	send(clients[clientID].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }

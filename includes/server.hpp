@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 15:32:24 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/07 11:23:30 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/07 12:10:24 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ class Server
 		t_nameMapChannel&			getChannels(void) { return (channels); };
 		void 						setChannels(const t_nameMapChannel &src) { channels = src; };
 		std::string					feedbackClient(int input);
+		void						feedbackClients(int client, int clientID, std::string reason, Channel* channel);
 		const std::string			getMessage(int input, int index);
 		void						informOtherClients(int index, std::string nickname);
 		bool						invalidChars(std::string nick);

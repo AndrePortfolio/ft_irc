@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/07 11:06:22 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/07 12:03:17 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,16 @@ std::string	Server::quitCommand(const strings& parameters, int& client, pollfd(&
 			Channel* channel = it->second;
 
 			if (channel->isMember(&clients[client]))
-				std::cout << "Channel name: " << it->first << std::endl;
+			{
+				for (Clients::iterator it = clients.begin(); it != clients.end(); ++it)
+				{
+					int clientID = it->first;
+
+					if ((clientID != client) && channel->isMember(&clients[clientID]))
+						feedbackClients(client, clientID, reason, channel);
+				}
+				channel->removeClient(&clients[client]);
+			}
 		}
 
 	}

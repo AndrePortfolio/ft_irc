@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/05 10:13:17 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/07 11:30:39 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@
 void Server::inviteCommand(const strings& commands, int& cindex)
 {
 	// Checks for param's (user to invite and channel name)
+	bool	authenticated = clients[cindex].getStatus();
+
+	if (authenticated != true)
+	{
+		std::string outputMsg = feedbackClient(ERR_NOTAUTHENTICATED);
+		send(clients[cindex].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
+		return ;
+	}
 	if (commands.size() < 3)
 	{
 		clients[cindex].sendMessage(ERR_NEEDMOREPARAMS, clients[cindex].getNickname() + " " + commands[0] + " :Not enough parameters");
@@ -65,7 +73,7 @@ void Server::inviteCommand(const strings& commands, int& cindex)
         clients[cindex].sendMessage(ERR_USERALREADYINVITED, clients[cindex].getNickname() + " " + commands[1] + " " + commands[2] + " :is already invited to the channel");
         return;
     }
-	
+
 	// Send an INVITE message to the target user
 	Client* target = &clients[targetIndex];
 	target->sendMessage(clients[cindex].getNickname(), "INVITE", commands[1] + " " + commands[2]);
