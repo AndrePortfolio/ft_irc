@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/07 11:30:39 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/11 11:17:34 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void Server::inviteCommand(const strings& commands, int& cindex)
 		clients[cindex].sendMessage(ERR_NOSUCHCHANNEL, clients[cindex].getNickname() + " " + commands[2] + " :No such channel");
 		return;
 	}
-
+	
 	if (!existsClient(commands[1]))
 	{
 		clients[cindex].sendMessage(ERR_NOSUCHNICK, clients[cindex].getNickname() + " " + commands[1] + " :No such nick");

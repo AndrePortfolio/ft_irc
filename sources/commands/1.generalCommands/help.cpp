@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/10/16 10:44:14 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/11 11:30:26 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ std::string	Server::helpCommand()
 	msg.append(RESET);
 	msg.append("    - Sends a private message\n");
 	msg.append(GREEN);
-	msg.append("-> PING:\n");
+	msg.append("-> PING ");
+	msg.append(RESET);
+	msg.append(BOLD);
+	msg.append("<token>:\n");
 	msg.append(RESET);
 	msg.append("    - Pings the server\n");
 	msg.append(GREEN);
