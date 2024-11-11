@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 15:32:24 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/07 12:10:24 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/11 07:34:22 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ class Server
 
 	// Mode command and aux's
 		void		modeCommand(const strings& commands, int& cindex);
+		int			ignoreInitialMsg(const std::string command);
 		void		handleChannelMode(const strings& commands, int& cindex);
 		void		validateModeCharacters(const strings& commands, int& cindex);
 		void		updateChannelMode(const strings& commands, int& cindex, Channel* channel);

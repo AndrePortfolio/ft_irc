@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleData.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/06 10:11:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/11 07:21:26 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /* Removes ENTER from the command, prepares for parsing and outputs to client */
 void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
+
 	std::string	message(buffer, strlen(buffer) - 1);
 	if (!message.empty() && *(message.end() - 1) == '\r')
 		message.erase(message.end() - 1);
@@ -33,8 +34,12 @@ static std::string toUpper(std::string cmd)
 /* Parses client input, split into commands and execute them */
 std::string Server::parseClientMessage(std::string message, int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
+
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
+	//----------------------------- Debugging
+	std::cout << "Message: " << message << std::endl;
+	//------------------------------
 
 	// General Commands:
 	if (command == "CAP")
@@ -54,6 +59,8 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 		return (nickCommand(parameters, client));
 	else if (command == "USER")
 		return (userCommand(parameters, client));
+	else if (command == "WHOIS")
+		return ("");
 	// Channel Operations:
 	else if (command == "JOIN")
 		joinCommand(parameters, client);

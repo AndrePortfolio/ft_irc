@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/07 11:30:32 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/11 07:38:01 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void Server::modeCommand(const strings& commands, int& cindex)
 {
 	bool	authenticated = clients[cindex].getStatus();
 
+	if (ignoreInitialMsg(commands[1]))
+		return ;
 	if (authenticated != true)
 	{
 		std::string outputMsg = feedbackClient(ERR_NOTAUTHENTICATED);
@@ -37,6 +39,7 @@ void Server::modeCommand(const strings& commands, int& cindex)
 	else
 		handleUserMode(commands, cindex);
 }
+
 
 void Server::handleChannelMode(const strings& commands, int& cindex)
 {
@@ -258,4 +261,11 @@ void Server::handleUserMode(const strings& commands, int& cindex)
 		clients[cindex].sendMessage(RPL_UMODEIS, clients[cindex].getNickname() + " :" + target->getMode());
 		return;
 	}
+}
+
+int	Server::ignoreInitialMsg(const std::string command)
+{
+	if (command == "Welcome")
+		return (1);
+	return (0);
 }

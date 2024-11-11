@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 12:32:11 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/07 12:13:22 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/11 07:41:59 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,12 +173,14 @@ const std::string Server::getMessage(int input, int index)
 			msg.append("001: Username assigned: ");
 			msg.append(RESET);
 			msg.append(clients[index].getUsername());
+			msg.append("\n");
 			msg.append(GREEN);
-			msg.append("\n001: Realname assigned: ");
+			msg.append("001: Realname assigned: ");
 			msg.append(RESET);
 			msg.append(clients[index].getRealname());
+			msg.append("\n");
 			msg.append(CYAN);
-			msg.append("\n001 :Welcome to the Internet Relay Chat Network, ");
+			msg.append("001 :Welcome to the Internet Relay Chat Network, ");
 			msg.append(RESET);
 			msg.append(clients[index].getNickname());
 			break;
