@@ -6,7 +6,7 @@
 /*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/11 07:38:01 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:44:24 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,6 @@ void Server::handleChannelMode(const strings& commands, int& cindex)
 		return;
 	}
 
-	// Validate the mode characters
-	for (size_t i = 0; i < commands[2].size(); i++)
-	{
-		if (commands[2][i] != '+' && commands[2][i] != '-' && commands[2][i] != 'i' && commands[2][i] != 't' && commands[2][i] != 'k' && commands[2][i] != 'l' && commands[2][i] != 'o')
-		{
-			clients[cindex].sendMessage(ERR_UNKNOWNMODE, clients[cindex].getNickname() + " " + commands[2][i] + " :is unknown mode char to me");
-			return ;
-		}
-	}
-
 	updateChannelMode(commands, cindex, channel);
 }
 
@@ -84,17 +74,23 @@ void Server::updateChannelMode(const strings& commands, int& cindex, Channel* ch
 	std::string buffer_add;
 	std::string buffer_del;
 	size_t argIndex = 3;
+	bool addMode = true;
 
 	for (size_t i = 0; i < commands[2].size(); i++)
 	{
 		char modeChar = commands[2][i];
 
-		// Skip '+' or '-' characters
-		if (modeChar == '+' || modeChar == '-')
+		// Handle '+' or '-' characters to set the mode state
+		if (modeChar == '+')
+		{
+			addMode = true;
 			continue;
-
-		// Determine if the mode is being added or removed
-		bool addMode = (commands[2][i - 1] == '+');
+		}
+		else if (modeChar == '-')
+		{
+			addMode = false;
+			continue;
+		}
 
 		switch (modeChar)
 		{
@@ -124,12 +120,14 @@ void Server::updateChannelMode(const strings& commands, int& cindex, Channel* ch
 			channel->delMode(std::string(1, modeChar));
 	}
 
-	// Construct the mode change message to add/remove modes
-	if (buffer_add != "")
+		// Construct the mode change message to add/remove modes
+	if (!buffer_add.empty())
 		to_send += "+" + buffer_add;
-	if (buffer_del != "")
+	if (!buffer_del.empty())
 		to_send += "-" + buffer_del;
-	channel->sendMessage(clients[cindex].getNickname(), "MODE", commands[1] + " " + to_send);
+
+	if (!to_send.empty())
+		channel->sendMessage(clients[cindex].getNickname(), "MODE", commands[1] + " " + to_send);
 }
 
 void Server::handleInviteOnlyMode(bool addMode, Channel* channel, std::string& buffer_add, std::string& buffer_del)
