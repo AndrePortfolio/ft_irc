@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/11 11:42:15 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/12 11:23:51 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ Server::~Server()
 {
 	if (socketFd >= 0)
 		close(socketFd);
+
+	// Iterate over all channels and delete them to free memory
+	for (t_channelIterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		delete it->second;
+	}
+	channels.clear();
 }
 //----------------------------------------------------------------------------//
 //---------------------------------- Operators -------------------------------//
