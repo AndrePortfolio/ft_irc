@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/06 10:11:19 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/14 12:05:25 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fd
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
+
+	std::cout << "client      : " << client << std::endl;
+	std::cout << "clientSocket: " << clients[client].getSocket() << std::endl;
+
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 

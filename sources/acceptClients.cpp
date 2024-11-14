@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/06 10:13:06 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/14 12:54:51 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	Server::listenForClients(pollfd(&fds)[MAX_FDS], int& activeFds)
 		setNonBlocking(clientSocket);
 
 		Client	newClient(clientSocket, clientAddress);
-		clients[clientSocket - DEFAULT_FDS] = newClient;
+		clients[activeFds - 1] = newClient;
 
 		updatePool(fds[activeFds], activeFds, clientSocket);
 		printMessage(NEW_CONNECTION, clientSocket - DEFAULT_FDS);
@@ -85,9 +85,23 @@ void Server::adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds)
 {
 	int key = fds[i].fd - DEFAULT_FDS;
 
-	// Remove from map
-	if (clients.find(key) != clients.end())
+	// Remove from `clients` map and adjust keys
+	if (clients.find(key) != clients.end()) {
 		clients.erase(key);
+
+		// Temporary map to hold adjusted clients
+		Clients tempClients;
+		int newKey = 0;
+
+		// Reassign keys to be contiguous
+		for (clientsIterator it = clients.begin(); it != clients.end(); ++it) {
+			tempClients[newKey] = it->second;
+			newKey++;
+		}
+
+		// Replace the original map with the reordered map
+		clients.swap(tempClients);
+	}
 
 	// Remove from pool
 	close(fds[i].fd);

@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/11 11:42:15 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/14 11:38:06 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	Server::acceptClients()
 	pollfd	fds[MAX_FDS];
 	int		activeFds = 0;
 
-	// Initialize fds array to prevent uninitialized reads.
+	// // Initialize fds array to prevent uninitialized reads.
 	for (int i = 0; i < MAX_FDS; i++)
 	{
 		fds[i].fd = -1;
@@ -171,23 +171,23 @@ std::vector<std::string> Server::split(std::string str, char c) const
 char  Server::closestPlusMinus(const std::string &str, const char &mode) const
 {
 	//reverse find to get the last occurence of the mode and the closest + or -
-    size_t lastMode = str.rfind(mode);
-    if (lastMode == std::string::npos)
-        return ('\0');
+	size_t lastMode = str.rfind(mode);
+	if (lastMode == std::string::npos)
+		return ('\0');
 
-    size_t closestPlus = str.rfind('+', lastMode);
-    size_t closestMinus = str.rfind('-', lastMode);
+	size_t closestPlus = str.rfind('+', lastMode);
+	size_t closestMinus = str.rfind('-', lastMode);
 	//if neither is found, default is +
-    if (closestPlus == std::string::npos && closestMinus == std::string::npos)
-        return '+';
-    if (closestPlus == std::string::npos)
-        return '-';
-    if (closestMinus == std::string::npos)
-        return '+';
+	if (closestPlus == std::string::npos && closestMinus == std::string::npos)
+		return '+';
+	if (closestPlus == std::string::npos)
+		return '-';
+	if (closestMinus == std::string::npos)
+		return '+';
 	// if the last occurence of the mode is closer to + than -
-    if (closestPlus > closestMinus)
-        return '+';
-    return '-';
+	if (closestPlus > closestMinus)
+		return '+';
+	return '-';
 }
 
 // Returns -1 if client is not found, otherwise returns the index of the client in the map
