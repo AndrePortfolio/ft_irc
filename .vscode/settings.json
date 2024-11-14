@@ -72,5 +72,6 @@
 		"algorithm": "cpp",
 		"filesystem": "cpp",
 		"charconv": "cpp"
-	}
+	},
+	"vscode-as-git-mergetool.settingsAssistantOnStartup": false
 }

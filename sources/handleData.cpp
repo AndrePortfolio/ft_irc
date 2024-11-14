@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/14 12:57:56 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/14 13:28:19 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fd
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
-
-	std::cout << "client      : " << client << std::endl;
-	std::cout << "clientSocket: " << clients[client].getSocket() << std::endl;
-
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
@@ -41,9 +37,9 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
-	//----------------------------- Debugging
-	std::cout << "Message: " << message << std::endl;
-	//------------------------------
+	// //----------------------------- Debugging
+	// std::cout << "Message: " << message << std::endl;
+	// //------------------------------
 
 	// General Commands:
 	if (command == "CAP")

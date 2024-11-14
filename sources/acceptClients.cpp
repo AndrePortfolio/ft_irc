@@ -6,7 +6,7 @@
 /*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 12:31:16 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/14 12:54:51 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/14 13:27:53 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ void	Server::listenForClients(pollfd(&fds)[MAX_FDS], int& activeFds)
 		setNonBlocking(clientSocket);
 
 		Client	newClient(clientSocket, clientAddress);
-		clients[activeFds - 1] = newClient;
+		int index = activeFds - 1;
+		clients[index] = newClient;
 
 		updatePool(fds[activeFds], activeFds, clientSocket);
-		printMessage(NEW_CONNECTION, clientSocket - DEFAULT_FDS);
+		printMessage(NEW_CONNECTION, index);
 	}
 }
 
