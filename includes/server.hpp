@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/01 15:32:24 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/11 07:34:22 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/14 12:57:50 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ class Client;
 class Channel;
 
 typedef std::map<int, Client> Clients;
+typedef std::map<int, Client>::iterator clientsIterator;
 typedef std::vector<std::string> strings;
 typedef std::vector<std::string>::const_iterator stringConsIterator;
 typedef std::map<std::string, Channel *>	t_nameMapChannel;	// map of channel name to channel object

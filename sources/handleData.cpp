@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleData.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 13:46:24 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/11 07:21:26 by apereira         ###   ########.fr       */
+/*   Updated: 2024/11/14 12:57:56 by andrealbuqu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fd
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
+
+	std::cout << "client      : " << client << std::endl;
+	std::cout << "clientSocket: " << clients[client].getSocket() << std::endl;
+
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 
