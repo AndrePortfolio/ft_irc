@@ -64,8 +64,9 @@ void	Server::CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds)
 /* Read data from client and output it to the server */
 void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
-	char	buffer[BUFFER_SIZE];
-	int		bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
+	char		buffer[BUFFER_SIZE];
+	int			bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
+	static char clientBuffer[MAX_FDS][BUFFER_SIZE];
 
 	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
@@ -76,8 +77,18 @@ void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-	int	clientIndex = client - 1;
-	handleData(buffer, clientIndex, fds, activeFds);
+	int		clientIndex = client - 1;
+
+    std::strncat(clientBuffer[clientIndex], buffer, BUFFER_SIZE - std::strlen(clientBuffer[clientIndex]) - 1);
+	std::cout << clientBuffer[clientIndex] << std::endl;
+
+   if (buffer[bytesRead - 1] == '\n')
+   {
+		handleData(buffer, clientIndex, fds, activeFds);
+		std::memset(clientBuffer[clientIndex], 0, sizeof(clientBuffer[clientIndex]));
+   }
+   else
+		send(clients[clientIndex].getSocket(), "^D", 2, DEFAULT);
 }
 
 /* Removes client from map and makes sure there are no gaps in the pool of fds */
