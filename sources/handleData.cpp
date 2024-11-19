@@ -20,10 +20,6 @@ void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fd
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
-
-	std::cout << "client      : " << client << std::endl;
-	std::cout << "clientSocket: " << clients[client].getSocket() << std::endl;
-
 	send(clients[client].getSocket(), outputMsg.c_str(), outputMsg.length(), DEFAULT);
 }
 

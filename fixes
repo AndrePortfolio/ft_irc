@@ -1,0 +1,2 @@
+1. Client won't close when server stops running (SAME FOR QUIT)
+2. valgrind ./ircserv 4000 OMG, just running and ^C has a lot of leaks
