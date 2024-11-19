@@ -66,7 +66,7 @@ class Server
 		void		CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds);
 		void		receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds);
 		void		adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds);
-		void		handleData(char	buffer[BUFFER_SIZE], int& client, pollfd(&fds)[MAX_FDS], int& activeFds);
+		void		handleData(const char	buffer[BUFFER_SIZE], int& client, pollfd(&fds)[MAX_FDS], int& activeFds);
 		std::string	parseClientMessage(std::string message, int& client, pollfd(&fds)[MAX_FDS], int& activeFds);
 
 	// Commands

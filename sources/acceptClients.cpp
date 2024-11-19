@@ -79,12 +79,29 @@ void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 	buffer[bytesRead] = '\0';
 	int		clientIndex = client - 1;
 
-    std::strncat(clientBuffer[clientIndex], buffer, BUFFER_SIZE - std::strlen(clientBuffer[clientIndex]) - 1);
-	std::cout << clientBuffer[clientIndex] << std::endl;
+	if (std::strlen(clientBuffer[clientIndex]) > 0)
+		if (BUFFER_SIZE - std::strlen(clientBuffer[clientIndex]) > 1)
+			std::strncat(clientBuffer[clientIndex], ".", 1);
+	std::strncat(clientBuffer[clientIndex], buffer, BUFFER_SIZE - std::strlen(clientBuffer[clientIndex]) - 1);
 
    if (buffer[bytesRead - 1] == '\n')
    {
-		handleData(buffer, clientIndex, fds, activeFds);
+		std::string cmd;
+		for (int i = 0; clientBuffer[clientIndex][i] != '\0'; i++)
+		{
+			if (clientBuffer[clientIndex][i] == '.')
+			{
+				if (!cmd.empty())
+				{
+					handleData(cmd.c_str(), clientIndex, fds, activeFds);
+					cmd.clear();
+				}
+			}
+			else
+				cmd += clientBuffer[clientIndex][i];
+		}
+		if (!cmd.empty())
+			handleData(cmd.c_str(), clientIndex, fds, activeFds);
 		std::memset(clientBuffer[clientIndex], 0, sizeof(clientBuffer[clientIndex]));
    }
    else

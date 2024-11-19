@@ -13,7 +13,7 @@
 #include "headers.hpp"
 
 /* Removes ENTER from the command, prepares for parsing and outputs to client */
-void	Server::handleData(char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
+void	Server::handleData(const char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	std::string	message(buffer, strlen(buffer) - 1);
 	if (!message.empty() && *(message.end() - 1) == '\r')
