@@ -15,8 +15,8 @@
 /* Removes ENTER from the command, prepares for parsing and outputs to client */
 void	Server::handleData(const char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
-	std::string	message(buffer, strlen(buffer) - 1);
-	if (!message.empty() && *(message.end() - 1) == '\r')
+	std::string	message(buffer, strlen(buffer));
+	if (!message.empty() && (*(message.end() - 1) == '\r' || *(message.end() - 1) == '\n'))
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
