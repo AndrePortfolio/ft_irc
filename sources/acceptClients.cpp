@@ -66,7 +66,6 @@ void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
 	char		buffer[BUFFER_SIZE];
 	int			bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
-	static char clientBuffer[MAX_FDS][BUFFER_SIZE];
 
 	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
@@ -77,35 +76,7 @@ void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-	int		clientIndex = client - 1;
-
-	if (std::strlen(clientBuffer[clientIndex]) > 0)
-		if (BUFFER_SIZE - std::strlen(clientBuffer[clientIndex]) > 1)
-			std::strncat(clientBuffer[clientIndex], ".", 1);
-	std::strncat(clientBuffer[clientIndex], buffer, BUFFER_SIZE - std::strlen(clientBuffer[clientIndex]) - 1);
-
-   if (buffer[bytesRead - 1] == '\n')
-   {
-		std::string cmd;
-		for (int i = 0; clientBuffer[clientIndex][i] != '\0'; i++)
-		{
-			if (clientBuffer[clientIndex][i] == '.')
-			{
-				if (!cmd.empty())
-				{
-					handleData(cmd.c_str(), clientIndex, fds, activeFds);
-					cmd.clear();
-				}
-			}
-			else
-				cmd += clientBuffer[clientIndex][i];
-		}
-		if (!cmd.empty())
-			handleData(cmd.c_str(), clientIndex, fds, activeFds);
-		std::memset(clientBuffer[clientIndex], 0, sizeof(clientBuffer[clientIndex]));
-   }
-   else
-		send(clients[clientIndex].getSocket(), "^D", 2, DEFAULT);
+	parseData(fds, buffer, client - 1, bytesRead, activeFds);
 }
 
 /* Removes client from map and makes sure there are no gaps in the pool of fds */
@@ -138,3 +109,36 @@ void Server::adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds)
 	activeFds--;
 }
 
+/* Handles partial commands */
+void Server::parseData(pollfd(&fds)[MAX_FDS], char	buffer[BUFFER_SIZE], int client, int bytesRead, int& activeFds)
+{
+	static char clientBuffer[MAX_FDS][BUFFER_SIZE];
+
+	if (std::strlen(clientBuffer[client]) > 0)
+		if (BUFFER_SIZE - std::strlen(clientBuffer[client]) > 1)
+			std::strncat(clientBuffer[client], ".", 1);
+	std::strncat(clientBuffer[client], buffer, BUFFER_SIZE - std::strlen(clientBuffer[client]) - 1);
+
+   if (buffer[bytesRead - 1] == '\n')
+   {
+		std::string cmd;
+		for (int i = 0; clientBuffer[client][i] != '\0'; i++)
+		{
+			if (clientBuffer[client][i] == '.')
+			{
+				if (!cmd.empty())
+				{
+					handleData(cmd.c_str(), client, fds, activeFds);
+					cmd.clear();
+				}
+			}
+			else
+				cmd += clientBuffer[client][i];
+		}
+		if (!cmd.empty())
+			handleData(cmd.c_str(), client, fds, activeFds);
+		std::memset(clientBuffer[client], 0, sizeof(clientBuffer[client]));
+   }
+   else
+		send(clients[client].getSocket(), "^D", 2, DEFAULT);
+}
