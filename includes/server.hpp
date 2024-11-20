@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 13:15:56 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/14 13:17:36 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/20 09:41:09 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ class Server
 
 	// Channels
 		bool		existsChannel(std::string name) const;
-		void		removeChannel(std::string channel_name);
+		void		deleteChannel(const std::string& channelName);
 		bool 		existsClient(const std::string& name) const;
 		char  		closestPlusMinus(const std::string &str, const char &mode) const;
 		int			findClientIndexByNickname(const std::string& nickname) const;

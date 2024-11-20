@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 08:05:47 by apereira          #+#    #+#             */
-/*   Updated: 2024/11/14 13:16:06 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/20 09:41:29 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,12 +149,6 @@ bool Server::existsClient(const std::string& name) const
 		}
 	}
 	return (false);
-}
-
-// Remove a channel from the server by its name
-void Server::removeChannel(std::string channel_name)
-{
-	channels.erase(channel_name);
 }
 
 std::vector<std::string> Server::split(std::string str, char c) const
