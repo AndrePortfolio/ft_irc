@@ -36,9 +36,6 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
-	// //----------------------------- Debugging
-	// std::cout << "Message: " << message << std::endl;
-	// //------------------------------
 
 	// General Commands:
 	if (command == "CAP")
@@ -80,34 +77,48 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 	return ("");
 }
 
-/* Spits client message in multiple command arguments, purposly not handling quotes */
-strings	Server::splitMessage(const std::string& message)
+strings Server::splitMessage(const std::string& message)
 {
-	strings				commands;
-	std::istringstream	stream(message);
-	std::string			command;
+    strings commands;
+    std::istringstream stream(message);
+    std::string command;
 
-	if (message.empty() || std::all_of(message.begin(), message.end(), isspace))
-	{
-		commands.push_back("Invalid command");
-		return (commands);
-	}
-	while (std::getline(stream, command, ' '))
-	{
-		if (command.empty() || command[0] == ' ')
-		{
-			commands.push_back("Invalid command");
-			return (commands);
-		}
-		if (command[0] == ':')
-		{
-			commands.push_back(message.substr(message.find(':')));
-			return (commands);
-		}
-		commands.push_back(command);
-	}
-	return (commands);
+    if (message.empty()) {
+        commands.push_back("Invalid command");
+        return commands;
+    }
+    bool isAllSpaces = true;
+    for (size_t i = 0; i < message.size(); ++i)
+    {
+        if (!isspace(message[i]))
+        {
+            isAllSpaces = false;
+            break;
+        }
+    }
+    if (isAllSpaces)
+    {
+        commands.push_back("Invalid command");
+        return commands;
+    }
+    while (std::getline(stream, command, ' '))
+    {
+        if (command.empty() || command[0] == ' ')
+        {
+            commands.push_back("Invalid command");
+            return commands;
+        }
+
+        if (command[0] == ':')
+        {
+            commands.push_back(message.substr(message.find(':')));
+            return commands;
+        }
+        commands.push_back(command);
+    }
+    return commands;
 }
+
 
 /* Displays Invalid command message */
 std::string	Server::invalidCommand(std::string message)

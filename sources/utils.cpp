@@ -29,11 +29,12 @@ std::string	Server::welcomeMsg() const
 	return (msg);
 }
 
-/* Displays messages */
+/* Displays message */
 void	Server::printMessage(int input, int index)
 {
 	std::string	msg;
 	std::string wMsg;
+	std::ostringstream oss; // String stream for manual conversion
 
 	switch (input)
 	{
@@ -51,7 +52,9 @@ void	Server::printMessage(int input, int index)
 			msg.append("]: ");
 			msg.append(RESET);
 			msg.append("listening on port ");
-			msg.append(std::to_string(port));
+			oss.str("");  // Clear the stream
+			oss << port;  // Convert the port number to string
+			msg.append(oss.str());
 			break;
 		case 2: // New connection
 			msg.append(GREEN);
@@ -64,7 +67,9 @@ void	Server::printMessage(int input, int index)
 			msg.append("new connection from ");
 			msg.append(inet_ntoa(((sockaddr_in*)&clients[index].getAddress())->sin_addr));
 			msg.append(" on socket ");
-			msg.append(std::to_string(clients[index].getSocket()));
+			oss.str("");  // Clear the stream
+			oss << clients[index].getSocket();  // Convert socket to string
+			msg.append(oss.str());
 			msg.append(".");
 			wMsg = welcomeMsg();
 			send(clients[index].getSocket(), wMsg.c_str(), wMsg.length(), DEFAULT);
@@ -78,7 +83,9 @@ void	Server::printMessage(int input, int index)
 			msg.append("]: ");
 			msg.append(RESET);
 			msg.append("socket ");
-			msg.append(std::to_string(index));
+			oss.str("");  // Clear the stream
+			oss << index;  // Convert index to string
+			msg.append(oss.str());
 			msg.append(" hung up.");
 			break;
 		default:

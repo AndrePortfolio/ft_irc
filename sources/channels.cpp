@@ -14,7 +14,7 @@
 
 Channel::Channel()
 {
-	Channel("", "default_name", nullptr);
+	Channel("", "default_name", NULL);
 }
 
 Channel::Channel(std::string mode, std::string name, Client *op)
@@ -249,10 +249,12 @@ const std::string Channel::getMode() const
     std::string modeString = "+" + mode; // Start with '+' and add all active mode characters
 
     if (mode.find('l') != std::string::npos)
-        modeString += " " + std::to_string(usersLimit); // Append the user limit if in `+l` mode first
-
-    // if (mode.find('k') != std::string::npos)
-    //     modeString += " " + password; // Append the key if in `+k` mode
+    {
+        // Convert usersLimit to string using std::stringstream
+        std::stringstream ss;
+        ss << usersLimit;
+        modeString += " " + ss.str(); // Append the user limit if in `+l` mode first
+    }
 
     return modeString;
 }

@@ -188,11 +188,14 @@ void Server::handleOperatorMode(bool addMode, const strings& commands, int& cind
 
 void Server::handleLimitMode(bool addMode, const strings& commands, int& cindex, Channel* channel, size_t& argIndex, std::string& buffer_add, std::string& buffer_del)
 {
+	int limit;
+
 	if (addMode)
 	{
 		if (commands.size() > argIndex)
 		{
-			int limit = std::stoi(commands[argIndex++]);
+			// Replace std::stoi with std::istringstream
+			std::istringstream(commands[argIndex++]) >> limit; // Extract the integer from the string
 			channel->setUserLimit(limit);
 			buffer_add += "l";
 		}
@@ -237,7 +240,7 @@ void Server::handleUserMode(const strings& commands, int& cindex)
 		clients[cindex].sendMessage(ERR_NOSUCHNICK, clients[cindex].getNickname() + " " + commands[1] + " :No such nick");
 		return;
 	}
-	Client *target = nullptr;
+	Client *target = NULL;
 	// Find the target client by nickname
 	for (Clients::iterator it = clients.begin(); it != clients.end(); ++it)
 	{
