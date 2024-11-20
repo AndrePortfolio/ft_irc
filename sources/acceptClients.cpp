@@ -17,15 +17,16 @@ void	Server::updatePool(pollfd& fds, int& activeFds, int socket)
 {
 	fds.fd = socket;
 	fds.events = POLLIN;
+	fds.revents = 0;
 	activeFds++;
 }
 
 /* Listen indefinitely for Events */
 void	Server::checkForEvent(pollfd(&fds)[MAX_FDS], int& activeFds)
 {
-	int	poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
-	if (poolCount == ERROR)
-		throw std::runtime_error("Error: pool failed");
+	int poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
+    if (poolCount == ERROR)
+        throw std::runtime_error("Error: poll failed");
 }
 
 /* Listen for clients wanting to connect to the server and accept them */
@@ -58,6 +59,11 @@ void	Server::CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds)
 	{
 		if (fds[i].revents & POLLIN)
 			receivedNewData(fds, i, activeFds);
+		else if (fds[i].revents & (POLLHUP | POLLERR))
+        {
+            printMessage(DISCONNECTED, fds[i].fd);
+            adjustClients(fds, i, activeFds);
+        }
 	}
 }
 

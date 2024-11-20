@@ -12,8 +12,14 @@
 
 #include "../includes/headers.hpp"
 
+static void signalHandler(int sig)
+{
+	(void)sig;
+}
+
 int	main(int ac, char **av)
 {
+	signal(SIGINT, signalHandler);
 	try
 	{
 		if (ac != 3)
