@@ -17,15 +17,16 @@ void	Server::updatePool(pollfd& fds, int& activeFds, int socket)
 {
 	fds.fd = socket;
 	fds.events = POLLIN;
+	fds.revents = 0;
 	activeFds++;
 }
 
 /* Listen indefinitely for Events */
 void	Server::checkForEvent(pollfd(&fds)[MAX_FDS], int& activeFds)
 {
-	int	poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
-	if (poolCount == ERROR)
-		throw std::runtime_error("Error: pool failed");
+	int poolCount = poll(fds, activeFds, WAIT_INDEFINITELY);
+    if (poolCount == ERROR)
+        throw std::runtime_error("Error: poll failed");
 }
 
 /* Listen for clients wanting to connect to the server and accept them */
@@ -59,14 +60,19 @@ void	Server::CheckForClientData(pollfd(&fds)[MAX_FDS], int& activeFds)
 	{
 		if (fds[i].revents & POLLIN)
 			receivedNewData(fds, i, activeFds);
+		else if (fds[i].revents & (POLLHUP | POLLERR))
+        {
+            printMessage(DISCONNECTED, fds[i].fd);
+            adjustClients(fds, i, activeFds);
+        }
 	}
 }
 
 /* Read data from client and output it to the server */
 void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 {
-	char	buffer[BUFFER_SIZE];
-	int		bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
+	char		buffer[BUFFER_SIZE];
+	int			bytesRead = recv(fds[client].fd, buffer, sizeof(buffer) - 1, DEFAULT);
 
 	if (bytesRead == ERROR)
 		throw std::runtime_error("Error: Failed to read from client socket");
@@ -77,8 +83,7 @@ void Server::receivedNewData(pollfd(&fds)[MAX_FDS], int& client, int& activeFds)
 		return ;
 	}
 	buffer[bytesRead] = '\0';
-	int	clientIndex = client - 1;
-	handleData(buffer, clientIndex, fds, activeFds);
+	parseData(fds, buffer, client - 1, bytesRead, activeFds);
 }
 
 /* Removes client from map and makes sure there are no gaps in the pool of fds */
@@ -111,3 +116,36 @@ void Server::adjustClients(pollfd(&fds)[MAX_FDS], int i, int& activeFds)
 	activeFds--;
 }
 
+/* Handles partial commands */
+void Server::parseData(pollfd(&fds)[MAX_FDS], char	buffer[BUFFER_SIZE], int client, int bytesRead, int& activeFds)
+{
+	static char clientBuffer[MAX_FDS][BUFFER_SIZE];
+
+	if (std::strlen(clientBuffer[client]) > 0)
+		if (BUFFER_SIZE - std::strlen(clientBuffer[client]) > 1)
+			std::strncat(clientBuffer[client], ".", 1);
+	std::strncat(clientBuffer[client], buffer, BUFFER_SIZE - std::strlen(clientBuffer[client]) - 1);
+
+   if (buffer[bytesRead - 1] == '\n')
+   {
+		std::string cmd;
+		for (int i = 0; clientBuffer[client][i] != '\0'; i++)
+		{
+			if (clientBuffer[client][i] == '.')
+			{
+				if (!cmd.empty())
+				{
+					handleData(cmd.c_str(), client, fds, activeFds);
+					cmd.clear();
+				}
+			}
+			else
+				cmd += clientBuffer[client][i];
+		}
+		if (!cmd.empty())
+			handleData(cmd.c_str(), client, fds, activeFds);
+		std::memset(clientBuffer[client], 0, sizeof(clientBuffer[client]));
+   }
+   else
+		send(clients[client].getSocket(), "^D", 2, DEFAULT);
+}
