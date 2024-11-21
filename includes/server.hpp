@@ -107,7 +107,7 @@ class Server
 		char  		closestPlusMinus(const std::string &str, const char &mode) const;
 		int			findClientIndexByNickname(const std::string& nickname) const;
 		void		handleLeaveAllChannels(const strings& commands, int &cindex);
-		void		processChannelNames(const std::vector<std::string>& channel_names, int &cindex);
+		void		processChannelNames(const std::vector<std::string>& channel_names, int &cindex, std::vector<std::string>& valid_channels);
 		bool		isValidChannelName(const std::string& channelName);
 		void		handleExistingOrNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
 		void		createNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *> &channels_to_sub);
