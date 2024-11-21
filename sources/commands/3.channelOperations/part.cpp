@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/07 11:30:29 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/20 09:39:46 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ void	Server::partCommand(const strings& commands, int& cindex)
 		channel->removeClient(&clients[cindex]);
 		channel->setUserCount(channel->getUserCount() - 1);
 		if (channel->isEmpty())
-			removeChannel(*it); // if user is the last in the channel, delete it
+			deleteChannel(*it); // if user is the last in the channel, delete it
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrealbuquerque <andrealbuquerque@stud    +#+  +:+       +#+        */
+/*   By: apereira <apereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:06:38 by andrealbuqu       #+#    #+#             */
-/*   Updated: 2024/11/07 11:30:36 by andrealbuqu      ###   ########.fr       */
+/*   Updated: 2024/11/20 09:35:24 by apereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,34 +69,50 @@ void Server::joinCommand(const strings& commands, int &cindex)
 	joinChannels(channels_to_sub, cindex);
 }
 
-void Server::handleLeaveAllChannels(const strings& commands, int &cindex)
+void Server::deleteChannel(const std::string& channelName)
+{
+	// Ensure the channel exists before deleting
+	if (existsChannel(channelName))
+	{
+		Channel* channel_to_delete = channels[channelName];
+		delete channel_to_delete;
+		channels.erase(channelName); // Remove channel from the map
+	}
+}
+
+void Server::handleLeaveAllChannels(const strings& commands, int& cindex)
 {
 	(void) commands;
-        // Create a temporary list to store channels to leave
-        std::vector<std::string> channelsToLeave;
+	std::vector<std::string> channelsToLeave;
 
-        // Populate the list with channel names the user is currently a member of
-        for (t_channelIterator it = channels.begin(); it != channels.end(); it++)
-        {
-            if (it->second->isMember(&clients[cindex]))
-            {
-                channelsToLeave.push_back(it->second->getName());
-            }
-        }
+	// Populate the list with channel names the user is currently a member of
+	for (t_channelIterator it = channels.begin(); it != channels.end(); it++)
+	{
+		if (it->second->isMember(&clients[cindex]))
+		{
+			channelsToLeave.push_back(it->second->getName());
+		}
+	}
 
-        // Iterate over the list and leave each channel
-        for (std::vector<std::string>::iterator it = channelsToLeave.begin(); it != channelsToLeave.end(); ++it)
-        {
-            std::vector<std::string> partTokens;
+	// Iterate over the list and leave each channel
+	for (std::vector<std::string>::iterator it = channelsToLeave.begin(); it != channelsToLeave.end(); ++it)
+	{
+		std::vector<std::string> partTokens;
 
-            // Prepare PART command to leave the channel
-            partTokens.push_back("PART");
-            partTokens.push_back(*it);
-            partCommand(partTokens, cindex);
-        }
+		// Prepare PART command to leave the channel
+		partTokens.push_back("PART");
+		partTokens.push_back(*it);
+		partCommand(partTokens, cindex);
 
-        // Reset the number of channels the client is part of
-        clients[cindex].setNbChannels(0);
+		// If the channel is empty after the client leaves, delete it
+		if (channels[*it]->getUserCount() == 0)
+		{
+			deleteChannel(*it);
+		}
+	}
+
+	// Reset the number of channels the client is part of
+	clients[cindex].setNbChannels(0);
 }
 
 
@@ -188,21 +204,22 @@ void Server::handleExistingOrNewChannel(const std::string& channelName, const st
 	}
 }
 
-void Server::createNewChannel(const std::string& channelName, const std::string& channelPassword, int &cindex, std::vector<Channel *>& channels_to_sub)
+void Server::createNewChannel(const std::string& channelName, const std::string& channelPassword, int& cindex, std::vector<Channel*>& channels_to_sub)
 {
-	std::string s = "";
-	Channel *channel_to_add = new Channel(s, channelName, &clients[cindex]);
+    // Allocate memory for a new channel
+    Channel* channel_to_add = new Channel("" ,channelName, &clients[cindex]);
 
-	// If a password is provided, set it
-	if (!channelPassword.empty())
-	{
-		channel_to_add->setPassword(channelPassword);
-		channel_to_add->addMode("k");
-	}
+    // If a password is provided, set it
+    if (!channelPassword.empty())
+    {
+        channel_to_add->setPassword(channelPassword);
+        channel_to_add->addMode("k");
+    }
 
-	channel_to_add->addClient(&clients[cindex]);
-	channels_to_sub.push_back(channel_to_add);
-	channels[channelName] = channel_to_add;
+    // Add the client to the new channel
+    channel_to_add->addClient(&clients[cindex]);
+    channels_to_sub.push_back(channel_to_add);
+    channels[channelName] = channel_to_add;
 }
 
 void Server::joinChannels(std::vector<Channel *>& channels_to_sub, int &cindex)
