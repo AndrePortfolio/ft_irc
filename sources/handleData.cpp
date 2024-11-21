@@ -16,7 +16,7 @@
 void	Server::handleData(const char	buffer[BUFFER_SIZE], int& client, struct pollfd(&fds)[MAX_FDS], int& activeFds)
 {
 	std::string	message(buffer, strlen(buffer));
-	if (!message.empty() && (*(message.end() - 1) == '\r' || *(message.end() - 1) == '\n'))
+	while (!message.empty() && (*(message.end() - 1) == '\r' || *(message.end() - 1) == '\n'))
 		message.erase(message.end() - 1);
 
 	std::string	outputMsg = parseClientMessage(message, client, fds, activeFds);
@@ -36,6 +36,8 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
+
+	std::cout << parameters[1].size() << std::endl;
 
 	// General Commands:
 	if (command == "CAP")
