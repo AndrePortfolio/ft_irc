@@ -53,7 +53,6 @@ class Server
 
 	// Member Functions
 		void		validateInput(std::string port, std::string password);
-		void		runServer();
 		void		createServerSocket();
 		void		setNonBlocking(int& fd);
 		void		initServerAddress();
@@ -131,6 +130,8 @@ class Server
 	public:
 		Server(std::string port, std::string password);
 		~Server();
+
+		void		runServer();
 };
 
 #endif

@@ -50,11 +50,7 @@ Client::Client(const Client &copy)
 	*this = copy;
 }
 
-Client::~Client()
-{
-	// if (socketFd >= 0)
-	// 	close(socketFd);
-}
+Client::~Client(){}
 
 //----------------------------------------------------------------------------//
 //---------------------------------- Operators -------------------------------//

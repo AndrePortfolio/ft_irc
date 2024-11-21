@@ -12,9 +12,13 @@
 
 #include "../includes/headers.hpp"
 
+static volatile bool running = true;
+
 static void signalHandler(int sig)
 {
 	(void)sig;
+	if (sig == SIGINT)
+        running = false;
 }
 
 int	main(int ac, char **av)
@@ -26,6 +30,9 @@ int	main(int ac, char **av)
 			throw std::runtime_error("Usage: ./ircserv <port number> <password>");
 
 		Server	server(av[1], av[2]);
+
+		while (running)
+            server.runServer();
 	}
 	catch(const std::exception& e)
 	{

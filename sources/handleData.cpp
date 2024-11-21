@@ -37,8 +37,6 @@ std::string Server::parseClientMessage(std::string message, int& client, struct 
 	strings	parameters = splitMessage(message);
 	std::string command = toUpper(parameters[0]);
 
-	std::cout << parameters[1].size() << std::endl;
-
 	// General Commands:
 	if (command == "CAP")
 		return ("");

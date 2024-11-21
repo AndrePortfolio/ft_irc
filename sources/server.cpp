@@ -25,7 +25,6 @@ Server::Server(std::string port, std::string password)
 		clients()
 {
 	validateInput(port, password);
-	runServer();
 }
 
 Server::Server(const Server &copy)
@@ -40,10 +39,17 @@ Server::~Server()
 
 	// Iterate over all channels and delete them to free memory
 	for (t_channelIterator it = channels.begin(); it != channels.end(); ++it)
-	{
 		delete it->second;
-	}
+	
 	channels.clear();
+
+	for (Clients::iterator it = clients.begin(); it != clients.end(); ++it)
+    {
+        int clientSocket = it->second.getSocket();
+        if (clientSocket >= 0)
+            close(clientSocket);
+    }
+    clients.clear();
 }
 //----------------------------------------------------------------------------//
 //---------------------------------- Operators -------------------------------//
