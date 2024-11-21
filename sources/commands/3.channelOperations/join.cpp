@@ -46,15 +46,15 @@ void Server::joinCommand(const strings& commands, int &cindex)
 	std::vector<std::string> passwords;
 	parseChannelNamesAndPasswords(commands[1], channel_names, passwords);
 
+	// Process valid channel names only
+	std::vector<std::string> valid_channels;
+	processChannelNames(channel_names, cindex, valid_channels);
+
+	// Process each valid channel name along with its password
 	std::vector<Channel *> channels_to_sub;
-
-	// Process each channel name
-	processChannelNames(channel_names, cindex);
-
-	// Process each channel name along with its password
-	for (size_t i = 0; i < channel_names.size(); ++i)
+	for (size_t i = 0; i < valid_channels.size(); ++i)
 	{
-		std::string channelName = channel_names[i];
+		std::string channelName = valid_channels[i];
 		std::string channelPassword;
 		if (i < passwords.size())
 			channelPassword = passwords[i];
@@ -65,7 +65,7 @@ void Server::joinCommand(const strings& commands, int &cindex)
 		handleExistingOrNewChannel(channelName, channelPassword, cindex, channels_to_sub);
 	}
 
-	// Join the channels
+	// Join the valid channels
 	joinChannels(channels_to_sub, cindex);
 }
 
@@ -133,23 +133,26 @@ void Server::parseChannelNamesAndPasswords(const std::string& input, std::vector
 		passwords = split(splitInput[1], ',');
 }
 
-void Server::processChannelNames(const std::vector<std::string>& channel_names, int &cindex)
+void Server::processChannelNames(const std::vector<std::string>& channel_names, int &cindex, std::vector<std::string>& valid_channels)
 {
-	for (std::vector<std::string>::const_iterator it_names = channel_names.begin(); it_names != channel_names.end(); it_names++)
+	for (std::vector<std::string>::const_iterator it_names = channel_names.begin(); it_names != channel_names.end(); ++it_names)
 	{
 		// Validate the channel name format
 		if (!isValidChannelName(*it_names))
 		{
 			clients[cindex].sendMessage(ERR_BADCHANMASK, *it_names + " :Cannot join channel: Channel must start with # and cannot contain spaces, commas or \\x07");
-			continue;
+			continue; // Skip invalid channel
 		}
 
 		// Check if the user has already joined too many channels (default limit is 10)
 		if (clients[cindex].getNbChannels() >= 10)
 		{
-			clients[cindex].sendMessage(ERR_TOOMANYCHANNELS, clients[cindex].getNickname() + " " + *(it_names) + " :You have joined too many channels");
-			continue;
+			clients[cindex].sendMessage(ERR_TOOMANYCHANNELS, clients[cindex].getNickname() + " " + *it_names + " :You have joined too many channels");
+			continue; // Skip channel if user limit exceeded
 		}
+
+		// If everything is fine, add to valid channels list
+		valid_channels.push_back(*it_names);
 	}
 }
 
