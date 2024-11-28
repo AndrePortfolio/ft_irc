@@ -25,4 +25,7 @@
 Run the IRC server executable with the following parameters:
 
 ```bash
-./ircserv <port> <password>
+git@github.com:AndrePortfolio/ft_irc.git
+cd ft_irc
+make
+./ircserv 4242 IRC
