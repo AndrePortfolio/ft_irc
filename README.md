@@ -1,14 +1,5 @@
 # ft_irc
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Usage](#usage)
-- [Commands](#commands)
-- [Testing](#testing)
-- [Requirements](#requirements)
-- [Building and Running](#building-and-running)
-
 ## Introduction
 **ft_irc** is an implementation of an Internet Relay Chat (IRC) server in C++. It demonstrates a solid understanding of networking concepts, the TCP/IP protocol, and non-blocking I/O operations. The project complies with the C++98 standard and supports multiple clients interacting simultaneously in real-time.
 
